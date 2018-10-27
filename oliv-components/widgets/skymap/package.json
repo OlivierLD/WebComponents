@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OlivierLD/raspberry-pi4j-samples.git"
+    "url": "git+https://github.com/OlivierLD/WebComponents.git"
   },
   "keywords": [
     "skymap",
@@ -19,9 +19,9 @@
   "author": "Olivier LeDiouris",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/OlivierLD/raspberry-pi4j-samples/issues"
+    "url": "https://github.com/OlivierLD/WebComponents/issues"
   },
-  "homepage": "https://github.com/OlivierLD/raspberry-pi4j-samples/tree/master/WebComponents",
+  "homepage": "https://github.com/OlivierLD/WebComponents.git",
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.1",

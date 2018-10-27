@@ -19,7 +19,7 @@ const mapProjections = {
 	}
 };
 
-const tropicLat = 23.43686;
+const tropicLat = 23.43686; // Earth Tilt
 
 const worldMapDefaultColorConfig = {
 	canvasBackground: "rgba(0, 0, 100, 1.0)",  // Remove this?
