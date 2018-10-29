@@ -65,7 +65,7 @@ Works OK (~so-so) if there is only one component, it's a mess otherwise.
 
 ### Good to go
 
-[Oliv's Components](https://github.com/OlivierLD/raspberry-pi4j-samples/tree/master/WebComponents/oliv-components)
+[Oliv's Components](./oliv-components)
 
 ---
 
