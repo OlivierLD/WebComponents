@@ -9,6 +9,8 @@
 - [Good resource](https://developers.google.com/web/fundamentals/web-components/customelements) also showing how to extend a WebComponent
 - [Templates & Imports](https://www.html5rocks.com/en/tutorials/webcomponents/imports/)
 
+- Portability & compatibility: [Polyfills](https://www.webcomponents.org/polyfills)
+
 ---
 
 I use nodeJS to run the pages:
