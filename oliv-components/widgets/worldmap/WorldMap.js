@@ -166,6 +166,7 @@ class WorldMap extends HTMLElement {
 		this._previousClassName = "";
 		this.worldmapColorConfig = worldMapDefaultColorConfig;
 
+		this.doFirst = undefined; // Callback, before drawing, before painting anything. Takes 'this' and the context as parameter.
 		this.doBefore = undefined; // Callback, before drawing. Takes 'this' and the context as parameter.
 		this.doAfter = undefined;  // Callback, after drawing. Takes 'this' and the context as parameter.
 
@@ -386,6 +387,9 @@ class WorldMap extends HTMLElement {
 	/*
 	 * Component methods
 	 */
+	setDoFirst(func) {
+		this.doFirst = func;
+	}
 	setDoBefore(func) {
 		this.doBefore = func;
 	}
@@ -1051,6 +1055,10 @@ class WorldMap extends HTMLElement {
 		let opHeight = Math.abs(maxY - minY);
 		this.globeView_ratio = Math.min(w / opWidth, h / opHeight) * this.defaultRadiusRatio; // 0.9, not to take all the space...
 
+		// First (callback)
+		if (this.doFirst !== undefined) {
+			this.doFirst(this, context);
+		}
 		// Black background.
 		context.fillStyle = this.worldmapColorConfig.globeBackground;
 		context.fillRect(0, 0, this.width, this.height);
