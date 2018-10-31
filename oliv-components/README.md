@@ -110,6 +110,8 @@ See the examples in this module.
 If you are having trouble running the WebComponents in Firefox 58, see
 [this document](https://www.designedbyaturtle.co.uk/2015/how-to-enable-web-components-in-firefox-shadow-dom/).
 
+> _Note_: Since version **63.0**, WebComponents are supported by Firefox.
+
 #### Transpilation
 Use `babel`, as explained [here](https://babeljs.io/docs/usage/cli/). Also see
 [this document](widgets/README.md) in the same project.
