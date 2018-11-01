@@ -166,7 +166,7 @@ class SkyMap extends HTMLElement {
 		// create and append a <canvas>
 		this.canvas = document.createElement("canvas");
 		let fallbackElemt = document.createElement("h1");
-		let content = document.createTextNode("This is a SkyMap or StarFInder, on an HTML5 canvas");
+		let content = document.createTextNode("This is a SkyMap or StarFinder, on an HTML5 canvas");
 		fallbackElemt.appendChild(content);
 		this.canvas.appendChild(fallbackElemt);
 		this.shadowRoot.appendChild(this.canvas);
@@ -611,7 +611,6 @@ class SkyMap extends HTMLElement {
 		context.fillStyle = 'silver'; // this.worldmapColorConfig.displayPositionColor; TODO Get color from CSS
 		context.font = "bold 16px Arial"; // "bold 40px Arial"
 		context.fillText('LHA Aries: ' + strAries, 10, 18);
-
 	}
 
 	static nextMonth(month) {
