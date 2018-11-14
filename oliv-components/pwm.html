@@ -17,8 +17,7 @@
 	<link rel="stylesheet" href="css/stylesheet.css">
 	<link rel="stylesheet" href="css/web-components.css">
 
-	<!-- Firefox does NOT like modules... Safari OK -->
-	<script type="module" src="widgets/LedPanel.js"></script>
+	<script type="module" src="widgets/ledpanel/LedPanel.js"></script>
 
 	<style>
 
@@ -208,7 +207,7 @@
 	<hr/>
 	<h5 style="font-style: italic;">Requires a Web-Components enabled browser</h5>
 	<hr/>
-	This page intends to show how Pulse Width Moduation (aka PWM) works.
+	This page intends to show how Pulse Width Modulation (aka PWM) works.
 	<br/>
 	PWM is this technique used to <span style="background: yellow;">simulate</span> <i><b>analog</b></i> output on a <i><b>digital</b></i> device. For example, the GPIO pins of the Raspberry PI are all digital. They only can be on (<code>3V3</code>) or off (<code>0V</code>).
 	If a Light Emitting Diode (led) is hooked on such a pin, it can only be on or off, with no value in between (nothing like "half-on")...

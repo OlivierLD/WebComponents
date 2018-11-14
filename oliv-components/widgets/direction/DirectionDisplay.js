@@ -627,7 +627,7 @@ class DirectionDisplay extends HTMLElement {
 		context.closePath();
 		context.fillStyle = this.directionColorConfig.handColor;
 		context.fill();
-		context.lineWidth = 1;
+		context.lineWidth = 2;
 		context.strokeStyle = this.directionColorConfig.handOutlineColor;
 		context.stroke();
 		// Knob
