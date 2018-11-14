@@ -841,6 +841,8 @@
 	  <small>
 		  For animation buttons: in this demo, only <b><i>one</i></b> animation can run at a given time. This is not a limitation of the components, this is just because
 		  this demo is implemented this way.
+			<br/>
+			Some samples of tags are given for each component. All the attribute combinations are not given, several have default values.
 	  </small>
 	</p>
 
@@ -850,9 +852,21 @@
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('pluviometer');" tabindex="0"><b><u>Pluviometer</u></b></div>
 	<div id="pluviometer" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;pluvio-meter id="pluviometer-01"
+              class="pluviometer-day"
+              title="m/m per hour"
+              min-value="0"
+              max-value="10"
+              major-ticks="1"
+              minor-ticks="0.25"
+              value="2.3"
+              width="80"
+              height="220">&lt;/pluvio-meter>
+		</pre>
+
 		<table>
 			<tr>
-
 				<td valign="top">
 					<div class="black-frame centered">
 						<pluvio-meter id="pluviometer-01"
@@ -993,6 +1007,18 @@
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('thermometer');" tabindex="0"><b><u>Thermometer</u></b></div>
 	<div id="thermometer" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;thermo-meter id="thermometer-01"
+              class="thermometer-day"
+              title="Celcius"
+              min-value="-10"
+              max-value="60"
+              major-ticks="10"
+              minor-ticks="1"
+              value="12.34"
+              width="100"
+              height="360">&lt;/thermo-meter>
+		</pre>
 		<table>
 			<tr>
 				<td valign="top">
@@ -1135,6 +1161,19 @@
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('direction');" tabindex="0"><b><u>Direction</u></b></div>
 	<div id="direction" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;direction-display class="analogdisplay-day"
+                   title="Heading, animated"
+                   id="compass-01"
+                   value="38"
+                   major-ticks="45"
+                   minor-ticks="5"
+                   with-rose="true"
+                   with-border="true"
+                   label="HDG"
+                   width="200"
+                   height="200">&lt;/direction-display>
+		</pre>
 		<table>
 			<tr>
 				<td valign="top">
@@ -1329,6 +1368,20 @@
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('analog');" tabindex="0"><b><u>Analog Displays</u></b></div>
 	<div id="analog" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;analog-display class="analogdisplay-day"
+                title="Boat Speed in Knots"
+                id="bsp-01"
+                min-value="0"
+                max-value="15"
+                value="6.7"
+                major-ticks="3"
+                minor-ticks="0.25"
+                overlap="-10"
+                with-border="true"
+                width="200"
+                height="100">&lt;/analog-display>
+		</pre>
 		<table>
 			<tr>
 				<td valign="top">
@@ -1719,6 +1772,19 @@
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('apparent-wind');" tabindex="0"><b><u>Wind Angle Displays</u></b></div>
 	<div id="apparent-wind" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;wind-angle-display class="analogdisplay-day"
+                    title="Apparent Wind Speed in Knots"
+                    id="aw-01"
+                    value="{ &amp;quot;wa&amp;quot;: 60, &amp;quot;ws&amp;quot;: 10.2 }"
+                    major-ticks="45"
+                    minor-ticks="5"
+                    with-border="true"
+                    with-digits="true"
+                    label="App Wind"
+                    width="300"
+                    height="300">&lt;/wind-angle-display>
+		</pre>
 		<table border="1">
 			<tr>
 				<td valign="top">
@@ -1851,6 +1917,14 @@
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('jumbo');" tabindex="0"><b><u>Jumbos</u></b></div>
 	<div id="jumbo" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;jumbo-display id="jumbo-02"
+               class="jumbo-02"
+               value="-12.34"
+               label="Value-A"
+               width="180"
+               height="80">&lt;/jumbo-display>
+		</pre>
 		<table>
 			<tr>
 				<td valign="top">
@@ -1974,6 +2048,14 @@
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('compass-rose');" tabindex="0"><b><u>Compass (concave) Rose</u></b></div>
 	<div id="compass-rose" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;compass-rose id="compass-rose-01"
+              class="day"
+              title="Heading"
+              value="45"
+              width="500"
+              height="50">&lt;/compass-rose>
+		</pre>
 		<small>Warning: The rose in <i>concave</i>. This means that it has to be seen as if the user was sitting at the center of the rose.</small>
 		<table>
 			<tr>
@@ -2130,7 +2212,7 @@
 		<table>
 			<tr>
 				<td>
-					<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top;">
+					<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;world-map id="world-map-01"
            class="worldmap-display"
            title="World Map"
@@ -2213,7 +2295,7 @@
 		<table>
 			<tr>
 				<td>
-					<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top;">
+					<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;sky-map id="sky-map-01"
           width="600"
           height="600"
@@ -2271,6 +2353,14 @@
 	 +-->
 	<div style="cursor: pointer;" onclick="showHide('led-panel');" tabindex="0"><b><u>Led Panel</u></b></div>
 	<div id="led-panel" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;led-panel id="led-panel-01"
+           class="led-panel-01"
+           width="200"
+           height="200"
+           nb-cols="8"
+           nb-lines="8"/>
+		</pre>
 		<table>
 			<tr>
 				<td valign="top">
@@ -2297,6 +2387,15 @@
 	 +-->
 	<div style="cursor: pointer;" onclick="showHide('marquee-panel');" tabindex="0"><b><u>Marquee Panel</u></b></div>
 	<div id="marquee-panel" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;marquee-panel id="marquee-panel-01"
+               class="marquee-01"
+               width="1000"
+               height="125"
+               nb-cols="128"
+               nb-lines="16"
+               display-data='{ "text": "Hello Web Components!", "x": 4, "y": 12 }'/>
+		</pre>
 		<table>
 			<tr>
 				<td valign="top">
@@ -2364,6 +2463,18 @@
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('analog-watch');" tabindex="0"><b><u>Analog Watch</u></b></div>
 	<div id="analog-watch" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;analog-watch id="analog-watch-01"
+              class="analogdisplay-day"
+              title="Custom Time"
+              width="220"
+              height="220"
+              hours-ticks="1"
+              minutes-ticks="1"
+              digital-value="6"
+              with-second-hand="true"
+              value="01:20:12">&lt;/analog-watch>
+		</pre>
 		<table>
 			<tr>
 				<td valign="top">
@@ -2478,6 +2589,14 @@
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('dir-16-points');" tabindex="0"><b><u>Direction, 16 points</u></b></div>
 	<div id="dir-16-points" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;dir-16-points id="dir-16-01"
+               class="dir-16-day"
+               title="16 points"
+               width="220"
+               height="220"
+               value="N">&lt;/dir-16-points>
+		</pre>
 		<table>
 			<tr>
 				<td valign="top">
@@ -2516,6 +2635,14 @@
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('calendar');" tabindex="0"><b><u>Calendar</u></b></div>
 	<div id="calendar" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;calendar-display id="calendar-01"
+                  class="calendar-01"
+                  title="Day-Month-Year"
+                  width="300"
+                  height="360"
+                  value="28-08-2018-tuesday">&lt;/calendar-display>
+		</pre>
 		<table>
 			<tr>
 				<td valign="top">
@@ -2630,6 +2757,12 @@
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('split-flap');" tabindex="0"><b><u>Split-Flap Display</u></b></div>
 	<div id="split-flap" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;split-flap-display id="split-flap-display-01"
+                    nb-char="24"
+                    font-size="60"
+                    value="02-sep-2018 10:19:00">&lt;/split-flap-display>
+		</pre>
 		<table>
 			<tr>
 				<td valign="top">
