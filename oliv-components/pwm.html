@@ -142,15 +142,15 @@
 		}
 
 		function setPWM(led, cycleHz, volume, renderingSpeed) {
-		  	setLed(led, true);    // On
-	    	window.setTimeout(function() {
+			setLed(led, true);    // On
+			window.setTimeout(function () {
 				if (debug) {
 					let now = new Date().getTime();
 					console.log("Started PWM at %d, led ON", (now - ref));
 					ref = now;
 				}
 				if (volume != 100) {
-				  	setLed(led, false); // Off
+					setLed(led, false); // Off
 				}
 				if (pulsing[led] === true) {
 					if (debug) {
@@ -158,24 +158,24 @@
 						console.log("PWM at %d, led going OFF", (now - ref));
 						ref = now;
 					}
-				  	window.setTimeout(function() {
+					window.setTimeout(function () {
 						if (debug) {
 							let now = new Date().getTime();
 							console.log("At %d, new PWM cycle", (now - ref));
 							ref = now;
 						}
 						if (pulsing[led]) {
-				    		setPWM(led, cycleHz, volume, renderingSpeed);
-				    	}
-				  }, (hzToMs(cycleHz) - volume) * renderingSpeed);
+							setPWM(led, cycleHz, volume, renderingSpeed);
+						}
+					}, (hzToMs(cycleHz) - volume) * renderingSpeed);
 				}
-	    	}, volume * renderingSpeed);
-	  	}
+			}, volume * renderingSpeed);
+		}
 
-	  	function percentToVolume(percent, cycleHz) {
-	  		if (debug) {
-	  			console.log("Cycle: %d, Width: %f", cycleHz, (100.0 / cycleHz))
-	  		}
+		function percentToVolume(percent, cycleHz) {
+			if (debug) {
+				console.log("Cycle: %d, Width: %f", cycleHz, (100.0 / cycleHz))
+			}
 			return percent / (100.0 / hzToMs(cycleHz));
 		}
 
