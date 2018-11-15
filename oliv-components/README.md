@@ -114,13 +114,11 @@ If you are having trouble running the WebComponents in Firefox 58, see
 > _Note_: Since version **63.0**, WebComponents are supported by Firefox.
 
 #### Transpilation
-Use `babel`, as explained [here](https://babeljs.io/docs/usage/cli/). Also see
-[this document](widgets/README.md) in the same project.
+Use `babel`, as explained [here](https://babeljs.io/docs/usage/cli/).
+
+Also see [this document](widgets/README.md), in the same project.
 
 There is also a [transpiler on-line](http://babeljs.io/en/repl.html), that works correctly.
-
-##### Scripted Transpilation
-See [this document](widgets/README.md), in the same project.
 
 ---
 &copy; 2018, by Oliv Soft.
