@@ -77,7 +77,7 @@ SkyMap in its `Sky Map` configuration:
 ##### Artifacts
 - Javascript Modules (careful with Firefox 58 and below...)
     - defining the component's parameters (properties) and behavior
-- Examples, in `index.html` and on [`CodePen`](http://codepen.io/OlivierLD/).
+- Examples, in `gallery.html` and on [`CodePen`](http://codepen.io/OlivierLD/).
     - including animations examples
 - CSS rules and classes (in their own stylesheet, `web-components.css`)
 
@@ -85,6 +85,7 @@ SkyMap in its `Sky Map` configuration:
 
 #### TODO
 - JSDoc
+- Local npm registry (See [https://www.npmjs.com/package/local-npm](https://www.npmjs.com/package/local-npm)) ?
 
 #### CodePen (might not be 100% in sync... But close'ish)
 The point of truth remains this repo.
@@ -106,7 +107,7 @@ Components above, live at [CodePen](http://codepen.io/OlivierLD/), when released
 Along the same lines as Web Components, for re-usability, modularity, etc.
 See the examples in this module.
 
-#### Firefox 58
+#### Firefox
 If you are having trouble running the WebComponents in Firefox 58, see
 [this document](https://www.designedbyaturtle.co.uk/2015/how-to-enable-web-components-in-firefox-shadow-dom/).
 

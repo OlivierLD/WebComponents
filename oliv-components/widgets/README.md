@@ -32,6 +32,8 @@ or
 ```
  $ npm install
 ```
+The previous step installs the required dependencies (`webpack` and related modules), in the `node_modules` folder.
+It relies on the file named `package.json`.
 
 Then, every time you want to start a new build
 ```
@@ -43,3 +45,9 @@ or
 ```
 This will `webpack` all the required bundled artifacts in the `lib` directory (sibling of `widgets`).
 The bundle contains all the necessary dependencies.
+
+When you want to use the "production" version of a component, pick it from there.
+
+To build everything, run the script at `oliv-components/widgets/to.prod.sh`.
+
+---
