@@ -120,7 +120,7 @@ Use `babel`, as explained [here](https://babeljs.io/docs/usage/cli/). Also see
 There is also a [transpiler on-line](http://babeljs.io/en/repl.html), that works correctly.
 
 ##### Scripted Transpilation
-See [this document](widgets/README.md).
+See [this document](widgets/README.md), in the same project.
 
 ---
 &copy; 2018, by Oliv Soft.
