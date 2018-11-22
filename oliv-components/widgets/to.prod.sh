@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-widgets=("analogdisplay" "analogwatch" "calendar" "compass" "direction" "jumbo" "ledpanel" "marquee" "rain" "raw" "skymap" "splitflap" "temperature" "windangle" "worldmap")
+widgets=("analogdisplay" "analogwatch" "calendar" "compass" "direction" "jumbo" "ledpanel" "marquee" "rain" "raw" "skymap" "splitflap" "temperature" "windangle" "worldmap" "boatoverview")
 #
 HOME=$PWD
 echo -e "Working from $HOME"

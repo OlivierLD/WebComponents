@@ -185,3 +185,35 @@ export function decToSex(val, ns_ew) {
 	return s;
 }
 
+export function getDir(x, y) {
+	let dir = 0.0;
+	if (y != 0) {
+		dir = toDegrees(Math.atan(x / y));
+	}
+	if (x <= 0 || y <= 0) {
+		if (x > 0 && y < 0) {
+			dir += 180;
+		} else if (x < 0 && y > 0) {
+			dir += 360;
+		} else if (x < 0 && y < 0) {
+			dir += 180;
+		} else if (x == 0) {
+			if (y > 0) {
+				dir = 0.0;
+			} else {
+				dir = 180;
+			}
+		} else if (y == 0) {
+			if (x > 0) {
+				dir = 90;
+			} else {
+				dir = 270;
+			}
+		}
+	}
+	dir += 180;
+	while (dir >= 360) {
+		dir -= 360;
+	}
+	return dir;
+}

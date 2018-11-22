@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="css/stylesheet.css">
 	<link rel="stylesheet" href="css/web-components.css">
 
+	<script type="module" src="widgets/skeleton/Skeleton.js"></script>
 	<script type="module" src="widgets/rain/Pluviometer.js"></script>
 	<script type="module" src="widgets/temperature/Thermometer.js"></script>
 	<script type="module" src="widgets/jumbo/JumboDisplay.js"></script>
@@ -28,6 +29,7 @@
 	<script type="module" src="widgets/marquee/MarqueePanel.js"></script>
 	<script type="module" src="widgets/raw/Raw16PointsDir.js"></script>
 	<script type="module" src="widgets/splitflap/SplitFlapDisplay.js"></script>
+	<script type="module" src="widgets/boatoverview/BoatOverview.js"></script>
 
 	<style>
 		:root {
@@ -846,6 +848,41 @@
 	  </small>
 	</p>
 
+	<hr/>
+	<!--
+			SKELETON
+	+-->
+	<div style="cursor: pointer;" onclick="showHide('skeleton');" tabindex="0"><b><u>Web Comp Skeleton</u></b></div>
+	<div id="skeleton" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;web-component-skeleton id="skeleton-01"
+                        title="This is a Skeleton in the closet"/>
+		</pre>
+
+		<table>
+			<tr>
+				<td valign="top">
+					<div class="black-frame centered">
+						<web-component-skeleton id="skeleton-01"
+																		title="This is a Skeleton in the closet"/>
+					</div>
+					<div class="black-frame centered">
+						Value:
+						<input type="number"
+									 id="skeleton-value-01"
+									 placeholder="Value"
+									 title="No unit"
+									 style="width: 50px; text-align: right;"
+									 value="0"/>
+						<br/>
+						<button onclick="setData('skeleton-value-01', 'skeleton-01')"
+										title="Set Skeleton value above"
+										style="margin-top: 3px;">Set value</button>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
 	<hr/>
 	<!--
 			PLUVIOMETER
@@ -2791,7 +2828,51 @@
 		</table>
 	</div>
 	<hr/>
-
+	<!--
+			BOAT-OVERVIEW
+	+-->
+	<div style="cursor: pointer;" onclick="showHide('boat-overview');" tabindex="0"><b><u>Boat Overview</u></b></div>
+	<div id="boat-overview" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;boat-overview id="boat-overview-01" width="800" height="600"
+               sog="6.9" cog="215" bsp="7.1" hdg="222" aws="15.8"
+               awa="-112" tws="20.5" twa="-130" twd="91"
+               cdr="49" csp="0.32" lwy="0" cmg="222"
+               D="10" d="-0.98" b2wp="230" vmg="-3.8584310339481522"
+               withCurrent="true" withVMG="false"/>
+		</pre>
+		<table>
+			<tr>
+				<td valign="top">
+					<div class="black-frame">
+						<boat-overview id="boat-overview-01"
+													 width="800"
+													 height="600"
+													 cog="215"
+													 sog="6.9"
+													 bsp="7.1"
+													 hdg="222"
+													 aws="15.8"
+													 awa="-112"
+													 tws="20.5"
+													 twa="-130"
+													 twd="91"
+													 cdr="49"
+													 csp="0.32"
+													 lwy="0"
+													 cmg="222"
+													 D="10"
+													 d="-0.98"
+													 b2wp="230"
+													 vmg="-3.8584310339481522"
+													 withCurrent="true"
+													 withVMG="false"/>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<hr/>
 	<table width="100%">
 		<tr>
 			<td><span style="font-style: italic;" title="C'est MOI qui l'ai fait.">Oliv did it</span></td>
