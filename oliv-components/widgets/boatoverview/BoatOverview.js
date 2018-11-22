@@ -1,6 +1,6 @@
 /*
  * Attributes:
- * Values: width, height, BSP, HDG, AWS, AWA, TWS, TWA, TWD, CDR, CSP, Leeway, CMG, VMG, B2WP, D, d
+ * Values: width, height, BSP, HDG, AWS, AWA, TWS, TWA, TWD, CDR, CSP, Leeway, CMG, VMG, B2WP, Decl, dev
  * Booleans: displayCurrent, displayLabels, displayVMG, vmgOnWind or vmgOnWP, with D, d, W
  * Options: BoatShape (mono, cata, tri), WPName
  *
@@ -211,7 +211,7 @@
 }
  *
  */
-const boatOverviewVerbose = false;
+const boatOverviewVerbose = true;
 const BOAT_OVERVIEW_TAG_NAME = 'boat-overview';
 
 const boatOverviewDefaultColorConfig = {
@@ -251,15 +251,15 @@ class BoatOverview extends HTMLElement {
 			"lwy",          // Float. Leeway [-180..180] Numeric value
 			"cmg",          // Integer. Course Made Good [0..360] Numeric value
 			"b2wp",         // Integer. Bearing to Next Way Point [0..360] Numeric value
-			"D",            // Float. Magnetic Declination Numeric value +/-
-			"d",            // Float. Magnetic deviation Numeric value +/-
-			"withCurrent",  // Boolean. Draw current
-			"withLabels",   // Boolean. Draw Labels on graphic
-			"withVMG",      // Boolean. Draw VMG
-			"vmgOnWind",    // Boolean. true: on Wind, false: on WayPoint
-			"withW",        // Boolean. Draw D & d
-			"boatShape",    // String. MONO, CATA, TRI
-			"wpName"        // String. Next WayPoint name
+			"decl",         // Float. Magnetic Declination Numeric value +/-
+			"dev",          // Float. Magnetic deviation Numeric value +/-
+			"with-current",  // Boolean. Draw current
+			"with-labels",   // Boolean. Draw Labels on graphic
+			"with-vmg",      // Boolean. Draw VMG
+			"vmg-on-wind",    // Boolean. true: on Wind, false: on WayPoint
+			"with-w",        // Boolean. Draw D & d
+			"boat-shape",    // String. MONO, CATA, TRI
+			"wp-name"        // String. Next WayPoint name
 
 		];
 	}
@@ -294,8 +294,8 @@ class BoatOverview extends HTMLElement {
 		this._lwy = 0; // Leeway
 		this._cmg = 0; // Course Made Good
 		this._b2wp = 0; // Bearing to WP
-		this._D = 0;   // Declination
-		this._d = 0;   // deviation
+		this._Decl = 0;   // Declination
+		this._dev = 0;   // deviation
 
 		this._withCurrent = false;
 		this._withLabels = true
@@ -303,7 +303,7 @@ class BoatOverview extends HTMLElement {
 		this._vmgOnWind = true; // False means vmg on WP
 		this._withW = false;    // Requires D and d
 
-		this._boatShape = "MONO";
+		this._boatShape = "MONO"; // "CATA"; //"MONO"; // "TRI";
 		this._wpName = "";
 
 		this._previousClassName = "";
@@ -312,13 +312,13 @@ class BoatOverview extends HTMLElement {
 		this.speedScale = 10; // Default value
 
 		this.WL_RATIO_COEFF = 0.75; // Ratio to apply to (3.5 * Width / Length)
-		this.BOAT_LENGTH = 50;
+		this.BOAT_LENGTH = 100; // 50;
 	}
 
 	// Called whenever the custom element is inserted into the DOM.
 	connectedCallback() {
 		if (boatOverviewVerbose) {
-			console.log("connectedCallback invoked, 'value' is [", this.value, "]");
+			console.log("connectedCallback invoked.");
 		}
 		this.repaint();
 	}
@@ -388,35 +388,36 @@ class BoatOverview extends HTMLElement {
 			case "b2wp":
 				this._b2wp = parseFloat(newVal);
 				break;
-			case "D":
+			case "decl":
 				this._D = parseFloat(newVal);
 				break;
-			case "d":
+			case "dev":
 				this._d = parseFloat(newVal);
 				break;
 
-			case "withCurrent":
+			case "with-current":
 				this._withCurrent = (newVal === 'true');
 				break;
-			case "withLabels":
+			case "with-labels":
 				this._withLabels = (newVal === 'true');
 				break;
-			case "withVMG":
+			case "with-vmg":
 				this._withVMG = (newVal === 'true');
 				break;
-			case "vmgOnWind":
+			case "vmg-on-wind":
 				this._vmgOnWind = (newVal === 'true');
 				break;
-			case "withW":
+			case "with-w":
 				this._withW = (newVal === 'true');
 				break;
 
-			case "boatShape":
+			case "boat-shape":
+				console.log('BoatShape changing')
 				if (newVal === 'MONO' || newVal === 'CATA' || newVal === 'TRI') {
 					this._boatShape = newVal;
 				}
 				break;
-			case "wpName":
+			case "wp-name":
 				this._wpName = newVal;
 				break;
 			default:
@@ -430,14 +431,6 @@ class BoatOverview extends HTMLElement {
 		if (boatOverviewVerbose) {
 			console.log("adoptedCallback invoked");
 		}
-	}
-
-	set value(option) {
-		this.setAttribute("value", option);
-		if (boatOverviewVerbose) {
-			console.log(">> Value option:", option);
-		}
-//	this.repaint(); // Done in attributeChangedCallback
 	}
 
 	// Setters
@@ -509,44 +502,44 @@ class BoatOverview extends HTMLElement {
 		this.setAttribute("b2wp", val);
 	}
 
-	set D(val) {
-		this.setAttribute("D", val);
+	set Decl(val) {
+		this.setAttribute("decl", val);
 	}
 
-	set d(val) {
-		this.setAttribute("d", val);
+	set dev(val) {
+		this.setAttribute("dev", val);
+	}
+
+	set withCurrent(val) {
+		this.setAttribute("with-current", val);
+	}
+
+	set withLabels(val) {
+		this.setAttribute("with-labels", val);
+	}
+
+	set withVMG(val) {
+		this.setAttribute("with-vmg", val);
+	}
+
+	set vmgOnWind(val) {
+		this.setAttribute("vmg-on-wind", val);
+	}
+
+	set withW(val) {
+		this.setAttribute("with-w", val);
+	}
+
+	set wpName(val) {
+		this.setAttribute("wp-name", val);
+	}
+
+	set boatShape(val) {
+		this.setAttribute("boat-shape", val);
 	}
 
 	set shadowRoot(val) {
 		this._shadowRoot = val;
-	}
-
-	set withCurrent(val) {
-		this.setAttribute("withCurrent", val);
-	}
-
-	set withLabels(val) {
-		this.setAttribute("withLabels", val);
-	}
-
-	set withVMG(val) {
-		this.setAttribute("withVMG", val);
-	}
-
-	set vmgOnWind(val) {
-		this.setAttribute("vmgOnWind", val);
-	}
-
-	set withW(val) {
-		this.setAttribute("withW", val);
-	}
-
-	set wpName(val) {
-		this.setAttribute("wpName", val);
-	}
-
-	set boatShape(val) {
-		this.setAttribute("boatShape", val);
 	}
 
 	// Getters
@@ -618,12 +611,12 @@ class BoatOverview extends HTMLElement {
 		return this._b2wp;
 	}
 
-	get D() {
-		return this._D;
+	get Decl() {
+		return this._Decl;
 	}
 
-	get d() {
-		return this._d;
+	get dev() {
+		return this._dev;
 	}
 
 	get withCurrent() {
@@ -965,13 +958,13 @@ class BoatOverview extends HTMLElement {
 		let x = center.x;
 		let y = center.y;
 
-		let _cmg = Utilities.toRadians(cmg);
+		let _cmg = Utilities.toRadians(this.cmg);
 		let bspLength = this.bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXcmg = bspLength * Math.sin(_cmg);
 		let dYcmg = - bspLength * Math.cos(_cmg);
 
-		let _cog = Utilities.toRadians(cog);
-		let sogLength = sog * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		let _cog = Utilities.toRadians(this.cog);
+		let sogLength = this.sog * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXcog = sogLength * Math.sin(_cog);
 		let dYcog = - sogLength * Math.cos(_cog);
 
@@ -1030,30 +1023,137 @@ class BoatOverview extends HTMLElement {
 	}
 
 	drawBoat(context, trueHeading) { // Boat Shape = MONO, for now.
-		let cWidth = this.width;
-		let cHeight = this.height;
-
 		let x = [];
-		x.push(this.WL_RATIO_COEFF * 0);
-		x.push(this.WL_RATIO_COEFF * this.BOAT_LENGTH / 7);
-		x.push(this.WL_RATIO_COEFF * (2 * this.BOAT_LENGTH) / 7);
-		x.push(this.WL_RATIO_COEFF * (2 * this.BOAT_LENGTH) / 7);
-		x.push(this.WL_RATIO_COEFF * (1.5 * this.BOAT_LENGTH) / 7);
-		x.push(this.WL_RATIO_COEFF * -(1.5 * this.BOAT_LENGTH) / 7);
-		x.push(this.WL_RATIO_COEFF * -(2 * this.BOAT_LENGTH) / 7);
-		x.push(this.WL_RATIO_COEFF * -(2 * this.BOAT_LENGTH) / 7);
-		x.push(this.WL_RATIO_COEFF * -this.BOAT_LENGTH / 7);
 		let y = [];// Half, length
-		y.push(-(4 * this.BOAT_LENGTH) / 7);
-		y.push(-(3 * this.BOAT_LENGTH) / 7);
-		y.push(-(this.BOAT_LENGTH) / 7);
-		y.push(this.BOAT_LENGTH / 7);
-		y.push((3 * this.BOAT_LENGTH) / 7);
-		y.push((3 * this.BOAT_LENGTH) / 7);
-		y.push(this.BOAT_LENGTH / 7);
-		y.push(-(this.BOAT_LENGTH) / 7);
-		y.push(-(3 * this.BOAT_LENGTH) / 7);
 
+		if (this.boatShape === 'MONO') {
+			// Width
+			x.push(this.WL_RATIO_COEFF * 0); // Bow
+			//     Starboard
+			x.push(this.WL_RATIO_COEFF * (   1 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (   2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (   2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * ( 1.5 * this.BOAT_LENGTH) / 7); // Transom, starboard
+			//     Port
+			x.push(this.WL_RATIO_COEFF * (-1.5 * this.BOAT_LENGTH) / 7); // Transom, port
+			x.push(this.WL_RATIO_COEFF * (  -2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -1 * this.BOAT_LENGTH) / 7);
+
+			// Length
+			y.push((-4 * this.BOAT_LENGTH) / 7); // Bow
+			//      Starboard
+			y.push((-3 * this.BOAT_LENGTH) / 7);
+			y.push((-1 * this.BOAT_LENGTH) / 7);
+			y.push( (1 * this.BOAT_LENGTH) / 7);
+			y.push( (3 * this.BOAT_LENGTH) / 7);
+			//     Port
+			y.push( (3 * this.BOAT_LENGTH) / 7);
+			y.push( (1 * this.BOAT_LENGTH) / 7);
+			y.push((-1 * this.BOAT_LENGTH) / 7);
+			y.push((-3 * this.BOAT_LENGTH) / 7);
+
+		} else if (this.boatShape === 'CATA') {
+			x.push(this.WL_RATIO_COEFF * 0); // Arm, front, center
+			// Starboard
+			x.push(this.WL_RATIO_COEFF * (   1 * this.BOAT_LENGTH) / 7); // Arm starboard, hull side
+			x.push(this.WL_RATIO_COEFF * ( 1.5 * this.BOAT_LENGTH) / 7); // Starboard bow
+			x.push(this.WL_RATIO_COEFF * (   2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (   2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (   2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * ( 1.8 * this.BOAT_LENGTH) / 7); // Starboard transform, ext
+			x.push(this.WL_RATIO_COEFF * ( 1.2 * this.BOAT_LENGTH) / 7); // Starboard transform, int
+			x.push(this.WL_RATIO_COEFF * (   1 * this.BOAT_LENGTH) / 7); // Arm, back, starboard, hull side
+			x.push(this.WL_RATIO_COEFF * (   0 * this.BOAT_LENGTH) / 7); // Arm, back, starboard, center
+			// Port
+			x.push(this.WL_RATIO_COEFF * (  -0 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -1 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (-1.2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (-1.8 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (-1.5 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -1 * this.BOAT_LENGTH) / 7);
+
+			// Length
+			y.push((-1 * this.BOAT_LENGTH) / 7);
+			//   Starboard
+			y.push((-1 * this.BOAT_LENGTH) / 7);
+			y.push((-4 * this.BOAT_LENGTH) / 7); // Bow
+			y.push((-1 * this.BOAT_LENGTH) / 7);
+			y.push((0 * this.BOAT_LENGTH) / 7);
+			y.push((1 * this.BOAT_LENGTH) / 7);
+			y.push((3 * this.BOAT_LENGTH) / 7);
+			y.push((3 * this.BOAT_LENGTH) / 7);
+			y.push((1 * this.BOAT_LENGTH) / 7);
+			y.push((1 * this.BOAT_LENGTH) / 7);
+			//    Port
+			y.push((1 * this.BOAT_LENGTH) / 7);
+			y.push((1 * this.BOAT_LENGTH) / 7); // Bow
+			y.push((3 * this.BOAT_LENGTH) / 7);
+			y.push((3 * this.BOAT_LENGTH) / 7);
+			y.push((1 * this.BOAT_LENGTH) / 7);
+			y.push((0 * this.BOAT_LENGTH) / 7);
+			y.push((-1 * this.BOAT_LENGTH) / 7);
+			y.push((-4 * this.BOAT_LENGTH) / 7);
+			y.push((-1 * this.BOAT_LENGTH) / 7);
+
+		} else if (this.boatShape === 'TRI') {
+			// Width
+			x.push(this.WL_RATIO_COEFF * 0); // Bow, center hull
+			// Starboard
+			x.push(this.WL_RATIO_COEFF * (  0.3 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (  0.6 * this.BOAT_LENGTH) / 7); // Arm, front, starboard, inside
+			x.push(this.WL_RATIO_COEFF * (  1.6 * this.BOAT_LENGTH) / 7); // Arm, front, starboard, outside
+			x.push(this.WL_RATIO_COEFF * (  1.8 * this.BOAT_LENGTH) / 7); // Outrigger bow
+			x.push(this.WL_RATIO_COEFF * (    2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (    2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (  1.9 * this.BOAT_LENGTH) / 7); // Outrigger transom, ext
+			x.push(this.WL_RATIO_COEFF * (  1.7 * this.BOAT_LENGTH) / 7); // Outrigger transom, int
+			x.push(this.WL_RATIO_COEFF * (  1.6 * this.BOAT_LENGTH) / 7); // Arm, back, starboard, outside
+			x.push(this.WL_RATIO_COEFF * (  0.6 * this.BOAT_LENGTH) / 7); // Arm, back, starboard, inside
+			x.push(this.WL_RATIO_COEFF * (  0.3 * this.BOAT_LENGTH) / 7); // Main hull, transom starboard,
+			// Port
+			x.push(this.WL_RATIO_COEFF * ( -0.3 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * ( -0.6 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * ( -1.6 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * ( -1.7 * this.BOAT_LENGTH) / 7); // Outrigger transom, int
+			x.push(this.WL_RATIO_COEFF * ( -1.9 * this.BOAT_LENGTH) / 7); // Outrigger transom, ext
+			x.push(this.WL_RATIO_COEFF * (   -2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * (   -2 * this.BOAT_LENGTH) / 7);
+			x.push(this.WL_RATIO_COEFF * ( -1.8 * this.BOAT_LENGTH) / 7); // Outrigger bow
+			x.push(this.WL_RATIO_COEFF * ( -1.6 * this.BOAT_LENGTH) / 7); // Arm, front, starboard, outside
+			x.push(this.WL_RATIO_COEFF * ( -0.6 * this.BOAT_LENGTH) / 7); // Arm, front, starboard, inside
+			x.push(this.WL_RATIO_COEFF * ( -0.3 * this.BOAT_LENGTH) / 7);
+
+			// Length
+			y.push((-4 * this.BOAT_LENGTH) / 7); // Bow
+			// Starboard
+			y.push((-3 * this.BOAT_LENGTH) / 7);
+			y.push((-1 * this.BOAT_LENGTH) / 7); // Starboard arm, front
+			y.push((-1 * this.BOAT_LENGTH) / 7); // Starboard arm, front, outrigger
+			y.push((-2.6 * this.BOAT_LENGTH) / 7); // Starboard outrigger bow
+			y.push((-1.5 * this.BOAT_LENGTH) / 7);
+			y.push(( 1.5 * this.BOAT_LENGTH) / 7);
+			y.push(( 2.5 * this.BOAT_LENGTH) / 7); // Starboard transom, ext
+			y.push(( 2.5 * this.BOAT_LENGTH) / 7); // Starboard transom, ext
+			y.push(( 1 * this.BOAT_LENGTH) / 7); // Starboard arm, back, outrigger
+			y.push(( 1 * this.BOAT_LENGTH) / 7); // Starboard arm, hull
+			y.push(( 3 * this.BOAT_LENGTH) / 7);
+			// Port
+			y.push(( 3 * this.BOAT_LENGTH) / 7);
+			y.push(( 1 * this.BOAT_LENGTH) / 7);
+			y.push(( 1 * this.BOAT_LENGTH) / 7);
+			y.push(( 2.5 * this.BOAT_LENGTH) / 7);
+			y.push(( 2.5 * this.BOAT_LENGTH) / 7);
+			y.push(( 1.5 * this.BOAT_LENGTH) / 7);
+			y.push((-1.5 * this.BOAT_LENGTH) / 7);
+			y.push((-2.6 * this.BOAT_LENGTH) / 7);
+			y.push((-1 * this.BOAT_LENGTH) / 7);
+			y.push((-1 * this.BOAT_LENGTH) / 7);
+			y.push((-3 * this.BOAT_LENGTH) / 7);
+		}
 		let xPoints = [];
 		let yPoints = [];
 
@@ -1065,9 +1165,9 @@ class BoatOverview extends HTMLElement {
 		let ptX = center.x;
 		let ptY = center.y;
 
-		for (let i=0; i<x.length; i++) {
+		for (let i=0; i<x.length; i++) { // Rotation
 			let dx = x[i] * Math.cos(Utilities.toRadians(trueHeading)) + (y[i] * (-Math.sin(Utilities.toRadians(trueHeading))));
-			let dy = x[i] * Math.sin(Utilities.toRadians(trueHeading)) + (y[i] * Math.cos(Utilities.toRadians(trueHeading)));
+			let dy = x[i] * Math.sin(Utilities.toRadians(trueHeading)) + (y[i] *   Math.cos(Utilities.toRadians(trueHeading)));
 			xPoints.push(Math.round(ptX + dx));
 			yPoints.push(Math.round(ptY + dy));
 		}
