@@ -4,3 +4,4 @@ node_modules
 .idea/
 oliv-components/widgets/Library
 **/*.min.*
+**/yarn.lock

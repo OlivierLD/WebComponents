@@ -19,10 +19,10 @@ if (env === 'build') {
 
 const config = {
   mode: mode,
-  entry: __dirname + '/DirectionDisplay.js',
+  entry: __dirname + '/BoatOverview.js',
   devtool: 'source-map',
   output: {
-    path: __dirname + '../../../lib/direction',
+    path: __dirname + '../../../lib/boatoverview',
     filename: outputFile,
     library: libraryName,
     libraryTarget: 'umd',

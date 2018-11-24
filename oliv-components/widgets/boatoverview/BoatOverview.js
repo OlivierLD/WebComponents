@@ -217,16 +217,25 @@ const boatOverviewVerbose = true;
 const BOAT_OVERVIEW_TAG_NAME = 'boat-overview';
 
 const boatOverviewDefaultColorConfig = {
-	bgColor: 'white',
 	displayBackgroundGradient: {
 		from: 'silver',
 		to: 'lightgray'
 	},
-	gridColor: 'rgba(255, 255, 255, 0.7)',
-	displayColor: 'cyan',
-	valueNbDecimal: 2,
-	labelFont: 'Courier New',
-	valueFont: 'Arial'
+	gridColor: 'gray',
+
+	twArrowColor: 'black',
+	bspArrowColor: 'red',
+	cmgArrowColor:'cyan',
+	awArrowColor: 'blue',
+	gpsWsArrowColor: 'coral',
+	vmgArrowColor: 'red',
+	currentArrowColor: 'royalblue',
+	boatFillColor: 'silver',
+	boatOutlineColor: 'blue',
+
+	nmeaDataDisplayColor: 'royalblue',
+	calculatedDataDisplayColor: 'darkcyan',
+	vmgDataDisplayColor: 'red'
 };
 
 import * as Utilities from "../utilities/Utilities.js";
@@ -234,7 +243,7 @@ import * as Utilities from "../utilities/Utilities.js";
 /* global HTMLElement */
 class BoatOverview extends HTMLElement {
 
-	static get observedAttributes() {
+	static get observedAttributes() { // That's a big one...
 		return [
 			"width",        // Integer. Canvas width
 			"height",       // Integer. Canvas height
@@ -690,9 +699,6 @@ class BoatOverview extends HTMLElement {
 									let key = keyValPair[0].trim();
 									let value = keyValPair[1].trim();
 									switch (key) {
-										case '--bg-color':
-											colorConfig.bgColor = value;
-											break;
 										case '--display-background-gradient-from':
 											colorConfig.displayBackgroundGradient.from = value;
 											break;
@@ -702,17 +708,41 @@ class BoatOverview extends HTMLElement {
 										case '--grid-color':
 											colorConfig.gridColor = value;
 											break;
-										case '--display-color':
-											colorConfig.displayColor = value;
+										case '--tw-arrow-color':
+											colorConfig.twArrowColor = value;
 											break;
-										case '--value-nb-decimal':
-											colorConfig.valueNbDecimal = value;
+										case '--bsp-arrow-color':
+											colorConfig.bspArrowColor = value;
 											break;
-										case '--label-font':
-											colorConfig.labelFont = value;
+										case '--cmg-arrow-color':
+											colorConfig.cmgArrowColor = value;
 											break;
-										case '--value-font':
-											colorConfig.valueFont = value;
+										case '--aw-arrow-color':
+											colorConfig.awArrowColor = value;
+											break;
+										case '--gps-ws-arrow-color':
+											colorConfig.gpsWsArrowColor = value;
+											break;
+										case '--vmg-arrow-color':
+											colorConfig.vmgArrowColor = value;
+											break;
+										case '--current-arrow-color':
+											colorConfig.currentArrowColor = value;
+											break;
+										case '--boat-fill-color':
+											colorConfig.boatFillColor = value;
+											break;
+										case '--boat-outline-color':
+											colorConfig.boatOutlineColor = value;
+											break;
+										case '--nmea-display-color':
+											colorConfig.nmeaDataDisplayColor = value;
+											break;
+										case '--calculated-color':
+											colorConfig.calculatedDataDisplayColor = value;
+											break;
+										case '--vmg-display-color':
+											colorConfig.vmgDataDisplayColor = value;
 											break;
 										default:
 											break;
@@ -757,14 +787,14 @@ class BoatOverview extends HTMLElement {
 		// create a new line object
 		let line = new Line(x + dX, y + dY, x, y);
 		// draw the line
-		context.strokeStyle = "black";
-		context.fillStyle   = "black";
+		context.strokeStyle = this.boatOverviewColorConfig.twArrowColor;
+		context.fillStyle   = this.boatOverviewColorConfig.twArrowColor;
 		context.lineWidth = 5;
 		line.drawWithAnemoArrowheads(context);
 		context.closePath();
 		if (this.withLabels) {
 			context.font= "bold 12px Arial";
-			context.fillStyle = "black";
+			context.fillStyle = this.boatOverviewColorConfig.twArrowColor;
 			context.fillText("TWS:" + this.tws.toFixed(2) + " kts", x + dX, y + dY);
 			context.fillText("TWA:" + this.twa + "°", x + dX, y + dY + 14);
 		}
@@ -790,14 +820,14 @@ class BoatOverview extends HTMLElement {
 		// create a new line object
 		let line = new Line(x + dX, y + dY, x, y);
 		// draw the line
-		context.strokeStyle = "blue";
-		context.fillStyle   = "blue";
+		context.strokeStyle = this.boatOverviewColorConfig.awArrowColor;
+		context.fillStyle   = this.boatOverviewColorConfig.awArrowColor;
 		context.lineWidth = 5;
 		line.drawWithAnemoArrowheads(context);
 		context.closePath();
 		if (this.withLabels) {
 			context.font= "bold 12px Arial";
-			context.fillStyle = "blue";
+			context.fillStyle = this.boatOverviewColorConfig.awArrowColor;
 			context.fillText("AWS:" + this.aws + " kts", x + dX, y + dY);
 			context.fillText("AWA:" + this.awa + "°", x + dX, y + dY + 14);
 		}
@@ -823,7 +853,7 @@ class BoatOverview extends HTMLElement {
 		// create a new line object
 		let line = new Line(x, y, x + dX, y + dY);
 		// draw the line
-		context.strokeStyle = "red";
+		context.strokeStyle = this.boatOverviewColorConfig.bspArrowColor;
 		context.lineWidth = 3;
 		line.drawHollowArrow(context);
 		context.closePath();
@@ -831,7 +861,7 @@ class BoatOverview extends HTMLElement {
 //    len = metrics.width;
 		if (this.withLabels) {
 			context.font= "bold 12px Arial";
-			context.fillStyle = "red";
+			context.fillStyle = this.boatOverviewColorConfig.bspArrowColor;
 			context.fillText("BSP:" + this.bsp.toFixed(2) + " kts", x + dX, y + dY);
 			context.fillText("HDG:" + this.hdg.toFixed(0) + "°", x + dX, y + dY + 14);
 		}
@@ -857,14 +887,14 @@ class BoatOverview extends HTMLElement {
 		// create a new line object
 		let line = new Line(x, y, x + dX, y + dY);
 		// draw the line
-		context.strokeStyle = "cyan";
-		context.fillStyle   = "cyan";
+		context.strokeStyle = this.boatOverviewColorConfig.cmgArrowColor;
+		context.fillStyle   = this.boatOverviewColorConfig.cmgArrowColor;
 		context.lineWidth = 5;
 		line.drawWithArrowhead(context);
 		context.closePath();
 		if (this.withLabels) {
 			context.font= "bold 12px Arial";
-			context.fillStyle = "darkcyan";
+			context.fillStyle = this.boatOverviewColorConfig.calculatedDataDisplayColor;
 			context.fillText("CMG:" + this.cmg.toFixed(0) + "°", x + dX, y + dY);
 		}
 	}
@@ -889,19 +919,17 @@ class BoatOverview extends HTMLElement {
 		// create a new line object
 		let line = new Line(x, y, x + dX, y + dY);
 		// draw the line
-		context.strokeStyle = "coral";
-		context.fillStyle   = "coral";
+		context.strokeStyle = this.boatOverviewColorConfig.gpsWsArrowColor;
+		context.fillStyle   = this.boatOverviewColorConfig.gpsWsArrowColor;
 		context.lineWidth = 5;
 		line.drawWithArrowhead(context);
 		context.closePath();
 		if (this.withLabels) {
 			context.font= "bold 12px Arial";
-			context.fillStyle = "coral";
+			context.fillStyle = this.boatOverviewColorConfig.gpsWsArrowColor;
 			context.fillText("SOG:" + this.sog + " kts", x + dX, y + dY);
 			context.fillText("COG:" + this.cog + "°", x + dX, y + dY + 14);
-			context.strokeStyle = "black";
 			context.lineWidth = 1;
-//    context.strokeText("SOG:" + sog.toFixed(2) + " kts, COG:" + cog + "", x + dX, y + dY);
 		}
 	}
 
@@ -920,8 +948,8 @@ class BoatOverview extends HTMLElement {
 		} else {
 			_hdg = Utilities.toRadians(this.b2wp);
 			// Display WP direction
-			context.strokeStyle = "red";
-			context.fillStyle   = "red";
+			context.strokeStyle = this.boatOverviewColorConfig.vmgArrowColor;
+			context.fillStyle   = this.boatOverviewColorConfig.vmgArrowColor;
 			context.lineWidth = 1;
 			let len = 0.75 * Math.min(cHeight, cWidth) / 2;
 			let _dX = len * Math.sin(_hdg);
@@ -937,19 +965,16 @@ class BoatOverview extends HTMLElement {
 		// create a new line object
 		let line = new Line(x, y, x + dX, y + dY);
 		// draw the line
-		context.strokeStyle = "red";
-		context.fillStyle   = "red";
+		context.strokeStyle = this.boatOverviewColorConfig.vmgArrowColor;
+		context.fillStyle   = this.boatOverviewColorConfig.vmgArrowColor;
 		context.lineWidth = 5;
 		line.drawWithArrowhead(context);
 		context.closePath();
 		if (this.withLabels) {
 			context.save();
 			context.font= "bold 12px Arial";
-			context.fillStyle = "red";
+			context.fillStyle = this.boatOverviewColorConfig.vmgArrowColor;
 			context.fillText("VMG:" + this.vmg.toFixed(2) + " kts", x + dX, y + dY);
-			context.strokeStyle = "black";
-			context.lineWidth = 1;
-//    context.strokeText("SOG:" + sog.toFixed(2) + " kts, COG:" + cog + "", x + dX, y + dY);
 			context.restore();
 		}
 		if (context.setLineDash !== undefined) {
@@ -993,14 +1018,14 @@ class BoatOverview extends HTMLElement {
 		// create a new line object
 		let line = new Line(x + dXcmg, y + dYcmg, x + dXcog, y + dYcog);
 		// draw the line
-		context.strokeStyle = "royalblue";
-		context.fillStyle   = "royalblue";
+		context.strokeStyle = this.boatOverviewColorConfig.currentArrowColor;
+		context.fillStyle   = this.boatOverviewColorConfig.currentArrowColor;
 		context.lineWidth = 5;
 		line.drawWithArrowhead(context);
 		context.closePath();
 		if (this.withLabels) {
 			context.font= "bold 12px Arial";
-			context.fillStyle = "royalblue";
+			context.fillStyle = this.boatOverviewColorConfig.currentArrowColor;
 			context.fillText("CSP:" + this.csp.toFixed(2) + " kts", x + dXcog, y + dYcog + 28); // + 14 not to overlap the SOG/COG
 			context.fillText("CDR:" + this.cdr.toFixed(0) + "°", x + dXcog, y + dYcog + 42);
 		}
@@ -1037,14 +1062,14 @@ class BoatOverview extends HTMLElement {
 		// create a new line object
 		let line = new Line(x + dXaw, y + dYaw, x + dXtw, y + dYtw);
 		// draw the line
-		context.strokeStyle = "coral";
-		context.fillStyle   = "coral";
+		context.strokeStyle = this.boatOverviewColorConfig.gpsWsArrowColor;
+		context.fillStyle   = this.boatOverviewColorConfig.gpsWsArrowColor;
 		context.lineWidth = 5;
 		line.drawWithAnemoArrowheads(context);
 		context.closePath();
 	}
 
-	drawBoat(context, trueHeading) { // Boat Shape = MONO, for now.
+	drawBoat(context, trueHeading) {
 		let x = [];
 		let y = [];// Half, length
 
@@ -1242,7 +1267,7 @@ class BoatOverview extends HTMLElement {
 			xPoints.push(Math.round(ptX + dx));
 			yPoints.push(Math.round(ptY + dy));
 		}
-		context.fillStyle = 'silver';
+		context.fillStyle = this.boatOverviewColorConfig.boatFillColor;
 		context.beginPath();
 		context.moveTo(xPoints[0], yPoints[0]);
 		for (let i=1; i<xPoints.length; i++) {
@@ -1250,7 +1275,7 @@ class BoatOverview extends HTMLElement {
 		}
 		context.closePath();
 		context.fill();
-		context.strokeStyle = 'blue';
+		context.strokeStyle = this.boatOverviewColorConfig.boatOutlineColor;
 		context.lineWidth = 2;
 		context.stroke();
 	}
@@ -1267,7 +1292,6 @@ class BoatOverview extends HTMLElement {
 				// Absorb?
 				console.log(err);
 			}
-
 			this._previousClassName = currentStyle;
 		}
 
@@ -1281,13 +1305,12 @@ class BoatOverview extends HTMLElement {
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;
 
+		// Background
 		let grd = context.createLinearGradient(0, 5, 0, this.height);
 		grd.addColorStop(0, this.boatOverviewColorConfig.displayBackgroundGradient.from); // 0  Beginning
 		grd.addColorStop(1, this.boatOverviewColorConfig.displayBackgroundGradient.to); // 1  End
 		context.fillStyle = grd;
 		context.fillRect(0, 0, this.width, this.height);
-
-		context.fillStyle = this.boatOverviewColorConfig.displayColor;
 
 		// The actual Graph:
 		let maxSpeed = 5;
@@ -1300,17 +1323,12 @@ class BoatOverview extends HTMLElement {
 		let cWidth  = this.width;
 		let cHeight = this.height;
 
-//  context.beginPath();
-//  context.lineWidth = 1;
-//  context.strokeStyle = 'black';
-//  context.strokeText("Overview", 10, 20); // Outlined
-//  context.closePath();
 		// Circles
 		let center = this.getCanvasCenter();
 		let x = center.x;
 		let y = center.y;
 
-		context.strokeStyle = 'gray';
+		context.strokeStyle = this.boatOverviewColorConfig.gridColor;
 		for (let circ=1; circ<=this.speedScale; circ++) {
 			let radius = this._zoom * Math.round(circ * ((Math.min(cHeight, cWidth) / 2) / this.speedScale));
 			context.beginPath();
@@ -1339,7 +1357,7 @@ class BoatOverview extends HTMLElement {
 		}
 		// Display values
 		// See http://www.w3schools.com/tags/ref_entities.asp, &deg; = &#176;
-		context.fillStyle = 'royalblue';
+		context.fillStyle = this.boatOverviewColorConfig.nmeaDataDisplayColor;
 		context.font="bold 16px Courier New";
 		let txtY = 20;
 		var space = 18;
@@ -1355,7 +1373,8 @@ class BoatOverview extends HTMLElement {
 		txtY += space;
 		context.fillText("AWA", col1, txtY);
 		context.fillText(this.awa + "°", col2, txtY);
-		context.fillStyle = 'darkcyan';
+
+		context.fillStyle = this.boatOverviewColorConfig.calculatedDataDisplayColor;
 		txtY += space;
 		context.fillText("TWS", col1, txtY);
 		context.fillText(this.tws.toFixed(2) + " kts", col2, txtY);
@@ -1386,7 +1405,7 @@ class BoatOverview extends HTMLElement {
 			} else {
 				mess += ("on WP [" + this.wpName + "]");
 			}
-			context.fillStyle = 'red';
+			context.fillStyle = this.boatOverviewColorConfig.vmgDataDisplayColor;
 			txtY += space;
 			context.fillText("VMG", col1, txtY);
 			context.fillText(this.vmg.toFixed(2) + " kts" + mess, col2, txtY);

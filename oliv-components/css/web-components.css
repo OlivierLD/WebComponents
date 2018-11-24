@@ -482,3 +482,21 @@ compass-rose .gray-flat {
 	--frame-color: silver;
 	--value-font: Verdana;
 }
+
+.boat-overview-01 {
+	--grid-color: gray;
+	--display-background-gradient-from: darkgray;
+	--display-background-gradient-to: gray;
+	--tw-arrow-color: darkred;
+	--bsp-arrow-color: red;
+	--cmg-arrow-color: cyan;
+	--aw-arrow-color: black;
+	--gps-ws-arrow-color: darkorange;
+	--vmg-arrow-color: darkgreen;
+	--current-arrow-color: darkcyan;
+	--boat-fill-color: silver;
+	--boat-outline-color: lightblue;
+	--nmea-display-color: navy;
+	--calculated-color: blue;
+	--vmg-display-color: darkgreen;
+}

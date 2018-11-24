@@ -2951,19 +2951,34 @@
 				}
 			}
 		</script>
-		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+		<table>
+			<tr>
+				<td valign="top" style="padding: 10px;">
+					<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;boat-overview id="boat-overview-01" width="800" height="600"
                sog="6.9" cog="215" bsp="7.1" hdg="222" aws="15.8"
                awa="-112" tws="20.5" twa="-130" twd="91"
                cdr="49" csp="0.32" lwy="0" cmg="222"
-               decl="10" dev="-0.98" b2wp="230" vmg="-3.8584310339481522"
+               decl="10" dev="-0.98" b2wp="230" vmg="-3.85"
                with-current="true" with-vmg="false"/>
-		</pre>
+					</pre>
+				</td>
+				<td valign="top" style="padding: 10px;">
+					Interactive interface.<br/>
+					Change the values in the right pane to see the graphic moving.<br/>
+					It simulates the data read from the NMEA station, Boat Speed (BSP), Apparent Wind Angle (AWA), Apparent Wind Speed (AWS), Speed Over Ground from the GPS (COG), Speed Over Ground from the GPS (SOG), <i><b><u>Compass</u></b></i> Heading (HDC), subject to 2 corrections (Declination and deviation) to become HDG (through HDM).
+					<br/>
+					<i>Note:</i> The True Wind (TW) is calculated with the GPS data (SOG, COG).<br/>
+					Those data read from the station are displayed in a color different from the others, calculated.
+				</td>
+			</tr>
+		</table>
 		<table>
 			<tr>
 				<td valign="top">
 					<div class="black-frame">
 						<boat-overview id="boat-overview-01"
+													 class="boat-overview-01"
 													 width="800"
 													 height="600"
 													 boat-shape="MONO"
