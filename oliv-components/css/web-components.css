@@ -492,13 +492,13 @@ compass-rose .gray-flat {
 	--cmg-arrow-color: cyan;
 	--aw-arrow-color: black;
 	--gps-ws-arrow-color: darkorange;
-	--vmg-arrow-color: darkgreen;
-	--current-arrow-color: darkcyan;
+	--vmg-arrow-color: green;
+	--current-arrow-color: green;
 	--boat-fill-color: silver;
 	--boat-outline-color: lightblue;
 	--nmea-display-color: navy;
 	--calculated-color: blue;
-	--vmg-display-color: darkgreen;
+	--vmg-display-color: green;
 	--variation-display-color: lightpink;
 	--variation-arrow-color: lightpink;
 }
@@ -513,7 +513,7 @@ compass-rose .gray-flat {
 	--aw-arrow-color: white;
 	--gps-ws-arrow-color: darkorange;
 	--vmg-arrow-color: lightyellow;
-	--current-arrow-color: darkcyan;
+	--current-arrow-color: yellow;
 	--boat-fill-color: transparent;
 	--boat-outline-color: lightblue;
 	--nmea-display-color: cyan;

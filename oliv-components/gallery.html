@@ -2842,6 +2842,11 @@
 				elem.boatShape = shape;
 			}
 
+			function updateWithGPS(id, checked) {
+				let elem = document.getElementById(id);
+				elem.withGPS = checked;
+			}
+
 			function updateWithCurrent(id, checked) {
 				let elem = document.getElementById(id);
 				elem.withCurrent = checked;
@@ -3033,6 +3038,8 @@
 									<option value="TRI">Trimaran</option>
 									<option value="PLANE">Plane</option>
 								</select>
+								<br/>
+								<input id="with-vmg" type="checkbox" onchange="updateWithGPS('boat-overview-01', this.checked);" checked/>With GPS
 								<br/>
 								<input id="with-wind" type="checkbox" onchange="updateWithWind('boat-overview-01', this.checked);" checked />With Wind
 								<br/>

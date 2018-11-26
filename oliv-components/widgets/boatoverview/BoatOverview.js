@@ -213,7 +213,7 @@
 }
  *
  */
-const boatOverviewVerbose = true;
+const boatOverviewVerbose = false;
 const BOAT_OVERVIEW_TAG_NAME = 'boat-overview';
 
 const boatOverviewDefaultColorConfig = {
@@ -268,6 +268,7 @@ class BoatOverview extends HTMLElement {
 			"decl",         // Float. Magnetic Declination Numeric value +/-
 			"dev",          // Float. Magnetic deviation Numeric value +/-
 			"with-current", // Boolean. Draw current
+			"with-gps",    // Boolean. Draw SOG & COG
 			"with-wind",    // Boolean. Draw wind (app & true)
 			"with-true-wind", // Boolean. Draw true wind
 			"with-labels",  // Boolean. Draw Labels on graphic
@@ -318,6 +319,7 @@ class BoatOverview extends HTMLElement {
 
 		this._withCurrent = false;
 		this._withLabels = true
+		this._withGPS = true;
 		this._withWind = true;
 		this._withTrueWind = true;
 		this._withVMG = true;
@@ -422,6 +424,9 @@ class BoatOverview extends HTMLElement {
 
 			case "with-current":
 				this._withCurrent = (newVal === 'true');
+				break;
+			case "with-gps":
+				this._withGPS = (newVal === 'true');
 				break;
 			case "with-true-wind":
 				this._withTrueWind = (newVal === 'true');
@@ -545,6 +550,10 @@ class BoatOverview extends HTMLElement {
 		this.setAttribute("zoom-on-boat", val);
 	}
 
+	set withGPS(val) {
+		this.setAttribute("with-gps", val);
+	}
+
 	set withCurrent(val) {
 		this.setAttribute("with-current", val);
 	}
@@ -664,6 +673,10 @@ class BoatOverview extends HTMLElement {
 
 	get zoomOnBoat() {
 		return this._zoom;
+	}
+
+	get withGPS() {
+		return this._withGPS;
 	}
 
 	get withCurrent() {
@@ -827,7 +840,7 @@ class BoatOverview extends HTMLElement {
 		context.lineWidth = 5;
 		line.drawWithAnemoArrowheads(context);
 		context.closePath();
-		if (this.withLabels) {
+		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.twArrowColor;
 			context.fillText("TWS:" + this.tws.toFixed(2) + " kts", x + dX, y + dY);
@@ -860,7 +873,7 @@ class BoatOverview extends HTMLElement {
 		context.lineWidth = 5;
 		line.drawWithAnemoArrowheads(context);
 		context.closePath();
-		if (this.withLabels) {
+		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.awArrowColor;
 			context.fillText("AWS:" + this.aws + " kts", x + dX, y + dY);
@@ -894,7 +907,7 @@ class BoatOverview extends HTMLElement {
 		context.closePath();
 //    let metrics = context.measureText(valueToDisplay);
 //    len = metrics.width;
-		if (this.withLabels) {
+		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.bspArrowColor;
 			context.fillText("BSP:" + this.bsp.toFixed(2) + " kts", x + dX, y + dY);
@@ -927,7 +940,7 @@ class BoatOverview extends HTMLElement {
 		context.lineWidth = 5;
 		line.drawWithArrowhead(context);
 		context.closePath();
-		if (this.withLabels) {
+		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.calculatedDataDisplayColor;
 			context.fillText("CMG:" + this.cmg.toFixed(0) + "°", x + dX, y + dY);
@@ -962,7 +975,7 @@ class BoatOverview extends HTMLElement {
 		context.lineWidth = 5;
 		line.drawWithArrowhead(context);
 		context.closePath();
-		if (this.withLabels) {
+		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
 			context.fillText("HDM:" + hdm.toFixed(0) + "°", x + dX, y + dY);
@@ -980,7 +993,7 @@ class BoatOverview extends HTMLElement {
 		context.lineWidth = 5;
 		line.drawWithArrowhead(context);
 		context.closePath();
-		if (this.withLabels) {
+		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
 			context.fillText("HDC:" + hdc.toFixed(0) + "°", x + dX, y + dY);
@@ -1011,7 +1024,7 @@ class BoatOverview extends HTMLElement {
 		context.lineWidth = 5;
 		line.drawWithArrowhead(context);
 		context.closePath();
-		if (this.withLabels) {
+		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.gpsWsArrowColor;
 			context.fillText("SOG:" + this.sog + " kts", x + dX, y + dY);
@@ -1043,7 +1056,7 @@ class BoatOverview extends HTMLElement {
 			let _dY = - len * Math.cos(_hdg);
 			let wpLine = new Line(x, y, x + _dX, y + _dY);
 			wpLine.drawWithArrowhead(context);
-			context.fillText(this.wpName, x + _dX, y + _dY);
+			context.fillText(this._wpName, x + _dX, y + _dY);
 		}
 
 		let bspLength = this._zoom * this.vmg * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
@@ -1057,7 +1070,7 @@ class BoatOverview extends HTMLElement {
 		context.lineWidth = 5;
 		line.drawWithArrowhead(context);
 		context.closePath();
-		if (this.withLabels) {
+		if (this._withLabels) {
 			context.save();
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.vmgArrowColor;
@@ -1110,7 +1123,7 @@ class BoatOverview extends HTMLElement {
 		context.lineWidth = 5;
 		line.drawWithArrowhead(context);
 		context.closePath();
-		if (this.withLabels) {
+		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.currentArrowColor;
 			context.fillText("CSP:" + this.csp.toFixed(2) + " kts", x + dXcog, y + dYcog + 28); // + 14 not to overlap the SOG/COG
@@ -1431,22 +1444,26 @@ class BoatOverview extends HTMLElement {
 
 		this.drawBoat(context, this.hdg);
 		if (this._withWind && this._withTrueWind) {
-			this.drawTrueWind(context);
-			this.drawVW(context); // Speed Wind (Velocity)
+			if (this._withGPS) {
+				this.drawTrueWind(context);
+				this.drawVW(context); // Speed Wind (Velocity)
+			}
 		}
 		if (this._withWind) {
 			this.drawAppWind(context);
 		}
 		this.drawBSP(context);
-		if (this.withW) {
+		if (this._withW) {
 			this.drawW(context);
 		}
 		this.drawCMG(context);
-		this.drawSOG(context);
-		if (this.withCurrent) {
+		if (this._withGPS) {
+			this.drawSOG(context);
+		}
+		if (this._withCurrent && this._withGPS) {
 			this.drawCurrent(context);
 		}
-		if (this.withVMG) {
+		if (this._withVMG && this._withGPS) {
 			this.drawVMG(context);
 		}
 		// Display values
@@ -1472,7 +1489,7 @@ class BoatOverview extends HTMLElement {
 
 		context.fillStyle = this.boatOverviewColorConfig.calculatedDataDisplayColor;
 		txtY += space;
-		if (this._withWind && this._withTrueWind) {
+		if (this._withWind && this._withTrueWind && this._withGPS) {
 			context.fillText("TWS", col1, txtY);
 			context.fillText(this.tws.toFixed(2) + " kts", col2, txtY);
 			txtY += space;
@@ -1483,12 +1500,13 @@ class BoatOverview extends HTMLElement {
 			context.fillText(this.twd + "°", col2, txtY);
 			txtY += space;
 		}
-		context.fillText("CDR", col1, txtY);
-		context.fillText(this.cdr.toFixed(0) + "°", col2, txtY);
-		txtY += space;
-		context.fillText("CSP", col1, txtY);
-		context.fillText(this.csp.toFixed(2) + " kts", col2, txtY);
-
+		if (this._withCurrent && this._withGPS) {
+			context.fillText("CDR", col1, txtY);
+			context.fillText(this.cdr.toFixed(0) + "°", col2, txtY);
+			txtY += space;
+			context.fillText("CSP", col1, txtY);
+			context.fillText(this.csp.toFixed(2) + " kts", col2, txtY);
+		}
 		txtY += space;
 		context.fillText("leeway", col1, txtY);
 		context.fillText(this.lwy.toFixed(2) + "°", col2, txtY);
@@ -1496,12 +1514,12 @@ class BoatOverview extends HTMLElement {
 		context.fillText("CMG", col1, txtY);
 		context.fillText(this.cmg.toFixed(0) + "°", col2, txtY);
 
-		if (this.withVMG) {
+		if (this._withVMG && this._withGPS) {
 			let mess = ", ";
 			if (this.vmgOnWind) {
 				mess += "on wind";
 			} else {
-				mess += ("on WP [" + this.wpName + "]");
+				mess += ("on WP [" + this._wpName + "]");
 			}
 			context.fillStyle = this.boatOverviewColorConfig.vmgDataDisplayColor;
 			txtY += space;
@@ -1509,7 +1527,7 @@ class BoatOverview extends HTMLElement {
 			context.fillText(this.vmg.toFixed(2) + " kts" + mess, col2, txtY);
 		}
 
-		if (this.withW) {
+		if (this._withW) {
 			let hdm = this.hdg + this.Decl;
 			let hdc = hdm + this.dev;
 

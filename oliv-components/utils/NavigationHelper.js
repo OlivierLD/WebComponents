@@ -155,7 +155,11 @@ let NavigationHelper = {
 	},
 
 	hdgFromHdc: function (hdc, D, d) {
-		return (hdc + this.variationCalculator(D, d));
+		let hdg = (hdc - this.variationCalculator(D, d)) % 360;
+		while (hdg < 0) {
+			hdg += 360;
+		}
+		return hdg;
 	},
 
 	vmgCalulator: function(sog, cog, twd, twa, bsp, hdg, b2wp) {
