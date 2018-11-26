@@ -2847,10 +2847,25 @@
 				elem.withCurrent = checked;
 			}
 
+			function updateWithWind(id, checked) {
+				let elem = document.getElementById(id);
+				elem.withWind = checked;
+			}
+
+			function updateWithTrueWind(id, checked) {
+				let elem = document.getElementById(id);
+				elem.withTrueWind = checked;
+			}
+
 			function updateWithVMG(id, checked) {
 				let elem = document.getElementById(id);
 				elem.withVMG = checked;
 				document.getElementById('vmg-option').style.display = (checked ? 'block' : 'none');
+			}
+
+			function updateWithW(id, checked) {
+				let elem = document.getElementById(id);
+				elem.withW = checked;
 			}
 
 			function updateWithLabels(id, checked) {
@@ -2916,6 +2931,8 @@
 						'TWS:' + tw.tws.toFixed(2) + ' kts\n' +
 						'TWA:' + tw.twa.toFixed(1) + '\272 \n' +
 						'TWD:' + tw.twd.toFixed(1) + '\272 \n' +
+						'D:' + Decl.toFixed(1) + '\272 \n' +
+						'd:' + dev.toFixed(1) + '\272 \n' +
 						'Current Dir:' + current.cdr.toFixed(1) + '\272 \n' +
 						'Current Speed:' + current.csp.toFixed(2) + ' kts';
 
@@ -2936,7 +2953,7 @@
 				graph.sog = sog;
 				graph.csp = current.csp;
 				graph.cdr = current.cdr;
-				graph.decl = Decl;
+				graph.Decl = Decl;
 				graph.dev = dev;
 				graph.lwy = lwy;
 
@@ -3001,6 +3018,7 @@
 													 b2wp="230"
 													 vmg="-3.97"
 													 with-current="true"
+													 with-w="false"
 													 with-vmg="false"/>
 					</div>
 				</td>
@@ -3015,14 +3033,18 @@
 									<option value="TRI">Trimaran</option>
 									<option value="PLANE">Plane</option>
 								</select>
-								&nbsp;
+								<br/>
+								<input id="with-wind" type="checkbox" onchange="updateWithWind('boat-overview-01', this.checked);" checked />With Wind
+								<br/>
+								<input id="with-true-wind" type="checkbox" onchange="updateWithTrueWind('boat-overview-01', this.checked);" checked />With True Wind
+								<br/>
 								<input id="with-current" type="checkbox" onchange="updateWithCurrent('boat-overview-01', this.checked);" checked />With Current
-								&nbsp;
+								<br/>
 								<input id="with-vmg" type="checkbox" onchange="updateWithVMG('boat-overview-01', this.checked);"/>With VMG
-								&nbsp;
+								<br/>
+								<input id="with-w" type="checkbox" onchange="updateWithW('boat-overview-01', this.checked);"/>With Variation
+								<br/>
 								<input id="with-vmg" type="checkbox" onchange="updateWithLabels('boat-overview-01', this.checked);" checked />With Labels
-								&nbsp;
-								<label for="zoom">Zoom:</label><input style="width: 40px;" type="number" onchange="updateZoom('boat-overview-01', this.value);" id="zoom" value="1.0" min="0.1" step="0.01" placeholder="Zoom value"/>
 							</td>
 						</tr>
 						<tr>
@@ -3093,16 +3115,31 @@
 									<option value="E" selected>E</option>
 									<option value="W">W</option>
 								</select>
-								<input type="number" id="Decl-deg-01" min="0" step="1" placeholder="D degree" value="14" style="width: 50px; text-align: right;" onchange="updateBoatContext();"/>&deg;
-								<input type="number" id="Decl-min-01" min="0" max="59" step="0.1" placeholder="D min" value="0.0" style="width: 50px; text-align: right;" onchange="updateBoatContext();"/>'
+								<input type="number" id="Decl-deg-01" min="0" step="1" title="degrees" placeholder="D degree" value="14" style="width: 50px; text-align: right;" onchange="updateBoatContext();"/>&deg;
+								<input type="number" id="Decl-min-01" min="0" max="59" step="0.1" title="minutes" placeholder="D min" value="0.0" style="width: 50px; text-align: right;" onchange="updateBoatContext();"/>'
 							</td>
 							<td style="border: 1px solid silver; border-radius: 3px;">
 								<select id="dev-sign-01" onchange="updateBoatContext();">
 									<option value="E">E</option>
 									<option value="W" selected>W</option>
 								</select>
-								<input type="number" id="dev-deg-01" min="0" step="1" placeholder="d degree" value="0" style="width: 50px; text-align: right;" onchange="updateBoatContext();"/>&deg;
-								<input type="number" id="dev-min-01" min="0" max="59" step="0.1" placeholder="d min" value="58.8" style="width: 50px; text-align: right;" onchange="updateBoatContext();"/>'
+								<input type="number" id="dev-deg-01" min="0" step="1" title="degrees" placeholder="d degree" value="0" style="width: 50px; text-align: right;" onchange="updateBoatContext();"/>&deg;
+								<input type="number" id="dev-min-01" min="0" max="59" step="0.1" title="minutes" placeholder="d min" value="58.8" style="width: 50px; text-align: right;" onchange="updateBoatContext();"/>'
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" style="padding: 10px;">
+								<label for="zoom">Graph Zoom:</label><input style="width: 40px;" type="number" onchange="updateZoom('boat-overview-01', this.value);" id="zoom" value="1.0" min="0.1" step="0.01" placeholder="Zoom value"/>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" style="padding: 10px;">
+								Style:
+								<select onchange="applyClass('boat-overview-01', this);">
+									<option value="boat-overview-01" selected>One</option>
+									<option value="boat-overview-02">Two</option>
+								</select>
+
 							</td>
 						</tr>
 					</table>

@@ -229,13 +229,16 @@ const boatOverviewDefaultColorConfig = {
 	awArrowColor: 'blue',
 	gpsWsArrowColor: 'coral',
 	vmgArrowColor: 'red',
+	dDWArrowColor: 'yellow',
 	currentArrowColor: 'royalblue',
 	boatFillColor: 'silver',
 	boatOutlineColor: 'blue',
 
 	nmeaDataDisplayColor: 'royalblue',
 	calculatedDataDisplayColor: 'darkcyan',
-	vmgDataDisplayColor: 'red'
+	vmgDataDisplayColor: 'red',
+	dDWDataDisplayColor: 'yellow',
+
 };
 
 import * as Utilities from "../utilities/Utilities.js";
@@ -265,6 +268,8 @@ class BoatOverview extends HTMLElement {
 			"decl",         // Float. Magnetic Declination Numeric value +/-
 			"dev",          // Float. Magnetic deviation Numeric value +/-
 			"with-current", // Boolean. Draw current
+			"with-wind",    // Boolean. Draw wind (app & true)
+			"with-true-wind", // Boolean. Draw true wind
 			"with-labels",  // Boolean. Draw Labels on graphic
 			"with-vmg",     // Boolean. Draw VMG
 			"vmg-on-wind",  // Boolean. true: on Wind, false: on WayPoint
@@ -313,6 +318,8 @@ class BoatOverview extends HTMLElement {
 
 		this._withCurrent = false;
 		this._withLabels = true
+		this._withWind = true;
+		this._withTrueWind = true;
 		this._withVMG = true;
 		this._vmgOnWind = true; // False means vmg on WP
 		this._withW = false;    // Requires D and d
@@ -403,10 +410,10 @@ class BoatOverview extends HTMLElement {
 				this._b2wp = parseFloat(newVal);
 				break;
 			case "decl":
-				this._D = parseFloat(newVal);
+				this._Decl = parseFloat(newVal);
 				break;
 			case "dev":
-				this._d = parseFloat(newVal);
+				this._dev = parseFloat(newVal);
 				break;
 
 			case "zoom-on-boat":
@@ -415,6 +422,12 @@ class BoatOverview extends HTMLElement {
 
 			case "with-current":
 				this._withCurrent = (newVal === 'true');
+				break;
+			case "with-true-wind":
+				this._withTrueWind = (newVal === 'true');
+				break;
+			case "with-wind":
+				this._withWind = (newVal === 'true');
 				break;
 			case "with-labels":
 				this._withLabels = (newVal === 'true');
@@ -536,6 +549,14 @@ class BoatOverview extends HTMLElement {
 		this.setAttribute("with-current", val);
 	}
 
+	set withTrueWind(val) {
+		this.setAttribute("with-true-wind", val);
+	}
+
+	set withWind(val) {
+		this.setAttribute("with-wind", val);
+	}
+
 	set withLabels(val) {
 		this.setAttribute("with-labels", val);
 	}
@@ -649,6 +670,14 @@ class BoatOverview extends HTMLElement {
 		return this._withCurrent;
 	}
 
+	get withTrueWind() {
+		return this._withTrueWind;
+	}
+
+	get withWind() {
+		return this._withWind;
+	}
+
 	get withLabels() {
 		return this._withLabels;
 	}
@@ -726,6 +755,9 @@ class BoatOverview extends HTMLElement {
 										case '--vmg-arrow-color':
 											colorConfig.vmgArrowColor = value;
 											break;
+										case '--variation-arrow-color':
+											colorConfig.dDWArrowColor = value;
+											break;
 										case '--current-arrow-color':
 											colorConfig.currentArrowColor = value;
 											break;
@@ -740,6 +772,9 @@ class BoatOverview extends HTMLElement {
 											break;
 										case '--calculated-color':
 											colorConfig.calculatedDataDisplayColor = value;
+											break;
+										case '--variation-display-color':
+											colorConfig.dDWDataDisplayColor = value;
 											break;
 										case '--vmg-display-color':
 											colorConfig.vmgDataDisplayColor = value;
@@ -899,6 +934,58 @@ class BoatOverview extends HTMLElement {
 		}
 	}
 
+	drawW(context) {
+		if (this.bsp === 0 || (this.Decl === 0 && this.dev === 0)) {
+			return;
+		}
+
+		let cWidth  = this.width;
+		let cHeight = this.height;
+
+		let hdm = this.hdg + this.Decl;
+		let hdc = hdm + this.dev;
+
+		let _hdm = Utilities.toRadians(hdm);
+		context.beginPath();
+		let center = this.getCanvasCenter();
+		let x = center.x;
+		let y = center.y;
+
+		let bspLength = this._zoom * this.bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		let dX = bspLength * Math.sin(_hdm);
+		let dY = - bspLength * Math.cos(_hdm);
+		// create a new line object
+		let line = new Line(x, y, x + dX, y + dY);
+		// draw the line
+		context.strokeStyle = this.boatOverviewColorConfig.dDWArrowColor;
+		context.fillStyle   = this.boatOverviewColorConfig.dDWArrowColor;
+		context.lineWidth = 5;
+		line.drawWithArrowhead(context);
+		context.closePath();
+		if (this.withLabels) {
+			context.font= "bold 12px Arial";
+			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
+			context.fillText("HDM:" + hdm.toFixed(0) + "°", x + dX, y + dY);
+		}
+		let _hdc = Utilities.toRadians(hdc);
+		context.beginPath();
+
+		dX = bspLength * Math.sin(_hdc);
+		dY = - bspLength * Math.cos(_hdc);
+		// create a new line object
+		line = new Line(x, y, x + dX, y + dY);
+		// draw the line
+		context.strokeStyle = this.boatOverviewColorConfig.dDWArrowColor;
+		context.fillStyle   = this.boatOverviewColorConfig.dDWArrowColor;
+		context.lineWidth = 5;
+		line.drawWithArrowhead(context);
+		context.closePath();
+		if (this.withLabels) {
+			context.font= "bold 12px Arial";
+			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
+			context.fillText("HDC:" + hdc.toFixed(0) + "°", x + dX, y + dY);
+		}
+	}
 	drawSOG(context) {
 		if (this.sog === 0) {
 			return;
@@ -1343,10 +1430,17 @@ class BoatOverview extends HTMLElement {
 		}
 
 		this.drawBoat(context, this.hdg);
-		this.drawTrueWind(context);
-		this.drawAppWind(context);
-		this.drawVW(context); // Speed Wind (Velocity)
+		if (this._withWind && this._withTrueWind) {
+			this.drawTrueWind(context);
+			this.drawVW(context); // Speed Wind (Velocity)
+		}
+		if (this._withWind) {
+			this.drawAppWind(context);
+		}
 		this.drawBSP(context);
+		if (this.withW) {
+			this.drawW(context);
+		}
 		this.drawCMG(context);
 		this.drawSOG(context);
 		if (this.withCurrent) {
@@ -1368,23 +1462,27 @@ class BoatOverview extends HTMLElement {
 		context.fillText("HDG", col1, txtY);
 		context.fillText(this.hdg.toFixed(0) + "° True", col2, txtY);
 		txtY += space;
-		context.fillText("AWS", col1, txtY);
-		context.fillText(this.aws + " kts", col2, txtY);
-		txtY += space;
-		context.fillText("AWA", col1, txtY);
-		context.fillText(this.awa + "°", col2, txtY);
+		if (this._withWind) {
+			context.fillText("AWS", col1, txtY);
+			context.fillText(this.aws + " kts", col2, txtY);
+			txtY += space;
+			context.fillText("AWA", col1, txtY);
+			context.fillText(this.awa + "°", col2, txtY);
+		}
 
 		context.fillStyle = this.boatOverviewColorConfig.calculatedDataDisplayColor;
 		txtY += space;
-		context.fillText("TWS", col1, txtY);
-		context.fillText(this.tws.toFixed(2) + " kts", col2, txtY);
-		txtY += space;
-		context.fillText("TWA", col1, txtY);
-		context.fillText(this.twa + "°", col2, txtY);
-		txtY += space;
-		context.fillText("TWD", col1, txtY);
-		context.fillText(this.twd + "°", col2, txtY);
-		txtY += space;
+		if (this._withWind && this._withTrueWind) {
+			context.fillText("TWS", col1, txtY);
+			context.fillText(this.tws.toFixed(2) + " kts", col2, txtY);
+			txtY += space;
+			context.fillText("TWA", col1, txtY);
+			context.fillText(this.twa + "°", col2, txtY);
+			txtY += space;
+			context.fillText("TWD", col1, txtY);
+			context.fillText(this.twd + "°", col2, txtY);
+			txtY += space;
+		}
 		context.fillText("CDR", col1, txtY);
 		context.fillText(this.cdr.toFixed(0) + "°", col2, txtY);
 		txtY += space;
@@ -1409,6 +1507,28 @@ class BoatOverview extends HTMLElement {
 			txtY += space;
 			context.fillText("VMG", col1, txtY);
 			context.fillText(this.vmg.toFixed(2) + " kts" + mess, col2, txtY);
+		}
+
+		if (this.withW) {
+			let hdm = this.hdg + this.Decl;
+			let hdc = hdm + this.dev;
+
+			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
+			txtY += space;
+			context.fillText("D", col1, txtY);
+			context.fillText(this.Decl.toFixed(1) + "°", col2, txtY);
+			txtY += space;
+			context.fillText("d", col1, txtY);
+			context.fillText(this.dev.toFixed(1) + "°", col2, txtY);
+			txtY += space;
+			context.fillText("W", col1, txtY);
+			context.fillText((this.Decl + this.dev).toFixed(1) + "°", col2, txtY);
+			txtY += space;
+			context.fillText("HDM", col1, txtY);
+			context.fillText(hdm.toFixed(1) + "°", col2, txtY);
+			txtY += space;
+			context.fillText("HDC", col1, txtY);
+			context.fillText(hdc.toFixed(1) + "°", col2, txtY);
 		}
 
 	}

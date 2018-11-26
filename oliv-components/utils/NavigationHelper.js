@@ -112,13 +112,13 @@ let NavigationHelper = {
 				dir += 360;
 			} else if (x < 0 && y < 0) {
 				dir += 180;
-			} else if (x == 0) {
+			} else if (x === 0) {
 				if (y > 0) {
 					dir = 0.0;
 				} else {
 					dir = 180;
 				}
-			} else if (y == 0) {
+			} else if (y === 0) {
 				if (x > 0) {
 					dir = 90;
 				} else {
@@ -162,7 +162,7 @@ let NavigationHelper = {
 		let vmgWind = null;
 		let vmgWayPoint = null;
 		try {
-			if (sog != null && cog != null && twd != null) {
+			if (sog !== null && cog !== null && twd !== null) {
 				let twa = twd - cog;
 				if (sog > 0) { // Try with GPS Data first
 					vmgWind = sog * Math.cos(Math.toRadians(twa));
@@ -175,7 +175,7 @@ let NavigationHelper = {
 						vmgWind = 0;
 					}
 				}
-				if (b2wp != null) {
+				if (b2wp !== undefined && b2wp !== null) {
 					if (sog > 0) {
 						let angle = b2wp - cog;
 						vmgWayPoint = sog * Math.cos(Math.toRadians(angle));

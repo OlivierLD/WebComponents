@@ -499,4 +499,26 @@ compass-rose .gray-flat {
 	--nmea-display-color: navy;
 	--calculated-color: blue;
 	--vmg-display-color: darkgreen;
+	--variation-display-color: lightpink;
+	--variation-arrow-color: lightpink;
+}
+
+.boat-overview-02 {
+	--grid-color: limegreen;
+	--display-background-gradient-from: black;
+	--display-background-gradient-to: darkgray;
+	--tw-arrow-color: darkred;
+	--bsp-arrow-color: red;
+	--cmg-arrow-color: cyan;
+	--aw-arrow-color: white;
+	--gps-ws-arrow-color: darkorange;
+	--vmg-arrow-color: lightyellow;
+	--current-arrow-color: darkcyan;
+	--boat-fill-color: transparent;
+	--boat-outline-color: lightblue;
+	--nmea-display-color: cyan;
+	--calculated-color: yellow;
+	--vmg-display-color: lightyellow;
+	--variation-display-color: lightpink;
+	--variation-arrow-color: lightpink;
 }
