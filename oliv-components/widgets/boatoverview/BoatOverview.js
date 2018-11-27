@@ -312,8 +312,8 @@ class BoatOverview extends HTMLElement {
 		this._lwy = 0; // Leeway
 		this._cmg = 0; // Course Made Good
 		this._b2wp = 0; // Bearing to WP
-		this._Decl = 0;   // Declination
-		this._dev = 0;   // deviation
+		this._Decl = 0; // Declination
+		this._dev = 0;  // deviation
 
 		this._zoom = 1.0;
 

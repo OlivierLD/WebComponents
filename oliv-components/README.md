@@ -49,6 +49,7 @@ After starting the `node` server as mentioned above, you can also reach
 - Generic Graphs. TODO
 - Sky Map and Star Finder (along with some `REST` service(s)). &#9989; Done
 - Split-flap Display. &#9989; Done
+- Boat Overview. &#9989; Done
 
 #### <img src="./images/cone.png" alt="WIP" width="48" height="48" align="middle"> TODO
 - &#x1F6A7; Replace (or duplicate) canvases with [SVG](https://www.w3.org/TR/SVG11/)s 🚧
@@ -70,7 +71,40 @@ SkyMap in its `Sky Map` configuration:
 - Satellite plotter? &#10140; See the `doAfter` callback on the Globe examples.
 - Tide Graph?
 - Current Display?
-- Boat Overview?
+- Generic curve(s) display
+
+#### To build for prod
+You need `npm` or `yarn` to be installed. Some scripts will minimized the scripts, and use `webpack` to put everything need in only one file.
+
+In the `widgets` directory, run `./to.prod.sh` to publish them all, or `./publish.sh` to publish them one by one.
+
+```
+$ ./publish.sh
++-------------------------+
++-- P U B L I S H I N G --+
++-------------------------+
+|  1. AnalogDisplay       |
+|  2. AnalogWatch         |
+|  3. CalendarDisplay     |
+|  4. Compass             |
+|  5. Direction Display   |
+|  6. Jumbo Display       |
+|  7. Led Panel           |
+|  8. Marquee Panel       |
+|  9. Rain Meter          |
+| 10. 16 Points Display   |
+| 11. Sky Map             |
+| 12. Split Flap          |
+| 13. Thermometer         |
+| 14. Wind Angle          |
+| 15. World Map           |
+| 16. Boat Overview       |
+| ...                     |
++-------------------------+
+| Q to quit               |
++-------------------------+
+- You choose >
+```
 
 ---
 
