@@ -812,24 +812,24 @@ class BoatOverview extends HTMLElement {
 	}
 
 	getCanvasCenter() {
-		let cw = this.width;
-		let ch = this.height;
+		let cw = this._width;
+		let ch = this._height;
 		let distFromRight = Math.min(cw, ch) / 2;
 
 		return { x: cw - distFromRight, y: ch / 2};
 	}
 
 	drawTrueWind(context) {
-		let cWidth  = this.width;
-		let cHeight = this.height;
+		let cWidth  = this._width;
+		let cHeight = this._height;
 
-		let _twd = Utilities.toRadians(this.twd);
+		let _twd = Utilities.toRadians(this._twd);
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
 		let y = center.y;
 
-		let windLength = this._zoom * this.tws * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		let windLength = this._zoom * this._tws * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dX = windLength * Math.sin(_twd);
 		let dY = - windLength * Math.cos(_twd);
 		// create a new line object
@@ -843,16 +843,16 @@ class BoatOverview extends HTMLElement {
 		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.twArrowColor;
-			context.fillText("TWS:" + this.tws.toFixed(2) + " kts", x + dX, y + dY);
-			context.fillText("TWA:" + this.twa + "°", x + dX, y + dY + 14);
+			context.fillText("TWS:" + this._tws.toFixed(2) + " kts", x + dX, y + dY);
+			context.fillText("TWA:" + this._twa + "°", x + dX, y + dY + 14);
 		}
 	}
 
 	drawAppWind(context) {
-		let cWidth  = this.width;
-		let cHeight = this.height;
+		let cWidth  = this._width;
+		let cHeight = this._height;
 
-		let wd = this._hdg + this.awa; // Direction the wind is blowing TO
+		let wd = this._hdg + this._awa; // Direction the wind is blowing TO
 		while (wd > 360) {
 			wd -= 360;
 		}
@@ -862,7 +862,7 @@ class BoatOverview extends HTMLElement {
 		let x = center.x;
 		let y = center.y;
 
-		let windLength = this._zoom * this.aws * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		let windLength = this._zoom * this._aws * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dX = windLength * Math.sin(_awd);
 		let dY = - windLength * Math.cos(_awd);
 		// create a new line object
@@ -876,8 +876,8 @@ class BoatOverview extends HTMLElement {
 		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.awArrowColor;
-			context.fillText("AWS:" + this.aws + " kts", x + dX, y + dY);
-			context.fillText("AWA:" + this.awa + "°", x + dX, y + dY + 14);
+			context.fillText("AWS:" + this._aws + " kts", x + dX, y + dY);
+			context.fillText("AWA:" + this._awa + "°", x + dX, y + dY + 14);
 		}
 	}
 
@@ -886,8 +886,8 @@ class BoatOverview extends HTMLElement {
 			return;
 		}
 
-		let cWidth  = this.width;
-		let cHeight = this.height;
+		let cWidth  = this._width;
+		let cHeight = this._height;
 
 		let _hdg = Utilities.toRadians(this._hdg);
 		context.beginPath();
@@ -916,12 +916,12 @@ class BoatOverview extends HTMLElement {
 	}
 
 	drawCMG(context) {
-		if (this._bsp === 0 || this.lwy === 0) {
+		if (this._bsp === 0 || this._lwy === 0) {
 			return;
 		}
 
-		let cWidth  = this.width;
-		let cHeight = this.height;
+		let cWidth  = this._width;
+		let cHeight = this._height;
 
 		let _hdg = Utilities.toRadians(this._cmg);
 		context.beginPath();
@@ -952,8 +952,8 @@ class BoatOverview extends HTMLElement {
 			return;
 		}
 
-		let cWidth  = this.width;
-		let cHeight = this.height;
+		let cWidth  = this._width;
+		let cHeight = this._height;
 		// Warning: Represent the Norths, not the headings!!!
 		let magNorth = this._Decl;
 		let compassNorth = magNorth + this._dev;
@@ -1019,20 +1019,20 @@ class BoatOverview extends HTMLElement {
 		}
 	}
 	drawSOG(context) {
-		if (this.sog === 0) {
+		if (this._sog === 0) {
 			return;
 		}
 
-		let cWidth  = this.width;
-		let cHeight = this.height;
+		let cWidth  = this._width;
+		let cHeight = this._height;
 
-		let _hdg = Utilities.toRadians(this.cog);
+		let _hdg = Utilities.toRadians(this._cog);
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
 		let y = center.y;
 
-		let bspLength = this._zoom * this.sog * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		let bspLength = this._zoom * this._sog * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dX = bspLength * Math.sin(_hdg);
 		let dY = - bspLength * Math.cos(_hdg);
 		// create a new line object
@@ -1046,15 +1046,15 @@ class BoatOverview extends HTMLElement {
 		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.gpsWsArrowColor;
-			context.fillText("SOG:" + this.sog + " kts", x + dX, y + dY);
-			context.fillText("COG:" + this.cog + "°", x + dX, y + dY + 14);
+			context.fillText("SOG:" + this._sog + " kts", x + dX, y + dY);
+			context.fillText("COG:" + this._cog + "°", x + dX, y + dY + 14);
 			context.lineWidth = 1;
 		}
 	}
 
 	drawVMG(context) {
-		let cWidth = this.width;
-		let cHeight = this.height;
+		let cWidth = this._width;
+		let cHeight = this._height;
 
 		let _hdg = 0;
 		context.beginPath();
@@ -1063,9 +1063,9 @@ class BoatOverview extends HTMLElement {
 		let y = center.y;
 
 		if (this.vmgOnWind) {
-			_hdg = Utilities.toRadians(this.twd);
+			_hdg = Utilities.toRadians(this._twd);
 		} else {
-			_hdg = Utilities.toRadians(this.b2wp);
+			_hdg = Utilities.toRadians(this._b2wp);
 			// Display WP direction
 			context.strokeStyle = this.boatOverviewColorConfig.vmgArrowColor;
 			context.fillStyle   = this.boatOverviewColorConfig.vmgArrowColor;
@@ -1078,7 +1078,7 @@ class BoatOverview extends HTMLElement {
 			context.fillText(this._wpName, x + _dX, y + _dY);
 		}
 
-		let bspLength = this._zoom * this.vmg * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		let bspLength = this._zoom * this._vmg * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dX = bspLength * Math.sin(_hdg);
 		let dY = - bspLength * Math.cos(_hdg);
 		// create a new line object
@@ -1093,14 +1093,14 @@ class BoatOverview extends HTMLElement {
 			context.save();
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.vmgArrowColor;
-			context.fillText("VMG:" + this.vmg.toFixed(2) + " kts", x + dX, y + dY);
+			context.fillText("VMG:" + this._vmg.toFixed(2) + " kts", x + dX, y + dY);
 			context.restore();
 		}
 		if (context.setLineDash !== undefined) {
 			context.setLineDash([5]);
 			context.moveTo(x + dX, y + dY);
-			let _cog = Utilities.toRadians(this.cog);
-			let sogLength = this._zoom * this.sog * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+			let _cog = Utilities.toRadians(this._cog);
+			let sogLength = this._zoom * this._sog * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 			dX = sogLength * Math.sin(_cog);
 			dY = - sogLength * Math.cos(_cog);
 			context.lineTo(x + dX, y + dY);
@@ -1112,12 +1112,12 @@ class BoatOverview extends HTMLElement {
 	}
 
 	drawCurrent(context) {
-		if (this.csp === 0) {
+		if (this._csp === 0) {
 			return;
 		}
 
-		let cWidth = this.width;
-		let cHeight = this.height;
+		let cWidth = this._width;
+		let cHeight = this._height;
 
 		let center = this.getCanvasCenter();
 		let x = center.x;
@@ -1128,8 +1128,8 @@ class BoatOverview extends HTMLElement {
 		let dXcmg = bspLength * Math.sin(_cmg);
 		let dYcmg = - bspLength * Math.cos(_cmg);
 
-		let _cog = Utilities.toRadians(this.cog);
-		let sogLength = this._zoom * this.sog * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		let _cog = Utilities.toRadians(this._cog);
+		let sogLength = this._zoom * this._sog * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXcog = sogLength * Math.sin(_cog);
 		let dYcog = - sogLength * Math.cos(_cog);
 
@@ -1145,35 +1145,35 @@ class BoatOverview extends HTMLElement {
 		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.currentArrowColor;
-			context.fillText("CSP:" + this.csp.toFixed(2) + " kts", x + dXcog, y + dYcog + 28); // + 14 not to overlap the SOG/COG
-			context.fillText("CDR:" + this.cdr.toFixed(0) + "°", x + dXcog, y + dYcog + 42);
+			context.fillText("CSP:" + this._csp.toFixed(2) + " kts", x + dXcog, y + dYcog + 28); // + 14 not to overlap the SOG/COG
+			context.fillText("CDR:" + this._cdr.toFixed(0) + "°", x + dXcog, y + dYcog + 42);
 		}
 	}
 
 	drawVW(context) { // Velocity Wind
-		if (this.sog === 0) {
+		if (this._sog === 0) {
 			return;
 		}
 
-		let cWidth = this.width;
-		let cHeight = this.height;
+		let cWidth = this._width;
+		let cHeight = this._height;
 
 		let center = this.getCanvasCenter();
 		let x = center.x;
 		let y = center.y;
 
-		let wd = this._hdg + this.awa; // Direction the wind is blowing TO
+		let wd = this._hdg + this._awa; // Direction the wind is blowing TO
 		while (wd > 360) {
 			wd -= 360;
 		}
 		let _awd = Utilities.toRadians(wd);
 		context.beginPath();
-		let awLength = this._zoom * this.aws * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		let awLength = this._zoom * this._aws * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXaw = awLength * Math.sin(_awd);
 		let dYaw = - awLength * Math.cos(_awd);
 
-		let _twd = Utilities.toRadians(this.twd);
-		let twLength = this._zoom * this.tws * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		let _twd = Utilities.toRadians(this._twd);
+		let twLength = this._zoom * this._tws * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXtw = twLength * Math.sin(_twd);
 		let dYtw = - twLength * Math.cos(_twd);
 
@@ -1194,7 +1194,7 @@ class BoatOverview extends HTMLElement {
 
 		let boatLength = this.BOAT_LENGTH * this._zoom;
 
-		if (this.boatShape === 'MONO') {
+		if (this._boatShape === 'MONO') {
 			// Width
 			x.push(this.WL_RATIO_COEFF * 0); // Bow
 			//     Starboard
@@ -1221,7 +1221,7 @@ class BoatOverview extends HTMLElement {
 			y.push((-1 * boatLength) / 7);
 			y.push((-3 * boatLength) / 7);
 
-		} else if (this.boatShape === 'CATA') {
+		} else if (this._boatShape === 'CATA') {
 			x.push(this.WL_RATIO_COEFF * 0); // Arm, front, center
 			// Starboard
 			x.push(this.WL_RATIO_COEFF * (   1 * boatLength) / 7); // Arm starboard, hull side
@@ -1267,7 +1267,7 @@ class BoatOverview extends HTMLElement {
 			y.push((-4 * boatLength) / 7);
 			y.push((-1 * boatLength) / 7);
 
-		} else if (this.boatShape === 'TRI') {
+		} else if (this._boatShape === 'TRI') {
 			// Width
 			x.push(this.WL_RATIO_COEFF * 0); // Bow, center hull
 			// Starboard
@@ -1321,7 +1321,7 @@ class BoatOverview extends HTMLElement {
 			y.push((-1 * boatLength) / 7);
 			y.push((-1 * boatLength) / 7);
 			y.push((-3 * boatLength) / 7);
-		} else if (this.boatShape === 'PLANE') {
+		} else if (this._boatShape === 'PLANE') {
 			// Width
 			x.push(this.WL_RATIO_COEFF * 0); // Nose
 			// Starboard
@@ -1416,7 +1416,7 @@ class BoatOverview extends HTMLElement {
 
 		let context = this.canvas.getContext('2d');
 
-		if (this.width === 0 || this.height === 0) { // Not visible
+		if (this._width === 0 || this._height === 0) { // Not visible
 			return;
 		}
 		// Set the canvas size from its container.
@@ -1424,23 +1424,23 @@ class BoatOverview extends HTMLElement {
 		this.canvas.height = this._height;
 
 		// Background
-		let grd = context.createLinearGradient(0, 5, 0, this.height);
+		let grd = context.createLinearGradient(0, 5, 0, this._height);
 		grd.addColorStop(0, this.boatOverviewColorConfig.displayBackgroundGradient.from); // 0  Beginning
 		grd.addColorStop(1, this.boatOverviewColorConfig.displayBackgroundGradient.to); // 1  End
 		context.fillStyle = grd;
-		context.fillRect(0, 0, this.width, this.height);
+		context.fillRect(0, 0, this._width, this._height);
 
 		// The actual Graph:
 		let maxSpeed = 5;
 		if (this._withGPS) {
-			maxSpeed = Math.max(maxSpeed, this.sog);
+			maxSpeed = Math.max(maxSpeed, this._sog);
 		}
 		maxSpeed = Math.max(maxSpeed, this._bsp);
 		if (this._withGPS && this._withWind && this._withTrueWind) {
-			maxSpeed = Math.max(maxSpeed, this.tws);
+			maxSpeed = Math.max(maxSpeed, this._tws);
 		}
 		if (this._withWind) {
-			maxSpeed = Math.max(maxSpeed, this.aws);
+			maxSpeed = Math.max(maxSpeed, this._aws);
 		}
 		this.speedScale = 5 * (Math.ceil(maxSpeed / 5));
 
@@ -1505,52 +1505,52 @@ class BoatOverview extends HTMLElement {
 		if (this._withWind) {
 			txtY += space;
 			context.fillText("AWS", col1, txtY);
-			context.fillText(this.aws + " kts", col2, txtY);
+			context.fillText(this._aws + " kts", col2, txtY);
 			txtY += space;
 			context.fillText("AWA", col1, txtY);
-			context.fillText(this.awa + "°", col2, txtY);
+			context.fillText(this._awa + "°", col2, txtY);
 		}
 
 		if (this._withGPS) {
 			context.fillStyle = this.boatOverviewColorConfig.gpsWsArrowColor;
 			txtY += space;
 			context.fillText("COG", col1, txtY);
-			context.fillText(this.cog.toFixed(0) + "°", col2, txtY);
+			context.fillText(this._cog.toFixed(0) + "°", col2, txtY);
 			txtY += space;
 			context.fillText("SOG", col1, txtY);
-			context.fillText(this.sog.toFixed(2) + " kts", col2, txtY);
+			context.fillText(this._sog.toFixed(2) + " kts", col2, txtY);
 		}
 
 		context.fillStyle = this.boatOverviewColorConfig.calculatedDataDisplayColor;
 		if (this._withWind && this._withTrueWind && this._withGPS) {
 			txtY += space;
 			context.fillText("TWS", col1, txtY);
-			context.fillText(this.tws.toFixed(2) + " kts", col2, txtY);
+			context.fillText(this._tws.toFixed(2) + " kts", col2, txtY);
 			txtY += space;
 			context.fillText("TWA", col1, txtY);
-			context.fillText(this.twa + "°", col2, txtY);
+			context.fillText(this._twa + "°", col2, txtY);
 			txtY += space;
 			context.fillText("TWD", col1, txtY);
-			context.fillText(this.twd + "°", col2, txtY);
+			context.fillText(this._twd + "°", col2, txtY);
 		}
 		if (this._withCurrent && this._withGPS) {
 			txtY += space;
 			context.fillText("CDR", col1, txtY);
-			context.fillText(this.cdr.toFixed(0) + "°", col2, txtY);
+			context.fillText(this._cdr.toFixed(0) + "°", col2, txtY);
 			txtY += space;
 			context.fillText("CSP", col1, txtY);
-			context.fillText(this.csp.toFixed(2) + " kts", col2, txtY);
+			context.fillText(this._csp.toFixed(2) + " kts", col2, txtY);
 		}
 		txtY += space;
 		context.fillText("leeway", col1, txtY);
-		context.fillText(this.lwy.toFixed(2) + "°", col2, txtY);
+		context.fillText(this._lwy.toFixed(2) + "°", col2, txtY);
 		txtY += space;
 		context.fillText("CMG", col1, txtY);
 		context.fillText(this._cmg.toFixed(0) + "°", col2, txtY);
 
 		if (this._withVMG && this._withGPS) {
 			let mess = ", ";
-			if (this.vmgOnWind) {
+			if (this._vmgOnWind) {
 				mess += "on wind";
 			} else {
 				mess += ("on WP [" + this._wpName + "]");
@@ -1558,7 +1558,7 @@ class BoatOverview extends HTMLElement {
 			context.fillStyle = this.boatOverviewColorConfig.vmgDataDisplayColor;
 			txtY += space;
 			context.fillText("VMG", col1, txtY);
-			context.fillText(this.vmg.toFixed(2) + " kts" + mess, col2, txtY);
+			context.fillText(this._vmg.toFixed(2) + " kts" + mess, col2, txtY);
 		}
 
 		if (this._withW) {
@@ -1574,13 +1574,13 @@ class BoatOverview extends HTMLElement {
 			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
 			txtY += space;
 			context.fillText("D", col1, txtY);
-			context.fillText(this.Decl.toFixed(1) + "°", col2, txtY);
+			context.fillText(this._Decl.toFixed(1) + "°", col2, txtY);
 			txtY += space;
 			context.fillText("d", col1, txtY);
-			context.fillText(this.dev.toFixed(1) + "°", col2, txtY);
+			context.fillText(this._dev.toFixed(1) + "°", col2, txtY);
 			txtY += space;
 			context.fillText("W", col1, txtY);
-			context.fillText((this.Decl + this.dev).toFixed(1) + "°", col2, txtY);
+			context.fillText((this._Decl + this._dev).toFixed(1) + "°", col2, txtY);
 			txtY += space;
 			context.fillText("HDM", col1, txtY);
 			context.fillText(hdm.toFixed(1) + "°", col2, txtY);
