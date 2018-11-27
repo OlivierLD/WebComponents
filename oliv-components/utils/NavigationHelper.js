@@ -155,7 +155,7 @@ let NavigationHelper = {
 	},
 
 	hdgFromHdc: function (hdc, D, d) {
-		let hdg = (hdc - this.variationCalculator(D, d)) % 360;
+		let hdg = (hdc + this.variationCalculator(D, d)) % 360;
 		while (hdg < 0) {
 			hdg += 360;
 		}

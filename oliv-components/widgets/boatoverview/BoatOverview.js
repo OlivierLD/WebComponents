@@ -852,7 +852,7 @@ class BoatOverview extends HTMLElement {
 		let cWidth  = this.width;
 		let cHeight = this.height;
 
-		let wd = this.hdg + this.awa; // Direction the wind is blowing TO
+		let wd = this._hdg + this.awa; // Direction the wind is blowing TO
 		while (wd > 360) {
 			wd -= 360;
 		}
@@ -882,20 +882,20 @@ class BoatOverview extends HTMLElement {
 	}
 
 	drawBSP(context) {
-		if (this.bsp === 0) {
+		if (this._bsp === 0) {
 			return;
 		}
 
 		let cWidth  = this.width;
 		let cHeight = this.height;
 
-		let _hdg = Utilities.toRadians(this.hdg);
+		let _hdg = Utilities.toRadians(this._hdg);
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
 		let y = center.y;
 
-		let bspLength = this._zoom * this.bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		let bspLength = this._zoom * this._bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dX = bspLength * Math.sin(_hdg);
 		let dY = - bspLength * Math.cos(_hdg);
 		// create a new line object
@@ -910,26 +910,26 @@ class BoatOverview extends HTMLElement {
 		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.bspArrowColor;
-			context.fillText("BSP:" + this.bsp.toFixed(2) + " kts", x + dX, y + dY);
-			context.fillText("HDG:" + this.hdg.toFixed(0) + "°", x + dX, y + dY + 14);
+			context.fillText("BSP:" + this._bsp.toFixed(2) + " kts", x + dX, y + dY);
+			context.fillText("HDG:" + this._hdg.toFixed(0) + "°", x + dX, y + dY + 14);
 		}
 	}
 
 	drawCMG(context) {
-		if (this.bsp === 0 || this.lwy === 0) {
+		if (this._bsp === 0 || this.lwy === 0) {
 			return;
 		}
 
 		let cWidth  = this.width;
 		let cHeight = this.height;
 
-		let _hdg = Utilities.toRadians(this.cmg);
+		let _hdg = Utilities.toRadians(this._cmg);
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
 		let y = center.y;
 
-		let bspLength = this._zoom * this.bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		let bspLength = this._zoom * this._bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dX = bspLength * Math.sin(_hdg);
 		let dY = - bspLength * Math.cos(_hdg);
 		// create a new line object
@@ -943,48 +943,67 @@ class BoatOverview extends HTMLElement {
 		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.calculatedDataDisplayColor;
-			context.fillText("CMG:" + this.cmg.toFixed(0) + "°", x + dX, y + dY);
+			context.fillText("CMG:" + this._cmg.toFixed(0) + "°", x + dX, y + dY);
 		}
 	}
 
-	drawW(context) {
-		if (this.bsp === 0 || (this.Decl === 0 && this.dev === 0)) {
+	drawNorths(context) {
+		if (this._bsp === 0 || (this._Decl === 0 && this._dev === 0)) {
 			return;
 		}
 
 		let cWidth  = this.width;
 		let cHeight = this.height;
+		// Warning: Represent the Norths, not the headings!!!
+		let magNorth = this._Decl;
+		let compassNorth = magNorth + this._dev;
 
-		let hdm = this.hdg + this.Decl;
-		let hdc = hdm + this.dev;
+		while (magNorth < 0) {
+			magNorth += 360;
+		}
+		while (compassNorth < 0) {
+			compassNorth += 360;
+		}
 
-		let _hdm = Utilities.toRadians(hdm);
-		context.beginPath();
+		let _magNorth = Utilities.toRadians(magNorth);
 		let center = this.getCanvasCenter();
 		let x = center.x;
 		let y = center.y;
 
-		let bspLength = this._zoom * this.bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
-		let dX = bspLength * Math.sin(_hdm);
-		let dY = - bspLength * Math.cos(_hdm);
-		// create a new line object
-		let line = new Line(x, y, x + dX, y + dY);
-		// draw the line
+		let bspLength = this._zoom * this._bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		// True North first
+		let line = new Line(x, y, x, y - (bspLength * 1.1));
+		context.beginPath();
 		context.strokeStyle = this.boatOverviewColorConfig.dDWArrowColor;
 		context.fillStyle   = this.boatOverviewColorConfig.dDWArrowColor;
+		context.lineWidth = 1;
+		line.drawWithArrowhead(context);
+		context.closePath();
+		if (this._withLabels) {
+			context.font= "12px Arial";
+			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
+			context.fillText("N", x, y  - (bspLength * 1.1));
+		}
+
+		context.beginPath();
+		let dX = bspLength * Math.sin(_magNorth);
+		let dY = - bspLength * Math.cos(_magNorth);
+		// create a new line object
+		line = new Line(x, y, x + dX, y + dY);
+		// draw the line
 		context.lineWidth = 5;
 		line.drawWithArrowhead(context);
 		context.closePath();
 		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
-			context.fillText("HDM:" + hdm.toFixed(0) + "°", x + dX, y + dY);
+			context.fillText("Mag N:" + magNorth.toFixed(0) + "°", x + dX, y + dY);
 		}
-		let _hdc = Utilities.toRadians(hdc);
+		let _compassNorth = Utilities.toRadians(compassNorth);
 		context.beginPath();
 
-		dX = bspLength * Math.sin(_hdc);
-		dY = - bspLength * Math.cos(_hdc);
+		dX = bspLength * 0.8 * Math.sin(_compassNorth);
+		dY = - bspLength * 0.8 * Math.cos(_compassNorth);
 		// create a new line object
 		line = new Line(x, y, x + dX, y + dY);
 		// draw the line
@@ -996,7 +1015,7 @@ class BoatOverview extends HTMLElement {
 		if (this._withLabels) {
 			context.font= "bold 12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
-			context.fillText("HDC:" + hdc.toFixed(0) + "°", x + dX, y + dY);
+			context.fillText("Compass N:" + compassNorth.toFixed(0) + "°", x + dX, y + dY);
 		}
 	}
 	drawSOG(context) {
@@ -1104,8 +1123,8 @@ class BoatOverview extends HTMLElement {
 		let x = center.x;
 		let y = center.y;
 
-		let _cmg = Utilities.toRadians(this.cmg);
-		let bspLength = this._zoom * this.bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+		let _cmg = Utilities.toRadians(this._cmg);
+		let bspLength = this._zoom * this._bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXcmg = bspLength * Math.sin(_cmg);
 		let dYcmg = - bspLength * Math.cos(_cmg);
 
@@ -1143,7 +1162,7 @@ class BoatOverview extends HTMLElement {
 		let x = center.x;
 		let y = center.y;
 
-		let wd = this.hdg + this.awa; // Direction the wind is blowing TO
+		let wd = this._hdg + this.awa; // Direction the wind is blowing TO
 		while (wd > 360) {
 			wd -= 360;
 		}
@@ -1416,7 +1435,7 @@ class BoatOverview extends HTMLElement {
 		if (this._withGPS) {
 			maxSpeed = Math.max(maxSpeed, this.sog);
 		}
-		maxSpeed = Math.max(maxSpeed, this.bsp);
+		maxSpeed = Math.max(maxSpeed, this._bsp);
 		if (this._withGPS && this._withWind && this._withTrueWind) {
 			maxSpeed = Math.max(maxSpeed, this.tws);
 		}
@@ -1447,7 +1466,7 @@ class BoatOverview extends HTMLElement {
 			context.stroke();
 		}
 
-		this.drawBoat(context, this.hdg);
+		this.drawBoat(context, this._hdg);
 		if (this._withWind && this._withTrueWind) {
 			if (this._withGPS) {
 				this.drawTrueWind(context);
@@ -1459,7 +1478,7 @@ class BoatOverview extends HTMLElement {
 		}
 		this.drawBSP(context);
 		if (this._withW) {
-			this.drawW(context);
+			this.drawNorths(context);
 		}
 		this.drawCMG(context);
 		if (this._withGPS) {
@@ -1479,10 +1498,10 @@ class BoatOverview extends HTMLElement {
 		var space = 18;
 		let col1 = 10, col2 = 90;
 		context.fillText("BSP", col1, txtY);
-		context.fillText(this.bsp + " kts", col2, txtY);
+		context.fillText(this._bsp + " kts", col2, txtY);
 		txtY += space;
 		context.fillText("HDG", col1, txtY);
-		context.fillText(this.hdg.toFixed(0) + "° True", col2, txtY);
+		context.fillText(this._hdg.toFixed(0) + "° True", col2, txtY);
 		if (this._withWind) {
 			txtY += space;
 			context.fillText("AWS", col1, txtY);
@@ -1527,7 +1546,7 @@ class BoatOverview extends HTMLElement {
 		context.fillText(this.lwy.toFixed(2) + "°", col2, txtY);
 		txtY += space;
 		context.fillText("CMG", col1, txtY);
-		context.fillText(this.cmg.toFixed(0) + "°", col2, txtY);
+		context.fillText(this._cmg.toFixed(0) + "°", col2, txtY);
 
 		if (this._withVMG && this._withGPS) {
 			let mess = ", ";
@@ -1543,8 +1562,14 @@ class BoatOverview extends HTMLElement {
 		}
 
 		if (this._withW) {
-			let hdm = this.hdg + this.Decl;
-			let hdc = hdm + this.dev;
+			let hdm = this._hdg - this._Decl;
+			let hdc = hdm - this._dev;
+			while (hdm < 0) {
+				hdm += 360;
+			}
+			while (hdc < 0) {
+				hdc += 360;
+			}
 
 			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
 			txtY += space;
