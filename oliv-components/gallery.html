@@ -2962,7 +2962,11 @@
 				graph.dev = dev;
 				graph.lwy = lwy;
 
-				graph.cmg = hdg + lwy;
+				let cmg = (hdg + lwy) % 360;
+				while (cmg < 0) {
+					cmg += 360;
+				}
+				graph.cmg = cmg;
 
 				if (graph.vmgOnWind) {
 					graph.vmg = vmgs.vmgWind;
@@ -2990,7 +2994,7 @@
 					Change the values in the right pane to see the graphic moving.<br/>
 					It simulates the data read from the NMEA station, Boat Speed (BSP), Apparent Wind Angle (AWA), Apparent Wind Speed (AWS), Speed Over Ground from the GPS (COG), Speed Over Ground from the GPS (SOG), <i><b><u>Compass</u></b></i> Heading (HDC), subject to 2 corrections (Declination and deviation) to become HDG (through HDM).
 					<br/>
-					<i>Note:</i> The True Wind (TW) is calculated with the GPS data (SOG, COG).<br/>
+					<i>Note:</i> The True Wind (TW) is calculated with the <b>GPS data</b> (SOG, COG).<br/>
 					Those data read from the station are displayed in a color different from the others, calculated.
 				</td>
 			</tr>

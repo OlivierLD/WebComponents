@@ -1396,14 +1396,13 @@ class BoatOverview extends HTMLElement {
 		}
 
 		let context = this.canvas.getContext('2d');
-		let scale = 1.0;
 
 		if (this.width === 0 || this.height === 0) { // Not visible
 			return;
 		}
 		// Set the canvas size from its container.
-		this.canvas.width = this.width;
-		this.canvas.height = this.height;
+		this.canvas.width = this._width;
+		this.canvas.height = this._height;
 
 		// Background
 		let grd = context.createLinearGradient(0, 5, 0, this.height);
@@ -1414,14 +1413,20 @@ class BoatOverview extends HTMLElement {
 
 		// The actual Graph:
 		let maxSpeed = 5;
-		maxSpeed = Math.max(maxSpeed, this.sog);
+		if (this._withGPS) {
+			maxSpeed = Math.max(maxSpeed, this.sog);
+		}
 		maxSpeed = Math.max(maxSpeed, this.bsp);
-		maxSpeed = Math.max(maxSpeed, this.tws);
-		maxSpeed = Math.max(maxSpeed, this.aws);
+		if (this._withGPS && this._withWind && this._withTrueWind) {
+			maxSpeed = Math.max(maxSpeed, this.tws);
+		}
+		if (this._withWind) {
+			maxSpeed = Math.max(maxSpeed, this.aws);
+		}
 		this.speedScale = 5 * (Math.ceil(maxSpeed / 5));
 
-		let cWidth  = this.width;
-		let cHeight = this.height;
+		let cWidth  = this._width;
+		let cHeight = this._height;
 
 		// Circles
 		let center = this.getCanvasCenter();
@@ -1478,8 +1483,8 @@ class BoatOverview extends HTMLElement {
 		txtY += space;
 		context.fillText("HDG", col1, txtY);
 		context.fillText(this.hdg.toFixed(0) + "° True", col2, txtY);
-		txtY += space;
 		if (this._withWind) {
+			txtY += space;
 			context.fillText("AWS", col1, txtY);
 			context.fillText(this.aws + " kts", col2, txtY);
 			txtY += space;
@@ -1487,9 +1492,19 @@ class BoatOverview extends HTMLElement {
 			context.fillText(this.awa + "°", col2, txtY);
 		}
 
+		if (this._withGPS) {
+			context.fillStyle = this.boatOverviewColorConfig.gpsWsArrowColor;
+			txtY += space;
+			context.fillText("COG", col1, txtY);
+			context.fillText(this.cog.toFixed(0) + "°", col2, txtY);
+			txtY += space;
+			context.fillText("SOG", col1, txtY);
+			context.fillText(this.sog.toFixed(2) + " kts", col2, txtY);
+		}
+
 		context.fillStyle = this.boatOverviewColorConfig.calculatedDataDisplayColor;
-		txtY += space;
 		if (this._withWind && this._withTrueWind && this._withGPS) {
+			txtY += space;
 			context.fillText("TWS", col1, txtY);
 			context.fillText(this.tws.toFixed(2) + " kts", col2, txtY);
 			txtY += space;
@@ -1498,9 +1513,9 @@ class BoatOverview extends HTMLElement {
 			txtY += space;
 			context.fillText("TWD", col1, txtY);
 			context.fillText(this.twd + "°", col2, txtY);
-			txtY += space;
 		}
 		if (this._withCurrent && this._withGPS) {
+			txtY += space;
 			context.fillText("CDR", col1, txtY);
 			context.fillText(this.cdr.toFixed(0) + "°", col2, txtY);
 			txtY += space;
