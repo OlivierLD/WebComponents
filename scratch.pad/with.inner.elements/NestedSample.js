@@ -1,17 +1,16 @@
-const webComp01Verbose = true;
-const WEB_COMP_01_TAG_NAME = 'web-comp-01';
+const nestedSampleVerbose = true;
+const NESTED_SAMPLE_TAG_NAME = 'nested-sample';
 
 /**
  * This is just extending a <button>
- * There is one 'action' member that can be overridden.
  */
 
 /* global HTMLElement */
 
 /**
- * Web Component 01
+ * Nested Sample
  */
-class WebComp01 extends HTMLElement {
+class NestedSample extends HTMLElement {
 
 	static get observedAttributes() {
 		return [
@@ -46,15 +45,24 @@ class WebComp01 extends HTMLElement {
 	// Called whenever the custom element (Web Comp.) is inserted into the DOM.
 	connectedCallback() {
 		this._connected = true;
-		if (webComp01Verbose) {
+		if (nestedSampleVerbose) {
 			console.log("connectedCallback invoked");
 		}
+		var observer = new MutationObserver(function(mutations) {
+			mutations.forEach(function(mutation) {
+				// Detect insertion
+				if (mutation.addedNodes.length > 0)
+					console.info('Node added: ', mutation.addedNodes[0]);
+			})
+		})
+		observer.observe(this, { childList: true });
+
 		this.repaint();
 	}
 
 	// Called whenever the custom element is removed from the DOM.
 	disconnectedCallback() {
-		if (webComp01Verbose) {
+		if (nestedSampleVerbose) {
 			console.log("disconnectedCallback invoked");
 		}
 	}
@@ -62,7 +70,7 @@ class WebComp01 extends HTMLElement {
 	// Called whenever an attribute is added, removed or updated.
 	// Only attributes listed in the observedAttributes property are affected.
 	attributeChangedCallback(attrName, oldVal, newVal) {
-		if (webComp01Verbose) {
+		if (nestedSampleVerbose) {
 			console.log("attributeChangedCallback invoked on " + attrName + " from " + oldVal + " to " + newVal);
 		}
 		switch (attrName) {
@@ -82,7 +90,7 @@ class WebComp01 extends HTMLElement {
 
 	// Called whenever the custom element has been moved into a new document.
 	adoptedCallback() {
-		if (webComp01Verbose) {
+		if (nestedSampleVerbose) {
 			console.log("adoptedCallback invoked");
 		}
 	}
@@ -147,4 +155,4 @@ class WebComp01 extends HTMLElement {
 
 }
 // Associate the tag and the class
-window.customElements.define(WEB_COMP_01_TAG_NAME, WebComp01);
+window.customElements.define(NESTED_SAMPLE_TAG_NAME, NestedSample);

@@ -37,7 +37,7 @@ yarn
 yarn build
 # 2. Copy them in the production app folder
 cd $HOME
-echo -e "Back in $HOME, copying bundled resources"
+echo -e "Back in $HOME, copying bundled resources from the lib directory"
 echo -e "- Watch"
 mkdir analogwatch
 cp -r ../oliv-components/lib/analogwatch/*.min.* analogwatch
