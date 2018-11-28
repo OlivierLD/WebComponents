@@ -7,6 +7,29 @@ const NESTED_SAMPLE_TAG_NAME = 'nested-sample';
 
 /* global HTMLElement */
 
+// See https://www.w3schools.com/jsref/prop_node_nodetype.asp
+const ELEMENT_TYPE = 1;
+const ATTRIBUTE_TYPE = 2;
+const TEXT_TYPE = 3;
+const COMMENT_TYPE = 8;
+const NODE_TYPE = [
+	{ type: 'element', val: ELEMENT_TYPE },
+	{ type: 'attribute', val:  ATTRIBUTE_TYPE },
+	{ type: 'text', val:  TEXT_TYPE },
+	{ type: 'comment', val: COMMENT_TYPE }
+];
+
+function nodeTypeFromVal(val) {
+	let typeName = 'Unknown';
+	for (let i=0; i<NODE_TYPE.length; i++) {
+		if (NODE_TYPE[i].val === val) {
+			typeName = NODE_TYPE[i].type;
+			break;
+		}
+	}
+	return typeName;
+}
+
 /**
  * Nested Sample
  */
@@ -56,6 +79,22 @@ class NestedSample extends HTMLElement {
 			})
 		})
 		observer.observe(this, { childList: true });
+
+		console.info("At load time:" + this.childElementCount + " child(ren)");
+		if (this.childElementCount > 0) {
+			this.childNodes.forEach(childNode => {
+				console.info("Node type is " + nodeTypeFromVal(childNode.nodeType));
+				if (childNode.nodeType === ELEMENT_TYPE) {
+					console.info(">> Node name is " + childNode.nodeName);
+				} else if (childNode.nodeType === TEXT_TYPE) {
+					console.info(">> Node value is " + childNode.nodeValue);
+				} else if (childNode.nodeType === ATTRIBUTE_TYPE) {
+					console.info(">> Node value is " + childNode.nodeValue);
+				} else if (childNode.nodeType === COMMENT_TYPE) {
+					console.info(">> Node value is " + childNode.nodeValue);
+				}
+			});
+		}
 
 		this.repaint();
 	}

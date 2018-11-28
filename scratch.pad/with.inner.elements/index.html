@@ -12,6 +12,7 @@
 
 	<script type="text/javascript">
 		window.onload = function() {
+			// Replace action for this instance
 			document.getElementById('nested-sample-01').action = () => {
 				console.info("Akeu coucou!");
 			};
@@ -22,7 +23,9 @@
 		 * All element's properties and methods at https://www.w3schools.com/jsref/dom_obj_all.asp
 		 */
 		function addSubElement() {
-			document.getElementById('nested-sample-01').insertAdjacentHTML('beforeend', '<sub-elem alt="foo" />')
+			let element = document.getElementById('nested-sample-01');
+			element.insertAdjacentHTML('beforeend', '<sub-elem alt="foo" />');
+			console.log("There is (are) now " + element.childElementCount + " element(s) in this one.");
 		}
 	</script>
 </head>
@@ -41,7 +44,10 @@
 									 width="100"
 									 height="30"
 									 value="Click"
-									 title="Overridden"/>
+									 title="Overridden">
+			<one title="one"/>
+			<two title="two"/>
+		</nested-sample>
 	</div>
 	<div>
 		<button onclick="addSubElement();">Add</button>

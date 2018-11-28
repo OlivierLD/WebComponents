@@ -136,6 +136,7 @@ Components above, live at [CodePen](http://codepen.io/OlivierLD/), when released
 - [Calendar Display](https://codepen.io/OlivierLD/pen/EpOJEW).
 - [SkyMap/StarFinder](https://codepen.io/OlivierLD/project/full/APNqRk).
 - [Split-Flap Display](https://codepen.io/OlivierLD/pen/LJLbeQ).
+- [Boat Overview](https://codepen.io/OlivierLD/pen/bQmZrm).
 
 #### HTML Templates &amp; Imports
 Along the same lines as Web Components, for re-usability, modularity, etc.
