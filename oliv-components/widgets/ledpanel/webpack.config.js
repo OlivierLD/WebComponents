@@ -22,7 +22,7 @@ const config = {
   entry: __dirname + '/LedPanel.js',
   devtool: 'source-map',
   output: {
-    path: __dirname + '../../../lib/leds',
+    path: __dirname + '../../../lib/ledpanel',
     filename: outputFile,
     library: libraryName,
     libraryTarget: 'umd',

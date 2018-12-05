@@ -69,6 +69,89 @@ Works OK (~so-so) if there is only one component, it's a mess otherwise.
 
 [Oliv's Components](./oliv-components)
 
+### WIP: Local `npm` registry
+- [https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af)
+
+Example:
+```
+$ cd oliv-components/widgets
+$ ./publish.sh
++-------------------------+
++-- P U B L I S H I N G --+
++-------------------------+
+|  1. AnalogDisplay       |
+|  2. AnalogWatch         |
+|  3. CalendarDisplay     |
+|  4. Compass             |
+|  5. Direction Display   |
+|  6. Jumbo Display       |
+|  7. Led Panel           |
+|  8. Marquee Panel       |
+|  9. Rain Meter          |
+| 10. 16 Points Display   |
+| 11. Sky Map             |
+| 12. Split Flap          |
+| 13. Thermometer         |
+| 14. Wind Angle          |
+| 15. World Map           |
+| 16. Boat Overview       |
+| ...                     |
++-------------------------+
+| Q to quit               |
++-------------------------+
+- You choose > 7
+--- npm config ---
+; cli configs
+ ...
+
+👉 Widget in ledpanel
+yarn install v1.9.4
+[1/4] 🔍  Resolving packages...
+success Already up-to-date.
+✨  Done in 0.52s.
+yarn run v1.9.4
+$ webpack --env dev && webpack --env build
+Hash: 7f5a3ceac71cdd0cfb45
+Version: webpack 4.26.1
+Time: 874ms
+Built at: 2018-12-05 11:23:45
+           Asset      Size  Chunks             Chunk Names
+    led-panel.js  17.9 KiB    main  [emitted]  main
+led-panel.js.map  22.1 KiB    main  [emitted]  main
+Entrypoint main = led-panel.js led-panel.js.map
+[./LedPanel.js] 14.1 KiB {main} [built]
+Hash: b78f9d47f241d805f010
+Version: webpack 4.26.1
+Time: 1412ms
+Built at: 2018-12-05 11:23:48
+               Asset      Size  Chunks             Chunk Names
+    led-panel.min.js  7.13 KiB       0  [emitted]  main
+led-panel.min.js.map  19.1 KiB       0  [emitted]  main
+Entrypoint main = led-panel.min.js led-panel.min.js.map
+[0] ./LedPanel.js 14.1 KiB {0} [built]
+✨  Done in 4.05s.
+👉 Distrib generated in ../lib/ledpanel
+👉 Done with ledpanel
+$
+# Then, npm link
+$ cd ../lib/ledpanel
+$ [sudo] npm link
+...
+$ mkdir ~/my-stuff
+$ cd ~/my-stuff
+$ [sudo] npm link lepdpanel
+...
+$ ll ./node_modules/ledpanel/*
+  8622552112 40 -rw-r--r--  1 olediour  staff  18325 Dec  5 11:23 node_modules/ledpanel/led-panel.js
+  8622552113 48 -rw-r--r--  1 olediour  staff  22629 Dec  5 11:23 node_modules/ledpanel/led-panel.js.map
+  8622552119 16 -rw-r--r--  1 olediour  staff   7303 Dec  5 11:23 node_modules/ledpanel/led-panel.min.js
+  8622552120 40 -rw-r--r--  1 olediour  staff  19578 Dec  5 11:23 node_modules/ledpanel/led-panel.min.js.map
+  8622552262  8 -rw-r--r--  1 root      staff     68 Dec  5 11:18 node_modules/ledpanel/package-lock.json
+  8622552456  8 -rw-r--r--  1 olediour  staff    424 Dec  5 11:26 node_modules/ledpanel/package.json
+$
+
+```
+
 ---
 
 More to come...

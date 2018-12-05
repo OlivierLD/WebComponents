@@ -514,7 +514,7 @@ compass-rose .gray-flat {
 	--gps-ws-arrow-color: darkorange;
 	--vmg-arrow-color: lightyellow;
 	--current-arrow-color: yellow;
-	--boat-fill-color: transparent;
+	--boat-fill-color: rgba(128, 128, 128, 0.5);
 	--boat-outline-color: lightblue;
 	--nmea-display-color: cyan;
 	--calculated-color: yellow;

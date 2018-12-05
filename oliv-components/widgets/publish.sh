@@ -53,13 +53,19 @@ case "$response" in
     npm config list
     #
     CompDir=${widgets[$response - 1]}
-    echo -e "Widget in $CompDir"
+    echo -e "👉 Widget in $CompDir"
     cd $CompDir
-//  npm publish . --dry-run
+#   npm publish . --dry-run
     yarn
     yarn build
     # npm publish .
-    echo -e "Done with $CompDir"
+    cd ..
+    echo -e "👉 Distrib generated in ../lib/$CompDir"
+    # echo -e "👉>> From $PWD"
+    cat ../../publish.utils/packagejson.part.01.txt > ../lib/$CompDir/package.json
+    echo -e "  \"name\": \"$CompDir\"," >> ../lib/$CompDir/package.json
+    cat ../../publish.utils/packagejson.part.02.txt >> ../lib/$CompDir/package.json
+    echo -e "👉 Done with $CompDir"
     ;;
   "q" | "Q")
     ;;
