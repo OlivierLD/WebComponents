@@ -76,35 +76,7 @@ SkyMap in its `Sky Map` configuration:
 #### To build for prod
 You need `npm` or `yarn` to be installed. Some scripts will minimized the scripts, and use `webpack` to put everything need in only one file.
 
-In the `widgets` directory, run `./to.prod.sh` to publish them all, or `./publish.sh` to publish them one by one.
-
-```
-$ ./publish.sh
-+-------------------------+
-+-- P U B L I S H I N G --+
-+-------------------------+
-|  1. AnalogDisplay       |
-|  2. AnalogWatch         |
-|  3. CalendarDisplay     |
-|  4. Compass             |
-|  5. Direction Display   |
-|  6. Jumbo Display       |
-|  7. Led Panel           |
-|  8. Marquee Panel       |
-|  9. Rain Meter          |
-| 10. 16 Points Display   |
-| 11. Sky Map             |
-| 12. Split Flap          |
-| 13. Thermometer         |
-| 14. Wind Angle          |
-| 15. World Map           |
-| 16. Boat Overview       |
-| ...                     |
-+-------------------------+
-| Q to quit               |
-+-------------------------+
-- You choose >
-```
+Follow [those instructions](./widgets/README.md).
 
 ---
 
