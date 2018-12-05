@@ -11,7 +11,7 @@ We will be using the `npm` module `webpack` to achieve this goal, along with a t
 
 
 ## To build
-For now (Sep-2018), build the components one by one.
+You can build the components one by one.
 
 We are using `webpack` to bundle _all_ the required resources into a _single_ file, minimized, uglified, etc., to minimize
 the IOs and the size of the HTTP response.
@@ -48,6 +48,14 @@ The bundle contains all the necessary dependencies.
 
 When you want to use the "production" version of a component, pick it from there.
 
-To build everything, run the script at `oliv-components/widgets/to.prod.sh`.
+#### Tooling
+Two scripts are available:
+- `publish.sh`
+    - to use to build the components one by one
+- `to.prod.sh`
+    - to build all the available components.
+
+The scripts are available in the `oliv-components/widgets/` folder.
+As previously said, the expected articfacts are in the `lib` directory.
 
 ---
