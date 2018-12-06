@@ -41,15 +41,16 @@ After starting the `node` server as mentioned above, you can also reach
 - Wind Angle. &#9989; Done
 - Globe and Map (with `import` and `module`). &#9989; Done <!-- &#10140; WIP -->
 - Compass Rose. &#9989; Done
-- Digital Display. TODO
+- Digital Display. TODO ⏰
 - Date (calendar) display. &#9989; Done
 - Watch/Clock (analog). &#9989; Done
 - Marquee. &#9989; Done
-- Evolution Displays. TODO
-- Generic Graphs. TODO
+- Evolution Displays. TODO ⏰
+- Generic Graphs. TODO ⏰
 - Sky Map and Star Finder (along with some `REST` service(s)). &#9989; Done
 - Split-flap Display. &#9989; Done
 - Boat Overview. &#9989; Done
+- Deviation Curve. TODO ⏰
 
 #### <img src="./images/cone.png" alt="WIP" width="48" height="48" align="middle"> TODO
 - &#x1F6A7; Replace (or duplicate) canvases with [SVG](https://www.w3.org/TR/SVG11/)s 🚧
@@ -91,7 +92,6 @@ Follow [those instructions](./widgets/README.md).
 
 #### TODO
 - JSDoc
-- Local npm registry (See [https://www.npmjs.com/package/local-npm](https://www.npmjs.com/package/local-npm)) ?
 
 #### CodePen (might not be 100% in sync... But close'ish)
 The point of truth remains this repo.
