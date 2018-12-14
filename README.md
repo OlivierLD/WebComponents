@@ -8,10 +8,15 @@
 - [Tutorial](https://auth0.com/blog/web-components-how-to-craft-your-own-custom-components/)
 - [Good resource](https://developers.google.com/web/fundamentals/web-components/customelements) also showing how to extend a WebComponent
 - [Templates & Imports](https://www.html5rocks.com/en/tutorials/webcomponents/imports/)
-
 - Portability & compatibility: [Polyfills](https://www.webcomponents.org/polyfills)
 
----
+Another bunch of links:
+- [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
+- [Custom Elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements)
+- [Templates and Slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots)
+- [Shadow DOM](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM)
+
+-----------------------
 
 I use nodeJS to run the pages:
  ```bash
