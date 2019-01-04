@@ -79,7 +79,7 @@ Works OK (~so-so) if there is only one component, it's a mess otherwise.
 
 Example:
 
-- First, publish the component(s)
+- First, publish the component(s). Here we publish `ledpanel`.
 ```
 $ cd oliv-components/widgets
 $ ./publish.sh
