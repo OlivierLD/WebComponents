@@ -78,6 +78,8 @@ Works OK (~so-so) if there is only one component, it's a mess otherwise.
 - [https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af](https://medium.com/@alexishevia/the-magic-behind-npm-link-d94dcb3a81af)
 
 Example:
+
+- First, publish the component(s)
 ```
 $ cd oliv-components/widgets
 $ ./publish.sh
@@ -138,10 +140,15 @@ Entrypoint main = led-panel.min.js led-panel.min.js.map
 👉 Distrib generated in ../lib/ledpanel
 👉 Done with ledpanel
 $
-# Then, npm link
+```
+- Then, npm link, from the directory where the component is published
+```
 $ cd ../lib/ledpanel
 $ [sudo] npm link
 ...
+```
+- Now you can refer to the npm link, by the directory name, from another directory you wish to use the component from. Here we refer to `ledpanel` from the `my-stuff` directory. The component appears under the `node_modules` folder...
+```
 $ mkdir ~/my-stuff
 $ cd ~/my-stuff
 $ [sudo] npm link lepdpanel
