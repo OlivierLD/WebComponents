@@ -1,12 +1,8 @@
 "use strict";
 
-const sunPathVerbose = false;
+const sunPathVerbose = true;
 const SUNPATH_TAG_NAME = 'sun-path';
 
-/*
- * TODO:
- * - Pointing North at noon...
- */
 if (Math.toRadians === undefined) {
 	Math.toRadians = (deg) => {
 		return deg * (Math.PI / 180);
@@ -53,7 +49,7 @@ class SunPath extends HTMLElement {
 
 		// Default values
 		this._tilt = -10;
-		this.rotation = 0;
+		this.rotation = 0; // Leave that one unchanged.
 		this._zOffset = 0;
 		this._width = 400;
 		this._height = 400;
@@ -65,24 +61,17 @@ class SunPath extends HTMLElement {
 		this.sunZ = undefined;
 
 		this.side =   0; // Left and right
-
-		// TODO Latitude lower than Sun D, south hemisphere and between tropics. Use Sun Z at local noon.
-
 		this.addToZ = 180;  // 180 when pointing South (Sun in the South at noon). Combined with left right rotation
 		this.invertX =  1;  // +1/-1 . +1 when pointing south
 
 		this._previousClassName = "";
 		this.sunPathColorConfig = sunPathDefaultColorConfig;
-
-		if (sunPathVerbose) {
-			console.log("Data in Constructor:", this._tilt);
-		}
 	}
 
 	// Called whenever the custom element is inserted into the DOM.
 	connectedCallback() {
 		if (sunPathVerbose) {
-			console.log("connectedCallback invoked, 'value' is [", this.value, "]");
+			console.log("connectedCallback invoked.");
 		}
 	}
 
@@ -150,6 +139,30 @@ class SunPath extends HTMLElement {
 
 	set sunPath(json) {
 		this._sunPath = json;
+		// Check where to point here (N or S)
+		let lastAlt = -90;
+		let lastZ = 0;
+		for (let idx=0; idx<json.length; idx++) {
+			if (json[idx].alt < lastAlt) { // Culmination reached
+				let zAtNoon = lastZ;
+	//		console.log("Z at noon:", zAtNoon);
+				if (zAtNoon > 90 && zAtNoon < 270) {
+					this.invertX = 1;   // +1 when pointing south
+					if (sunPathVerbose) {
+						console.log(this.id + ", Pointing South at Noon");
+					}
+				} else {
+					this.invertX = -1;  // -1 when pointing north
+					if (sunPathVerbose) {
+						console.log(this.id + ", Pointing North at Noon");
+					}
+				}
+				break;
+			} else {
+				lastAlt = json[idx].alt;
+				lastZ = json[idx].z;
+			}
+		}
 	}
 
 	set sunData(json) {
@@ -349,18 +362,25 @@ class SunPath extends HTMLElement {
 		// Base
 		let minZ = this._sunData !== undefined ? 10 * Math.floor(this._sunData.riseZ / 10) : 90,
 				maxZ = this._sunData !== undefined ? 10 * Math.ceil(this._sunData.setZ / 10) : 270;
+		if (this.invertX === -1) { // Pointing North
+			let tmp = maxZ - 360;
+			maxZ = minZ;
+			minZ = tmp;
+		}
+
+		console.log("For " + this.id + ", minZ:" + minZ + ", maxZ:" + maxZ);
 
 		context.strokeStyle = this.sunPathColorConfig.gridColor;
 		context.lineWidth = 3;
-		let panelPoint = this.rotateBothWays(this.rotation, minZ, this.side, this._tilt, (this.addToZ + this._zOffset));
+		let panelPoint = this.rotateBothWays(this.rotation, minZ, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
 		// Base
 		context.beginPath();
 		context.moveTo(center.x, center.y); // Start from center
-		context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
+		context.lineTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 		for (let alfa=minZ; alfa<=maxZ; alfa += 1) {
 //		console.log("Base rotation", rotation);
-			panelPoint = this.rotateBothWays(this.rotation, alfa, this.side, this._tilt, (this.addToZ + this._zOffset));
-			context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
+			panelPoint = this.rotateBothWays(this.rotation, alfa, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
+			context.lineTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 		}
 		context.closePath();
 		context.stroke();
@@ -370,55 +390,54 @@ class SunPath extends HTMLElement {
 
 		// Close the base
 		context.lineWidth = 1;
-		panelPoint = this.rotateBothWays(this.rotation, minZ, this.side, this._tilt, (this.addToZ + this._zOffset));
+		panelPoint = this.rotateBothWays(this.rotation, minZ, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
 		context.beginPath();
-		context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
+		context.moveTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 		context.lineTo(center.x, center.y);
-		context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
+		context.lineTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 		context.stroke();
 		context.closePath();
 		// Fill the base
 		context.fillStyle = this.sunPathColorConfig.baseColor;
 		context.fill();
 
-		// Indicate S (or N: TODO)
 		context.save();
 		let fontSize = 20;
-		context.font = "bold " + Math.round(fontSize) + "px Arial";
+		context.font = "bold " + Math.round(fontSize) + "px " + this.sunPathColorConfig.font;
 		context.fillStyle = this.sunPathColorConfig.cardPointColor;
 		let len = 0;
 
 		panelPoint = this.rotateBothWays(this.rotation, 180, this.side, this._tilt, (this.addToZ + this._zOffset));
-		context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
-		let text = "S";
+//	context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
+		let text = (this.invertX === 1 ? "S" : "N");
 		let metrics = context.measureText(text);
 		len = metrics.width;
-		context.fillText(text, center.x + (panelPoint.x * radius * this.invertX) - (len / 2), center.y - (panelPoint.y * radius));
+		context.fillText(text, center.x + (panelPoint.x * radius) - (len / 2), center.y - (panelPoint.y * radius));
 
 		panelPoint = this.rotateBothWays(this.rotation, 90, this.side, this._tilt, (this.addToZ + this._zOffset));
 		context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
-		text = "E";
+		text = (this.invertX === 1 ? "E" : "W");
 		metrics = context.measureText(text);
 		len = metrics.width;
-		context.fillText(text, center.x + (panelPoint.x * radius * this.invertX) - (len / 2), center.y - (panelPoint.y * radius));
+		context.fillText(text, center.x + (panelPoint.x * radius) - (len / 2), center.y - (panelPoint.y * radius));
 
 		panelPoint = this.rotateBothWays(this.rotation, 270, this.side, this._tilt, (this.addToZ + this._zOffset));
 		context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
-		text = "W";
+		text = (this.invertX === 1 ? "W" : "E");
 		metrics = context.measureText(text);
 		len = metrics.width;
-		context.fillText(text, center.x + (panelPoint.x * radius * this.invertX) - (len / 2), center.y - (panelPoint.y * radius));
+		context.fillText(text, center.x + (panelPoint.x * radius) - (len / 2), center.y - (panelPoint.y * radius));
 
 		context.restore();
 
 		// Meridians.
 		for (let alfa = minZ; alfa <= maxZ; alfa += 10) { // Longitude
-			panelPoint = this.rotateBothWays(this.rotation, alfa, this.side, this._tilt, (this.addToZ + this._zOffset));
+			panelPoint = this.rotateBothWays(this.rotation, alfa, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
 			context.beginPath();
-			context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
+			context.moveTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 			for (let beta = 0; beta <= 90; beta += 1) { // Latitude
-				panelPoint = this.rotateBothWays(beta + this.rotation, alfa, this.side, this._tilt, (this.addToZ + this._zOffset));
-				context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
+				panelPoint = this.rotateBothWays(beta + this.rotation, alfa, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
+				context.lineTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 			}
 			context.stroke();
 			context.closePath();
@@ -426,12 +445,12 @@ class SunPath extends HTMLElement {
 
 		// Parallels
 		for (let alfa = 10; alfa < 90; alfa += 10) { // Latitude
-			panelPoint = this.rotateBothWays(alfa + this.rotation, minZ, this.side, this._tilt, (this.addToZ + this._zOffset));
+			panelPoint = this.rotateBothWays(alfa + this.rotation, minZ, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
 			context.beginPath();
-			context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
+			context.moveTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 			for (let beta = minZ; beta <= maxZ; beta += 1) { // Longitude
-				panelPoint = this.rotateBothWays(alfa + this.rotation, beta, this.side, this._tilt, (this.addToZ + this._zOffset));
-				context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
+				panelPoint = this.rotateBothWays(alfa + this.rotation, beta, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
+				context.lineTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 			}
 			context.stroke();
 			context.closePath();
@@ -440,10 +459,10 @@ class SunPath extends HTMLElement {
 			context.fillStyle = this.sunPathColorConfig.altitudeValueColor;
 			context.beginPath();
 			panelPoint = this.rotateBothWays(alfa + this.rotation, 180, this.side, this._tilt, (this.addToZ + this._zOffset));
-			context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
+			context.moveTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 			metrics = context.measureText(text);
 			len = metrics.width;
-			context.fillText(text, center.x + (panelPoint.x * radius * this.invertX) - (len / 2), center.y - (panelPoint.y * radius));
+			context.fillText(text, center.x + (panelPoint.x * radius) - (len / 2), center.y - (panelPoint.y * radius));
 			context.closePath();
 		}
 
@@ -451,10 +470,10 @@ class SunPath extends HTMLElement {
 		if (this._sunPath !== undefined) {
 			context.lineWidth = 3;
 			context.strokeStyle = this.sunPathColorConfig.sunColor;
-			panelPoint = this.rotateBothWays(sunPath[0].alt + this.rotation, sunPath[0].z, this.side, this._tilt, (this.addToZ + this._zOffset));
+			panelPoint = this.rotateBothWays(this._sunPath[0].alt + this.rotation, this._sunPath[0].z, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
 			context.beginPath();
-			for (let i = 1; i < sunPath.length; i++) {
-				panelPoint = this.rotateBothWays(sunPath[i].alt + this.rotation, sunPath[i].z, this.side, this._tilt, (this.addToZ + this._zOffset));
+			for (let i = 1; i < this._sunPath.length; i++) {
+				panelPoint = this.rotateBothWays(this._sunPath[i].alt + this.rotation, this._sunPath[i].z, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
 				context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 			}
 			context.stroke();
@@ -463,8 +482,8 @@ class SunPath extends HTMLElement {
 		}
 		// Current Sun Pos.
 		if (this.sunHe !== undefined && this.sunZ !== undefined) {
-			panelPoint = this.rotateBothWays(this.rotation, this.sunZ, this.side, this._tilt, (this.addToZ + this._zOffset)); // Horizon under the Sun
-			// Center to horizon
+			panelPoint = this.rotateBothWays(this.rotation, this.sunZ, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset)); // Horizon under the Sun
+			// From center to horizon
 			context.beginPath();
 			context.moveTo(center.x, center.y);
 			context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
@@ -474,10 +493,10 @@ class SunPath extends HTMLElement {
 			context.beginPath();
 			context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 			for (let alt = 0; alt <= this.sunHe; alt++) {
-				panelPoint = this.rotateBothWays(alt + this.rotation, this.sunZ, this.side, this._tilt, (this.addToZ + this._zOffset));
+				panelPoint = this.rotateBothWays(alt + this.rotation, this.sunZ, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
 				context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 			}
-			panelPoint = this.rotateBothWays(this.sunHe + this.rotation, this.sunZ, this.side, this._tilt, (this.addToZ + this._zOffset));
+			panelPoint = this.rotateBothWays(this.sunHe + this.rotation, this.sunZ, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
 			context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 			context.stroke();
 			context.closePath();
@@ -499,7 +518,7 @@ class SunPath extends HTMLElement {
 			// Display values
 			context.save();
 			fontSize = 14;
-			context.font = "" + Math.round(fontSize) + "px Arial";
+			context.font = "" + Math.round(fontSize) + "px " + this.sunPathColorConfig.font;
 			context.fillText("Alt:" + this.sunHe.toFixed(2) + "°", 10, 20);
 			context.fillText("Z  :" + this.sunZ.toFixed(2) + "°", 10, 40);
 			context.restore();
