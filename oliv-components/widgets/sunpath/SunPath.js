@@ -48,9 +48,9 @@ class SunPath extends HTMLElement {
 		this.shadowRoot.appendChild(this.canvas);
 
 		// Default values
-		this._tilt = -10;
-		this.rotation = 0; // Leave that one unchanged.
-		this._zOffset = 0;
+		this._tilt = -10;  // Around X
+		this.rotation = 0; // Around Y. Leave that one unchanged. We don't use this axis.
+		this._zOffset = 0; // Around Z
 		this._width = 400;
 		this._height = 400;
 
