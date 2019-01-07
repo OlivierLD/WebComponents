@@ -5,8 +5,7 @@ const SUNPATH_TAG_NAME = 'sun-path';
 
 /*
  * TODO:
- * - CSS Color schemes
- * - Pointing North...
+ * - Pointing North at noon...
  */
 if (Math.toRadians === undefined) {
 	Math.toRadians = (deg) => {
@@ -188,7 +187,7 @@ class SunPath extends HTMLElement {
 	}
 
 	// Component methods
-	getColorConfig(classNames) { // TODO Upgrade that one
+	getColorConfig(classNames) {
 		let colorConfig = sunPathDefaultColorConfig;
 		let classes = classNames.split(" ");
 		for (let cls = 0; cls < classes.length; cls++) {
@@ -218,20 +217,26 @@ class SunPath extends HTMLElement {
 										case '--display-background-gradient-to':
 											colorConfig.displayBackgroundGradient.to = value;
 											break;
+										case '--with-gradient':
+											colorConfig.withGradient = value === 'true';
+											break;
 										case '--grid-color':
 											colorConfig.gridColor = value;
 											break;
-										case '--display-color':
-											colorConfig.displayColor = value;
+										case '--base-color':
+											colorConfig.baseColor = value;
 											break;
-										case '--value-nb-decimal':
-											colorConfig.valueNbDecimal = value;
+										case '--sun-color':
+											colorConfig.sunColor = value;
 											break;
-										case '--label-font':
-											colorConfig.labelFont = value;
+										case '--font':
+											colorConfig.font = value;
 											break;
-										case '--value-font':
-											colorConfig.valueFont = value;
+										case '--card-point-color':
+											colorConfig.cardPointColor = value;
+											break;
+										case '--altitude-value-color':
+											colorConfig.altitudeValueColor = value;
 											break;
 										default:
 											break;
