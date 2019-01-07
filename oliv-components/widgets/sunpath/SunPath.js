@@ -4,8 +4,9 @@ const sunPathVerbose = false;
 const SUNPATH_TAG_NAME = 'sun-path';
 
 /*
- * There is a bug in the base shape...
- * See rotation...
+ * TODO:
+ * - CSS Color schemes
+ * - Pointing North...
  */
 if (Math.toRadians === undefined) {
 	Math.toRadians = (deg) => {
@@ -349,14 +350,15 @@ class SunPath extends HTMLElement {
 		let panelPoint = this.rotateBothWays(this.rotation, minZ, this.side, this._tilt, (this.addToZ + this._zOffset));
 		// Base
 		context.beginPath();
-		context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
+		context.moveTo(center.x, center.y); // Start from center
+		context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 		for (let alfa=minZ; alfa<=maxZ; alfa += 1) {
 //		console.log("Base rotation", rotation);
 			panelPoint = this.rotateBothWays(this.rotation, alfa, this.side, this._tilt, (this.addToZ + this._zOffset));
 			context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 		}
-		context.stroke();
 		context.closePath();
+		context.stroke();
 		// Fill the base
 		context.fillStyle = this.sunPathColorConfig.baseColor;
 		context.fill();
