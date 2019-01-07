@@ -19,7 +19,7 @@
 #
 # WARNING: local-npm does not always work... version mismatch and such shit.
 #
-widgets=("analogdisplay" "analogwatch" "calendar" "compass" "direction" "jumbo" "ledpanel" "marquee" "rain" "raw" "skymap" "splitflap" "temperature" "windangle" "worldmap" "boatoverview")
+widgets=("analogdisplay" "analogwatch" "calendar" "compass" "direction" "jumbo" "ledpanel" "marquee" "rain" "raw" "skymap" "splitflap" "temperature" "windangle" "worldmap" "boatoverview" "sunpath")
 #
 echo -e "+-------------------------+"
 echo -e "+-- P U B L I S H I N G --+"
@@ -40,6 +40,7 @@ echo -e "| 13. Thermometer         |"
 echo -e "| 14. Wind Angle          |"
 echo -e "| 15. World Map           |"
 echo -e "| 16. Boat Overview       |"
+echo -e "| 17. Sun Path            |"
 echo -e "| ...                     |"
 echo -e "+-------------------------+"
 echo -e "| Q to quit               |"
@@ -48,7 +49,7 @@ echo -en "- You choose > "
 read response
 #
 case "$response" in
-  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" )
+  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17")
     echo -e "--- npm config ---"
     npm config list
     #
@@ -60,12 +61,12 @@ case "$response" in
     yarn build
     # npm publish .
     cd ..
-    echo -e "👉 Distrib generated in ../lib/$CompDir"
+    echo -e "🌟 Distrib generated in ../lib/$CompDir"
     # echo -e "👉>> From $PWD"
     cat ../../publish.utils/packagejson.part.01.txt > ../lib/$CompDir/package.json
     echo -e "  \"name\": \"$CompDir\"," >> ../lib/$CompDir/package.json
     cat ../../publish.utils/packagejson.part.02.txt >> ../lib/$CompDir/package.json
-    echo -e "👉 Done with $CompDir"
+    echo -e "🚚 $CompDir ready to ship"
     ;;
   "q" | "Q")
     ;;
