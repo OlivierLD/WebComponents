@@ -1,6 +1,6 @@
 "use strict";
 
-const sunPathVerbose = true;
+const sunPathVerbose = false;
 const SUNPATH_TAG_NAME = 'sun-path';
 
 if (Math.toRadians === undefined) {
@@ -8,6 +8,8 @@ if (Math.toRadians === undefined) {
 		return deg * (Math.PI / 180);
 	};
 }
+
+import * as Utilities from "../utilities/Utilities.js";
 
 const sunPathDefaultColorConfig = {
 	bgColor: 'black', // Used if withGradient = false
@@ -368,8 +370,6 @@ class SunPath extends HTMLElement {
 			minZ = tmp;
 		}
 
-		console.log("For " + this.id + ", minZ:" + minZ + ", maxZ:" + maxZ);
-
 		context.strokeStyle = this.sunPathColorConfig.gridColor;
 		context.lineWidth = 3;
 		let panelPoint = this.rotateBothWays(this.rotation, minZ, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
@@ -482,6 +482,7 @@ class SunPath extends HTMLElement {
 		}
 		// Current Sun Pos.
 		if (this.sunHe !== undefined && this.sunZ !== undefined) {
+			context.strokeStyle = this.sunPathColorConfig.sunColor;
 			panelPoint = this.rotateBothWays(this.rotation, this.sunZ, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset)); // Horizon under the Sun
 			// From center to horizon
 			context.beginPath();
@@ -519,8 +520,10 @@ class SunPath extends HTMLElement {
 			context.save();
 			fontSize = 14;
 			context.font = "" + Math.round(fontSize) + "px " + this.sunPathColorConfig.font;
-			context.fillText("Alt:" + this.sunHe.toFixed(2) + "°", 10, 20);
-			context.fillText("Z  :" + this.sunZ.toFixed(2) + "°", 10, 40);
+			let strAlt = Utilities.decToSex(this.sunHe);
+			let strZ = Utilities.decToSex(this.sunZ);
+			context.fillText("Alt:" + strAlt, 10, 20);
+			context.fillText("Z  :" + strZ, 10, 40);
 			context.restore();
 		}
 	}
