@@ -51,7 +51,7 @@ After starting the `node` server as mentioned above, you can also reach
 - Split-flap Display. &#9989; Done
 - Boat Overview. &#9989; Done
 - Deviation Curve. TODO ⏰
-- Sun Path Display. **WIP** In progress
+- Sun Path Display. 🚧 In progress
 
 #### <img src="./images/cone.png" alt="WIP" width="48" height="48" align="middle"> TODO
 - &#x1F6A7; Replace (or duplicate) canvases with [SVG](https://www.w3.org/TR/SVG11/)s 🚧
@@ -110,6 +110,7 @@ Components above, live at [CodePen](http://codepen.io/OlivierLD/), when released
 - [SkyMap/StarFinder](https://codepen.io/OlivierLD/project/full/APNqRk).
 - [Split-Flap Display](https://codepen.io/OlivierLD/pen/LJLbeQ).
 - [Boat Overview](https://codepen.io/OlivierLD/pen/bQmZrm).
+- [Sun Path](https://codepen.io/OlivierLD/pen/zyLoQj).
 
 #### HTML Templates &amp; Imports
 Along the same lines as Web Components, for re-usability, modularity, etc.
