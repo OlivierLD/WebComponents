@@ -19,7 +19,11 @@
 #
 # WARNING: local-npm does not always work... version mismatch and such shit.
 #
-widgets=("analogdisplay" "analogwatch" "calendar" "compass" "direction" "jumbo" "ledpanel" "marquee" "rain" "raw" "skymap" "splitflap" "temperature" "windangle" "worldmap" "boatoverview" "sunpath")
+widgets=(
+  "analogdisplay" "analogwatch" "calendar" "compass" "direction"
+  "jumbo" "ledpanel" "marquee" "rain" "raw" "skymap" "splitflap"
+  "temperature" "windangle" "worldmap" "boatoverview" "sunpath" "slideshow"
+)
 #
 echo -e "+-------------------------+"
 echo -e "+-- P U B L I S H I N G --+"
@@ -41,6 +45,7 @@ echo -e "| 14. Wind Angle          |"
 echo -e "| 15. World Map           |"
 echo -e "| 16. Boat Overview       |"
 echo -e "| 17. Sun Path            |"
+echo -e "| 18. Slide Show          |"
 echo -e "| ...                     |"
 echo -e "+-------------------------+"
 echo -e "| Q to quit               |"
@@ -49,7 +54,7 @@ echo -en "- You choose > "
 read response
 #
 case "$response" in
-  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17")
+  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17" | "18")
     echo -e "--- npm config ---"
     npm config list
     #

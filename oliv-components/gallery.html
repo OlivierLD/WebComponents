@@ -31,6 +31,7 @@
 	<script type="module" src="widgets/splitflap/SplitFlapDisplay.js"></script>
 	<script type="module" src="widgets/boatoverview/BoatOverview.js"></script>
 	<script type="module" src="widgets/sunpath/SunPath.js"></script>
+	<script type="module" src="widgets/slideshow/SlideShow.js"></script>
 
 	<script type="text/javascript" src="utils/NavigationHelper.js"></script>
 
@@ -4126,6 +4127,56 @@
 			</tr>
 			<tr>
 				<td colspan="2"><button onclick="setData();">Set data</button></td>
+			</tr>
+		</table>
+	</div>
+	<hr/>
+	<!--
+			SLIDE-SHOW
+	+-->
+	<div style="cursor: pointer;" onclick="showHide('slide-show');" tabindex="0"><b><u>Slide Show</u></b></div>
+	<div id="slide-show" class="smooth">
+		<script type="text/javascript">
+
+			let interval = undefined;
+
+			function setAuto(id, cb) {
+				if (cb.checked) {
+					interval = setInterval(() => { document.getElementById(id)._forward(); }, 5000);
+				} else {
+					clearInterval(interval);
+				}
+			}
+		</script>
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;slide-show id="slide-show-01"
+            width="400"
+            height="300">
+  &lt;slide-show-image src="..." title="...">&lt;/slide-show-image>
+  &lt;slide-show-image src="..." title="...">&lt;/slide-show-image>
+&lt;/slide-show>
+		</pre>
+		<table>
+			<tr>
+				<td valign="top">
+					<div class="black-frame">
+						<slide-show id="slide-show-01"
+												width="400"
+												height="300"
+												auto="false">
+							<slide-show-image src="./images/en.route.jpg" title="En route"></slide-show-image>
+							<slide-show-image src="./images/lambi.jpg" title="Lambi, Moorea"></slide-show-image>
+							<slide-show-image src="./images/huahine.jpg" title="Huahine"></slide-show-image>
+							<slide-show-image src="./images/tapuamu.jpg" title="Tapuamu Bay, Tahaa"></slide-show-image>
+							<slide-show-image src="./images/raiatea.jpg" title="Raiatea"></slide-show-image>
+							<slide-show-image src="./images/bora.jpg" title="Reaching Bora-Bora"></slide-show-image>
+							<slide-show-image src="./images/tongareva.jpg" title="Tongareva"></slide-show-image>
+						</slide-show>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="1"><input type="checkbox" onchange="setAuto('slide-show-01', this);">Auto</input></td>
 			</tr>
 		</table>
 	</div>
