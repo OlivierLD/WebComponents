@@ -44,7 +44,8 @@ class SlideShow extends HTMLElement {
 	static get observedAttributes() {
 		return [
 			"width",
-			"height"
+			"height",
+			"slideclick"
 		];
 	}
 
@@ -185,6 +186,10 @@ class SlideShow extends HTMLElement {
 		this._backward = () => {
 			this.plusSlides(-1);
 		}
+
+		// Slide click
+		this._onclick = src => {};
+
 	}
 
 	// Called whenever the custom element (Web Comp.) is inserted into the DOM.
@@ -243,6 +248,9 @@ class SlideShow extends HTMLElement {
 			case "height":
 				this._height = parseInt(newVal);
 				break;
+			case "slideclick":
+				this._onclick = newVal;
+				break;
 			default:
 				break;
 		}
@@ -253,6 +261,11 @@ class SlideShow extends HTMLElement {
 		if (slideshowVerbose) {
 			console.log("adoptedCallback invoked");
 		}
+	}
+
+	set slideclick(callback) {
+		console.info("Setting the slide click callback");
+		this._onclick = callback;
 	}
 
 	set width(val) {
@@ -320,8 +333,6 @@ class SlideShow extends HTMLElement {
 			if (this._height !== undefined) {
 				this.slideshowContainer.style.height = this._height + "px";
 			}
-	//	this.slideshowContainer.onclick = this._action;
-
 			/*
 			 * See if Shadow CSS can help... We need several CSS classes here.
 			 */
@@ -367,6 +378,10 @@ class SlideShow extends HTMLElement {
 							image.setAttribute('src', src);
 							image.setAttribute('title', title);
 							slide.appendChild(image);
+							// On Slide Click:
+							slide.addEventListener('click', () => {
+								self._onclick(src);
+							});
 
 							let textDiv = document.createElement('div');
 							textDiv.setAttribute('class', 'text');

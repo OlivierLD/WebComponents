@@ -4156,9 +4156,10 @@
   &lt;slide-show-image src="..." title="...">&lt;/slide-show-image>
 &lt;/slide-show>
 		</pre>
-		<table>
+		<table style="margin: auto;">
 			<tr>
 				<td valign="top">
+					You can click on the slides...
 					<div class="black-frame" style="height: 450px;">
 						<slide-show id="slide-show-01"
 												width="600"
@@ -4171,6 +4172,15 @@
 							<slide-show-image src="./images/bora.jpg" title="Reaching Bora-Bora"></slide-show-image>
 							<slide-show-image src="./images/tongareva.jpg" title="Tongareva"></slide-show-image>
 						</slide-show>
+						<script type="text/javascript">
+							window.onload = () => {
+								function onSlideShowClick(src) {
+									console.log(">> Client side!! Slide " + src + " was clicked.");
+									window.open(src, '_blank'); // This is an example
+								}
+								document.getElementById("slide-show-01").slideclick = onSlideShowClick;
+							}
+						</script>
 					</div>
 				</td>
 			</tr>

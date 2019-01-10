@@ -52,6 +52,7 @@ After starting the `node` server as mentioned above, you can also reach
 - Boat Overview. &#9989; Done
 - Deviation Curve. TODO ⏰
 - Sun Path Display. &#10140; 🚧 In progress
+- Simple Slide Show. &#9989; Done
 
 #### <img src="./images/cone.png" alt="WIP" width="48" height="48" align="middle"> TODO
 - &#x1F6A7; Replace (or duplicate) canvases with [SVG](https://www.w3.org/TR/SVG11/)s 🚧
