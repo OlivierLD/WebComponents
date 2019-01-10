@@ -187,7 +187,7 @@ class SlideShow extends HTMLElement {
 			this.plusSlides(-1);
 		}
 
-		// Slide click
+		// Slide click. Do nothing by default.
 		this._onclick = src => {};
 
 	}
@@ -264,7 +264,6 @@ class SlideShow extends HTMLElement {
 	}
 
 	set slideclick(callback) {
-		console.info("Setting the slide click callback");
 		this._onclick = callback;
 	}
 
@@ -418,7 +417,7 @@ class SlideShow extends HTMLElement {
 				this.slideshowContainer.appendChild(next);
 
 				this.slideIndex = 1;
-				this.showSlides(this.slideIndex); // First display
+				this.showSlides(this.slideIndex); // First display, use the first slide.
 			}
 		}
 	}

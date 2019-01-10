@@ -4135,6 +4135,7 @@
 			SLIDE-SHOW
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('slide-show');" tabindex="0"><b><u>Slide Show</u></b></div>
+	<span style="margin: 10px;">Shows how to use nested custom components...</span>
 	<div id="slide-show" class="smooth">
 		<script type="text/javascript">
 
@@ -4146,6 +4147,11 @@
 				} else {
 					clearInterval(interval);
 				}
+			}
+
+			function onSlideShowClick(src) {
+				console.log(">> Client side!! Slide " + src + " was clicked.");
+				window.open(src, '_blank'); // This is an example
 			}
 		</script>
 		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
@@ -4173,11 +4179,7 @@
 							<slide-show-image src="./images/tongareva.jpg" title="Tongareva"></slide-show-image>
 						</slide-show>
 						<script type="text/javascript">
-							window.onload = () => {
-								function onSlideShowClick(src) {
-									console.log(">> Client side!! Slide " + src + " was clicked.");
-									window.open(src, '_blank'); // This is an example
-								}
+							window.onload = () => { // Important: window.onload
 								document.getElementById("slide-show-01").slideclick = onSlideShowClick;
 							}
 						</script>
