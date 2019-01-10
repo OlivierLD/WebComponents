@@ -63,107 +63,113 @@ class SlideShow extends HTMLElement {
 
 		this.slideIndex = 1;
 
+		this.widgetColor = 'cyan'; // TODO Make it a CSS rule
+
 		// TODO Isn't there a better way to define the styles?
 		let cssClasses = document.createElement("style");
-		cssClasses.innerText =
-				'.the-slides {\n' +
-				'\t\t\tdisplay: none\n' +
-				'\t\t}\n' +
+		cssClasses.innerHTML =
+				'.the-slides {' +
+				'   display: none;' +
+				'}' +
 				'\n' +
-				'\t\t/* Slideshow container */\n' +
-				'\t\t.slideshow-container {\n' +
-				'\t\t\tmax-width: 1000px;\n' +
-				'\t\t\tposition: relative;\n' +
-				'\t\t\tmargin: auto;\n' +
-				'\t\t}\n' +
+				'/* Slideshow container */' +
+				'.slideshow-container {' +
+				'   max-width: 1000px;' +
+				'   position: relative;' +
+				'   margin: auto;' +
+				'}' +
 				'\n' +
-				'\t\t/* Next & previous buttons */\n' +
-				'\t\t.prev, .next {\n' +
-				'\t\t\tcursor: pointer;\n' +
-				'\t\t\tposition: absolute;\n' +
-				'\t\t\ttop: 50%;\n' +
-				'\t\t\twidth: auto;\n' +
-				'\t\t\tpadding: 16px;\n' +
-				'\t\t\tmargin-top: -22px;\n' +
-				'\t\t\tcolor: cyan; /* white; */\n' +
-				'\t\t\tfont-weight: bold;\n' +
-				'\t\t\tfont-size: 18px;\n' +
-				'\t\t\ttransition: 0.6s ease;\n' +
-				'\t\t\tborder-radius: 0 3px 3px 0;\n' +
-				'\t\t}\n' +
+				'/* Next & previous buttons */' +
+				'.prev, .next {' +
+				'   cursor: pointer;' +
+				'   position: absolute;' +
+				'   top: 50%;' +
+				'   width: auto;' +
+				'   padding: 8px 16px 8px 12px;' +
+				'   margin-top: -22px;' +
+				'   color: '  + this.widgetColor + ';' +
+				'   font-weight: bold;' +
+				'   font-size: 18px;' +
+				'   transition: 0.6s ease;' +
+				'   border-radius: 24px;' +
+				'}' +
 				'\n' +
-				'\t\t/* Position the "next button" to the right */\n' +
-				'\t\t.next {\n' +
-				'\t\t\tright: 0;\n' +
-				'\t\t\tborder-radius: 3px 0 0 3px;\n' +
-				'\t\t}\n' +
+				'/* Position the "next button" to the right */' +
+				'.next {' +
+				'   right: 0;' +
+				'   padding: 8px 12px 8px 16px;' +
+				'}' +
 				'\n' +
-				'\t\t/* On hover, add a black background color with a little bit see-through */\n' +
-				'\t\t.prev:hover, .next:hover {\n' +
-				'\t\t\tbackground-color: rgba(0,0,0,0.8);\n' +
-				'\t\t}\n' +
+				'/* On hover, add a black background color with a little bit see-through */' +
+				'.prev:hover, .next:hover {' +
+				'   background-color: rgba(0, 0, 0, 0.6);' +
+				'   border: 1px solid ' + this.widgetColor + ';' +
+				'}' +
 				'\n' +
-				'\t\t/* Caption text */\n' +
-				'\t\t.text {\n' +
-				'\t\t\tcolor: cyan; /*#f2f2f2; */\n' +
-				'\t\t\tfont-size: 15px;\n' +
-				'\t\t\t/*padding: 8px 12px;*/\n' +
-				'\t\t\tposition: absolute;\n' +
-				'\t\t\tbottom: 26px;\n' +
-				'\t\t\twidth: 100%;\n' +
-				'\t\t\ttext-align: center;\n' +
-				'\t\t}\n' +
+				'/* Caption text */' +
+				'.text {' +
+				'   color: ' + this.widgetColor + ';' +
+				'   font-size: 15px;' +
+				'   /*padding: 8px 12px;*/' +
+				'   position: absolute;' +
+				'   bottom: 26px;' +
+				'   width: 100%;' +
+				'   text-align: center;' +
+				'}' +
 				'\n' +
-				'\t\t/* Number text (1/3 etc) */\n' +
-				'\t\t.numbertext {\n' +
-				'\t\t\tcolor: cyan; /*  #f2f2f2; */\n' +
-				'\t\t\tfont-size: 12px;\n' +
-				'\t\t\tpadding: 8px 12px;\n' +
-				'\t\t\tposition: absolute;\n' +
-				'\t\t\ttop: 0;\n' +
-				'\t\t}\n' +
+				'/* Number text (1/3 etc) */' +
+				'.numbertext {' +
+				'   color: ' + this.widgetColor + ';' +
+				'   font-size: 12px;' +
+				'   padding: 8px 12px;' +
+				'   position: absolute;' +
+				'   top: 0;' +
+				'}' +
 				'\n' +
-				'\t\t/* The dots/bullets/indicators */\n' +
-				'\t\t.dot {\n' +
-				'\t\t\tcursor:pointer;\n' +
-				'\t\t\theight: 13px;\n' +
-				'\t\t\twidth: 13px;\n' +
-				'\t\t\tmargin: 0 2px;\n' +
-				'\t\t\tbackground-color: #bbb;\n' +
-				'\t\t\tborder-radius: 50%;\n' +
-				'\t\t\tdisplay: inline-block;\n' +
-				'\t\t\ttransition: background-color 0.6s ease;\n' +
-				'\t\t}\n' +
+				'/* The dots/bullets/indicators */' +
+				'.dot {' +
+				'   cursor:pointer;' +
+				'   height: 13px;' +
+				'   width: 13px;' +
+				'   margin: 0 2px;' +
+				'   background-color: #bbb;' +
+				'   border-radius: 50%;' +
+				'   display: inline-block;' +
+				'   transition: background-color 0.6s ease;' +
+				'}' +
 				'\n' +
-				'\t\t.dots {\n' +
-				'\t\t\tposition: relative;\n' +
-				'\t\t\ttext-align: center;\n' +
-				'\t\t\tbottom: 20px;\n' +
-				'\t\t\tmargin: auto;\n' +
-				'\t\t\tgrid-area: center;\n' +
-				'\t\t}\n' +
+				'.dots {' +
+				'   position: relative;' +
+				'   text-align: center;' +
+				'   bottom: 20px;' +
+				'   margin: auto;' +
+				'   grid-area: center;' +
+				'}' +
 				'\n' +
-				'\t\t.active, .dot:hover {\n' +
-				'\t\t\tbackground-color: #717171;\n' +
-				'\t\t}\n' +
+				'.active, .dot:hover {' +
+				'   background-color: #717171;' +
+				'   height: 11px;' +
+				'   width: 11px;' +
+				'   border: 1px solid '+ this.widgetColor + ';' +
+				'}' +
 				'\n' +
-				'\t\t/* Fading animation */\n' +
-				'\t\t.fade {\n' +
-				'\t\t\t-webkit-animation-name: fade;\n' +
-				'\t\t\t-webkit-animation-duration: 1.5s;\n' +
-				'\t\t\tanimation-name: fade;\n' +
-				'\t\t\tanimation-duration: 1.5s;\n' +
-				'\t\t}\n' +
+				'/* Fading animation */' +
+				'.fade {' +
+				'   -webkit-animation-name: fade;' +
+				'   -webkit-animation-duration: 1.5s;' +
+				'   animation-name: fade;' +
+				'   animation-duration: 1.5s;' +
+				'}' +
 				'\n' +
-				'\t\t@-webkit-keyframes fade {\n' +
-				'\t\t\tfrom {opacity: .4}\n' +
-				'\t\t\tto {opacity: 1}\n' +
-				'\t\t}\n' +
+				'@-webkit-keyframes fade {' +
+				'   from {opacity: .4}' +
+				'   to {opacity: 1}' +
+				'}' +
 				'\n' +
-				'\t\t@keyframes fade {\n' +
-				'\t\t\tfrom {opacity: .4}\n' +
-				'\t\t\tto {opacity: 1}\n' +
-				'\t\t}';
+				'@keyframes fade {' +
+				'   from {opacity: .4}' +
+				'   to {opacity: 1}' +
+				'}';
 
 		this._shadowRoot.appendChild(cssClasses);
 
@@ -187,6 +193,7 @@ class SlideShow extends HTMLElement {
 		if (slideshowVerbose) {
 			console.log("connectedCallback invoked");
 		}
+		// To dynamically add children
 		var observer = new MutationObserver(function(mutations) {
 			mutations.forEach(function(mutation) {
 				// Detect insertion
