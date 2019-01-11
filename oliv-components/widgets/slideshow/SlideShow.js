@@ -1,4 +1,6 @@
-"use strict";
+// "use strict";
+
+// import slideShowCSS from './css/SlideShow.css'; TODO See why that thing does not work...
 
 const slideshowVerbose = false;
 const SLIDE_SHOW_TAG_NAME = 'slide-show';
@@ -52,6 +54,9 @@ class SlideShow extends HTMLElement {
 	constructor() {
 		super();
 		this._shadowRoot = this.attachShadow({mode: 'open'}); // 'open' means it is accessible from external JavaScript.
+
+		// slideShowCSS.use();
+
 		// create and append an element, a div.
 
 		this.slideshowContainer = document.createElement("div");
@@ -66,7 +71,14 @@ class SlideShow extends HTMLElement {
 
 		this.widgetColor = 'cyan'; // TODO Make it a CSS rule
 
-		// TODO Isn't there a better way to define the styles?
+		// <link href="./css/SlideShow.css" rel="stylesheet" type="text/css">
+		// let link = document.createElement("link");
+		// link.setAttribute('rel', 'stylesheet');
+		// link.setAttribute('type', 'text/css');
+		// link.setAttribute('href', './css/SlideShow.css');
+		// this._shadowRoot.appendChild(link);
+
+		// TODO Isn't there a better way to define the styles? (slideShowCSS.use();)
 		let cssClasses = document.createElement("style");
 		cssClasses.innerHTML =
 				'.the-slides {' +
@@ -358,6 +370,7 @@ class SlideShow extends HTMLElement {
 					if (childNode.nodeType === ELEMENT_TYPE) {
 //					console.info(">> Node name is " + childNode.nodeName);
 						if (childNode.nodeName === 'SLIDE-SHOW-IMAGE') {
+							// Compose the slide here, with title, number, image, onclick event. Also add one dot per slide.
 
 							idx += 1;
 
