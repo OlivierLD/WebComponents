@@ -407,6 +407,7 @@ class SlideShow extends HTMLElement {
 
 							let dot = document.createElement('span');
 							dot.setAttribute('class', 'dot');
+							dot.setAttribute('title', title);
 							let gotoSlide = idx;
 							dot.addEventListener('click', () => {
 								self.currentSlide(gotoSlide);
