@@ -1864,6 +1864,7 @@
 								let aws = document.getElementById('aws-01').value;
 								let awa = document.getElementById('awa-01').value;
 								document.getElementById('json-aw').value = '{ "wa":' + awa + ', "ws":' + aws + '}';
+								document.getElementById('aw-01').value = '{ "wa":' + awa + ', "ws":' + aws + '}';
 							}
 						</script>
 						<input type="text" id="json-aw" style="display: none;" value="{ &quot;awa&quot;: 60, &quot;aws&quot;: 10.2 }">
@@ -1909,7 +1910,7 @@
 						<wind-angle-display class="analogdisplay-day"
 																title="Apparent Wind Speed in Knots"
 																id="aw-02"
-																value="{ &quot;wa&quot;: 60, &quot;ws&quot;: 10.2 }"
+																value="{ &quot;wa&quot;: -60, &quot;ws&quot;: 13.4 }"
 																major-ticks="45"
 																minor-ticks="5"
 																with-border="true"
@@ -1925,9 +1926,10 @@
 								let aws = document.getElementById('aws-02').value;
 								let awa = document.getElementById('awa-02').value;
 								document.getElementById('json-aw-2').value = '{ "wa":' + awa + ', "ws":' + aws + '}';
+								document.getElementById('aw-02').value = '{ "wa":' + awa + ', "ws":' + aws + '}';
 							}
 						</script>
-						<input type="text" id="json-aw-2" style="display: none;" value="{ &quot;awa&quot;: 60, &quot;aws&quot;: 10.2 }">
+						<input type="text" id="json-aw-2" style="display: none;" value="{ &quot;awa&quot;: -60, &quot;aws&quot;: 13.4 }">
 						AWA:
 						<input type="number"
 									 id="awa-02"
@@ -1935,7 +1937,7 @@
 									 placeholder="AWA"
 									 title="AWA in degrees"
 									 style="width: 50px; text-align: right;"
-									 value="60"/>
+									 value="-60"/>
 						<br/>
 						<button onclick="setData('json-aw-2', 'aw-02')"
 										title="Set Apparent Wind angle and speed"
@@ -1946,7 +1948,7 @@
 						&nbsp;
 						<input type="checkbox" onchange="setBorder(this, 'aw-02');" checked>With Border
 						<br/>
-						<input id="aws-02" title="AWS" type="range" min="0" max="50" step="0.1" value="10.2" onchange="updateJsonAw2();" style="width: 100%;"/>
+						<input id="aws-02" title="AWS" type="range" min="0" max="50" step="0.1" value="13.4" onchange="updateJsonAw2();" style="width: 100%;"/>
 					</div>
 				</td>
 			</tr>
