@@ -5,19 +5,21 @@
 > Note: _Those components requires **absolutely NO** external library._
 > (No Knockout, Require, jQuery, etc).
 
-> But EcmaScript6 (ES6) is required.
+> But EcmaScript6 (ES6, or higher) is required. Should not be a problem (2018 onwards).
 
-> Some components might require some provided utilities like
+> Some components might require some (provided) utilities like
 > - `character.matrixes/characters.js`
 > - `stars/constellation.js`
 > - `utilities/Utilities.js`
+
+You need to be aware of this kind of dependencies, in case you wish to use the non-WebPacked version of those components.
 
 They do require a WebComponents-savvy browser though. Most of them are (or will shortly be...).
 
 ### Live Demos
 Requires `nodejs` to be available on your system.
 
-To see the components at work, after cloning the repo, start the `node` server _**from the `WebComponents` directory**_, and load `index.html` in a browser:
+To see the components at work, after cloning the repo (or refreshing your branch), start the `node` server _**from the `WebComponents` directory**_, and load `index.html` in a browser:
 
 ```bash
  $> node server.js
@@ -41,24 +43,26 @@ After starting the `node` server as mentioned above, you can also reach
 - Wind Angle. &#9989; Done
 - Globe and Map (with `import` and `module`). &#9989; Done <!-- &#10140; WIP -->
 - Compass Rose. &#9989; Done
-- Digital Display. TODO ⏰
+- Digital Display (like a log). TODO ⏰
 - Date (calendar) display. &#9989; Done
 - Watch/Clock (analog). &#9989; Done
 - Marquee. &#9989; Done
+- Lep Panel. &#9989; Done
 - Evolution Displays. TODO ⏰
 - Generic Graphs. TODO ⏰
 - Sky Map and Star Finder (along with some `REST` service(s)). &#9989; Done
 - Split-flap Display. &#9989; Done
-- Boat Overview. &#9989; Done
+- Boat Overview (all the vectors). &#9989; Done
 - Deviation Curve. TODO ⏰
-- Sun Path Display. &#10140; 🚧 In progress
+- Sun Path Display (fed by some `REST` services). &#9989; Done <!-- &#10140; 🚧 In progress -->
 - Simple Slide Show. &#9989; Done
+- T900 Templates (Dieumegard Bataille). TODO ⏰
 
 #### <img src="./images/cone.png" alt="WIP" width="48" height="48" align="middle"> TODO
 - &#x1F6A7; Replace (or duplicate) canvases with [SVG](https://www.w3.org/TR/SVG11/)s 🚧
 
 #### Screenshots, as they appear from the Demo page
-World Map it is `globe` configuration:
+World Map in its `globe` configuration:
 
 ![World Map](./images/worldmap.png)
 
