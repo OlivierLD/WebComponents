@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Keyboard events</title>
+	<link rel="stylesheet" href="../../oliv-components/css/stylesheet.css">
+	<script type="text/javascript">
+		window.onload = () => {
+
+			console.log('Init...');
+
+			document.body.addEventListener(
+					'keydown',
+					evt => {
+						if (evt.key !== undefined) {
+							console.log("1 Key:", evt.key, "Code:", evt.keyCode);
+							if (evt.key === 'Shift') { // Just for test.
+								alert('Aha!');
+							}
+						} else if (evt.keyIdentifier !== undefined) {
+							console.log("2", evt.keyIdentifier, " Code:", evt.keyCode);
+						} else if (evt.keyCode !== undefined) {
+							console.log("3", evt.keyCode);
+						} else {
+							console.log('... Bad.');
+						}
+					}, false);
+
+		};
+	</script>
+</head>
+<body>
+	<h1>Trapping key event</h1>
+	<div id="the-zone" style="width: 400px; height: 300px; border: 1px solid silver; border-radius: 5px; background-color: gold; padding: 10px;">
+		Hit keys, see console...
+	</div>
+	<hr/>
+  <span style="font-style: italic;">Aha!</span>
+</body>
+</html>
