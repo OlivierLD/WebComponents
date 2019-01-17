@@ -5,24 +5,34 @@
 	<title>Keyboard events</title>
 	<link rel="stylesheet" href="../../oliv-components/css/stylesheet.css">
 	<script type="text/javascript">
+		function message(mess) {
+			document.getElementById('mess-zone').innerText = mess;
+		}
+
 		window.onload = () => {
 
 			console.log('Init...');
 
-			document.body.addEventListener(
+			let button = document.getElementById('the-button');
+//		document.body.addEventListener(
+			button.addEventListener(
 					'keydown',
-					evt => {
+					evt => { // ArrowRight, ArrowUp, ArrowLeft, ArrowDown
 						if (evt.key !== undefined) {
 							console.log("1 Key:", evt.key, "Code:", evt.keyCode);
+							message("1 Key: " + evt.key + ", Code:" + evt.keyCode);
 							if (evt.key === 'Shift') { // Just for test.
 								alert('Aha!');
 							}
 						} else if (evt.keyIdentifier !== undefined) {
-							console.log("2", evt.keyIdentifier, " Code:", evt.keyCode);
+							console.log("2", evt.keyIdentifier, "Code:", evt.keyCode);
+							message("2, " + evt.keyIdentifier + ", Code:" + evt.keyCode);
 						} else if (evt.keyCode !== undefined) {
 							console.log("3", evt.keyCode);
+							message("3, " + evt.keyCode);
 						} else {
 							console.log('... Bad.');
+							message('... Bad.');
 						}
 					}, false);
 
@@ -31,9 +41,14 @@
 </head>
 <body>
 <h1>Trapping key event</h1>
+
+<div id="mess-zone" style="width: 400px; height: 50px; border: 1px solid silver; border-radius: 5px; padding: 10px; margin: 10px;"></div>
+
 <div id="the-zone"
-		 style="width: 400px; height: 300px; border: 1px solid silver; border-radius: 5px; background-color: gold; padding: 10px;">
-	Hit keys, see console...
+		 style="width: 400px; height: 300px; border: 1px solid silver; border-radius: 5px; background-color: gold; padding: 10px; margin: 10px;">
+	Navigate to the button, hit keys, see console...
+	<br/>
+	<button id="the-button" style="margin: 10px;">Click!</button>
 </div>
 <hr/>
 <span style="font-style: italic;">Aha!</span>
