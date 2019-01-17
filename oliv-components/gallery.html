@@ -4055,10 +4055,16 @@
 				"setZ": 243.4362699175676
 			};
 
+			const userPosition1 = {
+				"latitude": 37.76661945,
+				"longitude": -122.5166988
+			};
+
 			function setData() {
 				let elem1 = document.getElementById('sun-path-01');
 				elem1.sunPath = sunPath1;
 				elem1.sunData = sunData1;
+				elem1.userPos = userPosition1;
 				elem1.repaint();
 
 				let elem2 = document.getElementById('sun-path-02');
