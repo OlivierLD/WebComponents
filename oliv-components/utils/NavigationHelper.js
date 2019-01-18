@@ -15,8 +15,6 @@
  *  - Declination (possibly from RMC), deviation, from the dev curve
  */
 
-// TODO VMGs
-
 if (Math.toRadians === undefined) {
 	Math.toRadians = (deg) => {
 		return deg * (Math.PI / 180);
@@ -31,11 +29,11 @@ if (Math.toDegrees === undefined) {
 
 let NavigationHelper = {
 
-	twCalculator: function (
+	twCalculator: (
 			aws, awsCoeff,
 			awa, awaOffset,
 			hdg, hdgOffset,
-			sog, cog) {
+			sog, cog) => {
 		let twa = 0, tws = -1, twd = 0;
 		try {
 			// Warning, the MHU is carried by the boat, that has the HDG...
@@ -80,11 +78,11 @@ let NavigationHelper = {
 		return {'twa': twa, 'tws': tws, 'twd': twd};
 	},
 
-	currentCalculator: function (
+	currentCalculator: (
 			bsp, bspCoeff,
 			hdg, hdgOffset,
 			leeway,
-			sog, cog) {
+			sog, cog) => {
 		let cdr = 0, csp = 0;
 
 		let rsX = ((bsp * bspCoeff) * Math.sin(Math.toRadians((hdg + hdgOffset) + leeway)));
@@ -100,7 +98,7 @@ let NavigationHelper = {
 		return {'cdr': cdr, 'csp': csp};
 	},
 
-	directionFinder: function(x, y) {
+	directionFinder: (x, y) => {
 		let dir = 0.0;
 		if (y != 0) {
 			dir = Math.toDegrees(Math.atan(x / y));
@@ -133,7 +131,7 @@ let NavigationHelper = {
 		return dir;
 	},
 
-	leewayEvaluator: function (awa, maxLeeway) {
+	leewayEvaluator: (awa, maxLeeway) => {
 		let _awa = awa;
 		if (_awa < 0) {
 			_awa += 360;
@@ -150,11 +148,11 @@ let NavigationHelper = {
 		return leeway;
 	},
 
-	variationCalculator: function (D, d) {
+	variationCalculator: (D, d) => {
 		return D + d;
 	},
 
-	hdgFromHdc: function (hdc, D, d) {
+	hdgFromHdc: (hdc, D, d) => {
 		let hdg = (hdc + this.variationCalculator(D, d)) % 360;
 		while (hdg < 0) {
 			hdg += 360;
@@ -162,7 +160,7 @@ let NavigationHelper = {
 		return hdg;
 	},
 
-	vmgCalulator: function(sog, cog, twd, twa, bsp, hdg, b2wp) {
+	vmgCalculator: (sog, cog, twd, twa, bsp, hdg, b2wp) => {
 		let vmgWind = null;
 		let vmgWayPoint = null;
 		try {
