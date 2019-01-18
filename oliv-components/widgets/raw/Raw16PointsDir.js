@@ -292,7 +292,7 @@ class Raw16PointsDir extends HTMLElement {
 
 		// LEDs
 		for (let led=0; led<cardValues.length; led++) {
-			let angle = Utilities.toRadians(cardValues[led].value + 90);
+			let angle = Math.toRadians(cardValues[led].value + 90);
 			// Led centrer
 			let xLedCenter = (this.width / 2) - ((radius * 0.95) * Math.cos(angle));
 			let yLedCenter = (this.height / 2) - ((radius * 0.95) * Math.sin(angle));

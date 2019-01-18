@@ -407,7 +407,7 @@ class SkyMap extends HTMLElement {
 			context.beginPath();
 			for (let i = 0; i < 360; i++) {
 				if (i % this.majorTicks === 0) {
-					let currentAngle = - Utilities.toRadians(i - (this._hemisphere * this.LHAAries));
+					let currentAngle = - Math.toRadians(i - (this._hemisphere * this.LHAAries));
 					let xFrom = (this.canvas.width / 2) - ((radius * 0.98) * Math.cos(currentAngle));
 					let yFrom = (this.canvas.height / 2) - ((radius * 0.98) * Math.sin(currentAngle));
 					let xTo = (this.canvas.width / 2) - ((radius * 0.92) * Math.cos(currentAngle));
@@ -425,7 +425,7 @@ class SkyMap extends HTMLElement {
 			if (this.minorTicks > 0) {
 				context.beginPath();
 				for (let i = 0; i < 360; i += this.minorTicks) {
-					let _currentAngle = - Utilities.toRadians(i - (this._hemisphere * this.LHAAries));
+					let _currentAngle = - Math.toRadians(i - (this._hemisphere * this.LHAAries));
 
 					let xFrom = (this.canvas.width / 2) - ((radius * 0.98) * Math.cos(_currentAngle));
 					let yFrom = (this.canvas.height / 2) - ((radius * 0.98) * Math.sin(_currentAngle));
@@ -446,7 +446,7 @@ class SkyMap extends HTMLElement {
 				if (i % this.majorTicks === 0) {
 					context.save();
 					context.translate(this.canvas.width / 2, (this.canvas.height / 2)); // canvas.height);
-					let __currentAngle = - Utilities.toRadians(i - (this._hemisphere * this.LHAAries));
+					let __currentAngle = - Math.toRadians(i - (this._hemisphere * this.LHAAries));
 					context.rotate(__currentAngle - Math.PI);
 					context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
 					context.fillStyle = 'black';
@@ -468,7 +468,7 @@ class SkyMap extends HTMLElement {
 				let now = SkyMap.findCorrespondingDay(day);
 				let angleOnDisk = 360 * ((day - 1) / 365); // The angle in the circle
 //			console.log("Day ", day, " => now", JSON.stringify(now), " angle:", angleOnDisk);
-				let rad = Utilities.toRadians((angleOnDisk - this.LHAAries) * this._hemisphere);
+				let rad = Math.toRadians((angleOnDisk - this.LHAAries) * this._hemisphere);
 				let xFrom = (this.canvas.width / 2) - ((radius * 0.98) * Math.cos(rad - (Math.PI / 2)));
 				let yFrom = (this.canvas.height / 2) - ((radius * 0.98) * Math.sin(rad - (Math.PI / 2)));
 				let xTo = (this.canvas.width / 2) - ((radius * ((now.dayOfMonth === 1 || now.dayOfMonth % 5 === 0) ? 0.92 : 0.95)) * Math.cos(rad - (Math.PI / 2)));
@@ -518,7 +518,7 @@ class SkyMap extends HTMLElement {
 		// quarters of hours
 		context.beginPath();
 		for (let i = 0; i < 96; i++) {
-			let currentAngle = Utilities.toRadians(i * (15 / 4));
+			let currentAngle = Math.toRadians(i * (15 / 4));
 			let xFrom = (this.canvas.width / 2) - ((radius * 0.92) * Math.cos(currentAngle));
 			let yFrom = (this.canvas.height / 2) - ((radius * 0.92) * Math.sin(currentAngle));
 			let xTo = (this.canvas.width / 2) - ((radius * 0.90) * Math.cos(currentAngle));
@@ -534,7 +534,7 @@ class SkyMap extends HTMLElement {
 		// Hours
 		context.beginPath();
 		for (let i = 0; i < 24; i++) {
-			let currentAngle = Utilities.toRadians(i * 15);
+			let currentAngle = Math.toRadians(i * 15);
 			let xFrom = (this.canvas.width / 2) - ((radius * 0.92) * Math.cos(currentAngle));
 			let yFrom = (this.canvas.height / 2) - ((radius * 0.92) * Math.sin(currentAngle));
 			let xTo = (this.canvas.width / 2) - ((radius * 0.88) * Math.cos(currentAngle));
@@ -552,7 +552,7 @@ class SkyMap extends HTMLElement {
 		for (let i = 0; i < 24; i++) {
 			context.save();
 			context.translate(this.canvas.width / 2, (this.canvas.height / 2)); // canvas.height);
-			let __currentAngle = - Utilities.toRadians(i * 15);
+			let __currentAngle = - Math.toRadians(i * 15);
 			context.rotate(__currentAngle - Math.PI);
 			context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
 			context.fillStyle = 'blue';
@@ -948,8 +948,8 @@ class SkyMap extends HTMLElement {
 
 	plotCoordinates(lat, lng, radius) {
 		let r = (((90 - lat) / 180) * radius);
-		let xOffset = Math.round(r * Math.sin(Utilities.toRadians(lng))) * this._hemisphere;
-		let yOffset = Math.round(r * Math.cos(Utilities.toRadians(lng)));
+		let xOffset = Math.round(r * Math.sin(Math.toRadians(lng))) * this._hemisphere;
+		let yOffset = Math.round(r * Math.cos(Math.toRadians(lng)));
 		if (this._type === MapType.SKYMAP_TYPE) {
 			yOffset *= -1;
 		}

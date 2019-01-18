@@ -823,7 +823,7 @@ class BoatOverview extends HTMLElement {
 		let cWidth  = this._width;
 		let cHeight = this._height;
 
-		let _twd = Utilities.toRadians(this._twd);
+		let _twd = Math.toRadians(this._twd);
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
@@ -856,7 +856,7 @@ class BoatOverview extends HTMLElement {
 		while (wd > 360) {
 			wd -= 360;
 		}
-		let _awd = Utilities.toRadians(wd);
+		let _awd = Math.toRadians(wd);
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
@@ -889,7 +889,7 @@ class BoatOverview extends HTMLElement {
 		let cWidth  = this._width;
 		let cHeight = this._height;
 
-		let _hdg = Utilities.toRadians(this._hdg);
+		let _hdg = Math.toRadians(this._hdg);
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
@@ -923,7 +923,7 @@ class BoatOverview extends HTMLElement {
 		let cWidth  = this._width;
 		let cHeight = this._height;
 
-		let _hdg = Utilities.toRadians(this._cmg);
+		let _hdg = Math.toRadians(this._cmg);
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
@@ -965,7 +965,7 @@ class BoatOverview extends HTMLElement {
 			compassNorth += 360;
 		}
 
-		let _magNorth = Utilities.toRadians(magNorth);
+		let _magNorth = Math.toRadians(magNorth);
 		let center = this.getCanvasCenter();
 		let x = center.x;
 		let y = center.y;
@@ -999,7 +999,7 @@ class BoatOverview extends HTMLElement {
 			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
 			context.fillText("Mag N:" + magNorth.toFixed(0) + "°", x + dX, y + dY);
 		}
-		let _compassNorth = Utilities.toRadians(compassNorth);
+		let _compassNorth = Math.toRadians(compassNorth);
 		context.beginPath();
 
 		dX = bspLength * 0.8 * Math.sin(_compassNorth);
@@ -1026,7 +1026,7 @@ class BoatOverview extends HTMLElement {
 		let cWidth  = this._width;
 		let cHeight = this._height;
 
-		let _hdg = Utilities.toRadians(this._cog);
+		let _hdg = Math.toRadians(this._cog);
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
@@ -1063,9 +1063,9 @@ class BoatOverview extends HTMLElement {
 		let y = center.y;
 
 		if (this.vmgOnWind) {
-			_hdg = Utilities.toRadians(this._twd);
+			_hdg = Math.toRadians(this._twd);
 		} else {
-			_hdg = Utilities.toRadians(this._b2wp);
+			_hdg = Math.toRadians(this._b2wp);
 			// Display WP direction
 			context.strokeStyle = this.boatOverviewColorConfig.vmgArrowColor;
 			context.fillStyle   = this.boatOverviewColorConfig.vmgArrowColor;
@@ -1099,7 +1099,7 @@ class BoatOverview extends HTMLElement {
 		if (context.setLineDash !== undefined) {
 			context.setLineDash([5]);
 			context.moveTo(x + dX, y + dY);
-			let _cog = Utilities.toRadians(this._cog);
+			let _cog = Math.toRadians(this._cog);
 			let sogLength = this._zoom * this._sog * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 			dX = sogLength * Math.sin(_cog);
 			dY = - sogLength * Math.cos(_cog);
@@ -1123,12 +1123,12 @@ class BoatOverview extends HTMLElement {
 		let x = center.x;
 		let y = center.y;
 
-		let _cmg = Utilities.toRadians(this._cmg);
+		let _cmg = Math.toRadians(this._cmg);
 		let bspLength = this._zoom * this._bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXcmg = bspLength * Math.sin(_cmg);
 		let dYcmg = - bspLength * Math.cos(_cmg);
 
-		let _cog = Utilities.toRadians(this._cog);
+		let _cog = Math.toRadians(this._cog);
 		let sogLength = this._zoom * this._sog * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXcog = sogLength * Math.sin(_cog);
 		let dYcog = - sogLength * Math.cos(_cog);
@@ -1166,13 +1166,13 @@ class BoatOverview extends HTMLElement {
 		while (wd > 360) {
 			wd -= 360;
 		}
-		let _awd = Utilities.toRadians(wd);
+		let _awd = Math.toRadians(wd);
 		context.beginPath();
 		let awLength = this._zoom * this._aws * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXaw = awLength * Math.sin(_awd);
 		let dYaw = - awLength * Math.cos(_awd);
 
-		let _twd = Utilities.toRadians(this._twd);
+		let _twd = Math.toRadians(this._twd);
 		let twLength = this._zoom * this._tws * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXtw = twLength * Math.sin(_twd);
 		let dYtw = - twLength * Math.cos(_twd);
@@ -1381,8 +1381,8 @@ class BoatOverview extends HTMLElement {
 		let ptY = center.y;
 
 		for (let i=0; i<x.length; i++) { // Rotation
-			let dx = x[i] * Math.cos(Utilities.toRadians(trueHeading)) + (y[i] * (-Math.sin(Utilities.toRadians(trueHeading))));
-			let dy = x[i] * Math.sin(Utilities.toRadians(trueHeading)) + (y[i] *   Math.cos(Utilities.toRadians(trueHeading)));
+			let dx = x[i] * Math.cos(Math.toRadians(trueHeading)) + (y[i] * (-Math.sin(Math.toRadians(trueHeading))));
+			let dy = x[i] * Math.sin(Math.toRadians(trueHeading)) + (y[i] *   Math.cos(Math.toRadians(trueHeading)));
 			xPoints.push(Math.round(ptX + dx));
 			yPoints.push(Math.round(ptY + dy));
 		}
@@ -1615,8 +1615,8 @@ class Line {
 
 
 	rotate(p, angle) {
-		let r = new Point(Math.round((p.x * Math.cos(Utilities.toRadians(angle))) + (p.y * Math.sin(Utilities.toRadians(angle)))),
-				Math.round((p.x * -Math.sin(Utilities.toRadians(angle))) + (p.y * Math.cos(Utilities.toRadians(angle)))));
+		let r = new Point(Math.round((p.x * Math.cos(Math.toRadians(angle))) + (p.y * Math.sin(Math.toRadians(angle)))),
+				Math.round((p.x * -Math.sin(Math.toRadians(angle))) + (p.y * Math.cos(Math.toRadians(angle)))));
 		return r;
 	}
 

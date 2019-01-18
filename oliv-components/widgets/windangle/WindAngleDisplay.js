@@ -415,7 +415,7 @@ class WindAngleDisplay extends HTMLElement {
 		context.beginPath();
 		for (let i = 0; i <= 360; i++) {
 			if (i % this.majorTicks === 0) {
-				let currentAngle = Utilities.toRadians(i);
+				let currentAngle = Math.toRadians(i);
 				let xFrom = (this.canvas.width / 2) - ((radius * 0.95) * Math.cos(currentAngle));
 				let yFrom = (radius + 10) - ((radius * 0.95) * Math.sin(currentAngle));
 				let xTo = (this.canvas.width / 2) - ((radius * 0.85) * Math.cos(currentAngle));
@@ -433,7 +433,7 @@ class WindAngleDisplay extends HTMLElement {
 		if (this.minorTicks > 0) {
 			context.beginPath();
 			for (let i = 0; i <= 360; i += this.minorTicks) {
-				let _currentAngle = Utilities.toRadians(i);
+				let _currentAngle = Math.toRadians(i);
 				let xFrom = (this.canvas.width / 2) - ((radius * 0.95) * Math.cos(_currentAngle));
 				let yFrom = (radius + 10) - ((radius * 0.95) * Math.sin(_currentAngle));
 				let xTo = (this.canvas.width / 2) - ((radius * 0.90) * Math.cos(_currentAngle));
@@ -480,7 +480,7 @@ class WindAngleDisplay extends HTMLElement {
 			let y = this.canvas.height / 2;
 			context.lineWidth = 20;
 			let top = 1.5 * Math.PI;
-			let arcWidth = Utilities.toRadians(120);
+			let arcWidth = Math.toRadians(120);
 
 			// Starboard
 			if (this.analogDisplayColorConfig.outlinedPortStarboard === true) {
@@ -565,13 +565,13 @@ class WindAngleDisplay extends HTMLElement {
 		context.moveTo(centerX, centerY);
 
 		// Left
-		let x = centerX - ((radius * 0.05) * Math.cos(Utilities.toRadians(windValue.wa))); //  - (Math.PI / 2))));
-		let y = centerY - ((radius * 0.05) * Math.sin(Utilities.toRadians(windValue.wa))); // - (Math.PI / 2))));
+		let x = centerX - ((radius * 0.05) * Math.cos(Math.toRadians(windValue.wa))); //  - (Math.PI / 2))));
+		let y = centerY - ((radius * 0.05) * Math.sin(Math.toRadians(windValue.wa))); // - (Math.PI / 2))));
 		context.lineTo(x, y);
 		if (this.hand !== 'wind') { // Regular needle
 			// Tip
-			x = centerX - ((radius * 0.90) * Math.cos(Utilities.toRadians(windValue.wa) + (Math.PI / 2)));
-			y = centerY - ((radius * 0.90) * Math.sin(Utilities.toRadians(windValue.wa) + (Math.PI / 2)));
+			x = centerX - ((radius * 0.90) * Math.cos(Math.toRadians(windValue.wa) + (Math.PI / 2)));
+			y = centerY - ((radius * 0.90) * Math.sin(Math.toRadians(windValue.wa) + (Math.PI / 2)));
 			context.lineTo(x, y);
 		} else {                    // Then draw wind arrow
 			/*
@@ -596,7 +596,7 @@ class WindAngleDisplay extends HTMLElement {
 				{ x: + radius * 0.20, y: - radius * 0.60 }, // Right back fat side of the arrow head
 				{ x: + radius * 0.04, y: - radius * 0.30 }  // Right pointy side of the arrow head
 			];
-			let radAngle = Utilities.toRadians(windValue.wa); // + (Math.PI / 2);
+			let radAngle = Math.toRadians(windValue.wa); // + (Math.PI / 2);
 			// Apply rotation to the points of the needle
 			arrowPoints.forEach(pt => {
 				x = centerX + ((pt.x * Math.cos(radAngle)) - (pt.y * Math.sin(radAngle)));
@@ -605,8 +605,8 @@ class WindAngleDisplay extends HTMLElement {
 			});
 		}
 		// Right
-		x = centerX - ((radius * 0.05) * Math.cos(Utilities.toRadians(windValue.wa) + (2 * Math.PI / 2)));
-		y = centerY - ((radius * 0.05) * Math.sin(Utilities.toRadians(windValue.wa) + (2 * Math.PI / 2)));
+		x = centerX - ((radius * 0.05) * Math.cos(Math.toRadians(windValue.wa) + (2 * Math.PI / 2)));
+		y = centerY - ((radius * 0.05) * Math.sin(Math.toRadians(windValue.wa) + (2 * Math.PI / 2)));
 		context.lineTo(x, y);
 
 		context.closePath();

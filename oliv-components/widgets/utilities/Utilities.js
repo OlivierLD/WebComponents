@@ -18,12 +18,16 @@ export function rpad(str, len, pad) {
 	return s;
 }
 
-export function toRadians(deg) {
-	return deg * (Math.PI / 180);
+if (Math.toRadians === undefined) {
+	Math.toRadians = (deg) => {
+		return deg * (Math.PI / 180);
+	};
 }
 
-export function toDegrees(rad) {
-	return rad * (180 / Math.PI);
+if (Math.toDegrees === undefined) {
+	Math.toDegrees = (rad) => {
+		return rad * (180 / Math.PI);
+	};
 }
 
 /**
@@ -34,13 +38,13 @@ export function toDegrees(rad) {
  * @return DR Position, L & G in Degrees
  */
 export function deadReckoning(start, dist, bearing) {
-	let radianDistance = toRadians(dist / 60);
-	let finalLat = (Math.asin((Math.sin(toRadians(start.lat)) * Math.cos(radianDistance)) +
-			(Math.cos(toRadians(start.lat)) * Math.sin(radianDistance) * Math.cos(toRadians(bearing)))));
-	let finalLng = toRadians(start.lng) + Math.atan2(Math.sin(toRadians(bearing)) * Math.sin(radianDistance) * Math.cos(toRadians(start.lat)),
-			Math.cos(radianDistance) - Math.sin(toRadians(start.lat)) * Math.sin(finalLat));
-	finalLat = toDegrees(finalLat);
-	finalLng = toDegrees(finalLng);
+	let radianDistance = Math.toRadians(dist / 60);
+	let finalLat = (Math.asin((Math.sin(Math.toRadians(start.lat)) * Math.cos(radianDistance)) +
+			(Math.cos(Math.toRadians(start.lat)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(bearing)))));
+	let finalLng = Math.toRadians(start.lng) + Math.atan2(Math.sin(Math.toRadians(bearing)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(start.lat)),
+			Math.cos(radianDistance) - Math.sin(Math.toRadians(start.lat)) * Math.sin(finalLat));
+	finalLat = Math.toDegrees(finalLat);
+	finalLng = Math.toDegrees(finalLng);
 
 	return {lat: finalLat, lng: finalLng};
 }
@@ -73,7 +77,7 @@ export function calculateGreatCircle(start, arrival, nbPoints) {
 		ewDir = TO_WEST;
 	}
 	if (Math.abs(arrival.lng - start.lng) > Math.PI) {
-		if (ewDir == TO_EAST) {
+		if (ewDir === TO_EAST) {
 			ewDir = TO_WEST;
 			arrival.lng = (arrival.lng - (2 * Math.PI));
 		} else {
@@ -98,7 +102,7 @@ export function calculateGreatCircle(start, arrival, nbPoints) {
 			rpG = (2 * Math.PI) + rpG;
 		}
 		let routePoint = { lat: smallL, lng: rpG };
-		let ari = toDegrees(Math.atan(tanStartAngle));
+		let ari = Math.toDegrees(Math.atan(tanStartAngle));
 		if (ari < 0.0) {
 			ari = Math.abs(ari);
 		}
@@ -110,7 +114,7 @@ export function calculateGreatCircle(start, arrival, nbPoints) {
 		}
 		let arrG = routePoint.lng;
 		let staG = smallStart.lng;
-		if (Math.sign(arrG) != Math.sign(staG)) {
+		if (Math.sign(arrG) !== Math.sign(staG)) {
 			if (Math.sign(arrG) > 0) {
 				arrG -= (2 * Math.PI);
 			} else {
@@ -124,15 +128,15 @@ export function calculateGreatCircle(start, arrival, nbPoints) {
 			_ewDir = TO_WEST;
 		}
 		let _start = 0.0;
-		if (_nsDir == TO_SOUTH) {
+		if (_nsDir === TO_SOUTH) {
 			_start = 180;
-			if (_ewDir == TO_EAST) {
+			if (_ewDir === TO_EAST) {
 				ari = _start - ari;
 			} else {
 				ari = _start + ari;
 			}
 		} else {
-			if (_ewDir == TO_EAST) {
+			if (_ewDir === TO_EAST) {
 				ari = _start + ari;
 			} else {
 				ari = _start - ari;
@@ -149,12 +153,12 @@ export function calculateGreatCircle(start, arrival, nbPoints) {
 
 export function calculateGreatCircleInDegrees(start, arrival, nbPoints) {
 	let radRoute = calculateGreatCircle(
-			{ lat: toRadians(start.lat), lng: toRadians(start.lng) },
-			{ lat: toRadians(arrival.lat), lng: toRadians(arrival.lng) },
+			{ lat: Math.toRadians(start.lat), lng: Math.toRadians(start.lng) },
+			{ lat: Math.toRadians(arrival.lat), lng: Math.toRadians(arrival.lng) },
 			nbPoints);
 	let degRoute = [];
 	radRoute.forEach(pt => {
-		degRoute.push({ pos: { lat: toDegrees(pt.pos.lat), lng: toDegrees(pt.pos.lng) }, z: pt.z });
+		degRoute.push({ pos: { lat: Math.toDegrees(pt.pos.lat), lng: Math.toDegrees(pt.pos.lng) }, z: pt.z });
 	});
 	return degRoute;
 }
@@ -187,8 +191,8 @@ export function decToSex(val, ns_ew) {
 
 export function getDir(x, y) {
 	let dir = 0.0;
-	if (y != 0) {
-		dir = toDegrees(Math.atan(x / y));
+	if (y !== 0) {
+		dir = Math.toDegrees(Math.atan(x / y));
 	}
 	if (x <= 0 || y <= 0) {
 		if (x > 0 && y < 0) {
@@ -197,13 +201,13 @@ export function getDir(x, y) {
 			dir += 360;
 		} else if (x < 0 && y < 0) {
 			dir += 180;
-		} else if (x == 0) {
+		} else if (x === 0) {
 			if (y > 0) {
 				dir = 0.0;
 			} else {
 				dir = 180;
 			}
-		} else if (y == 0) {
+		} else if (y === 0) {
 			if (x > 0) {
 				dir = 90;
 			} else {

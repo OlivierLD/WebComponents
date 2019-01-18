@@ -438,14 +438,14 @@ class AnalogDisplay extends HTMLElement {
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;
 
-		let totalAngle = (Math.PI + (2 * (Utilities.toRadians(this.overlap))));
+		let totalAngle = (Math.PI + (2 * (Math.toRadians(this.overlap))));
 
 		context.beginPath();
 
 		if (this.withBorder === true) {
 			//  context.arc(x, y, radius, startAngle, startAngle + Math.PI, antiClockwise);
 //    context.arc(canvas.width / 2, radius + 10, radius, Math.PI - toRadians(overlapOver180InDegree), (2 * Math.PI) + toRadians(overlapOver180InDegree), false);
-			context.arc(this.canvas.width / 2, radius + 10, radius, Math.PI - Utilities.toRadians(this.overlap > 0 ? 90 : 0), (2 * Math.PI) + Utilities.toRadians(this.overlap > 0 ? 90 : 0), false);
+			context.arc(this.canvas.width / 2, radius + 10, radius, Math.PI - Math.toRadians(this.overlap > 0 ? 90 : 0), (2 * Math.PI) + Math.toRadians(this.overlap > 0 ? 90 : 0), false);
 			context.lineWidth = 5;
 		}
 
@@ -478,8 +478,8 @@ class AnalogDisplay extends HTMLElement {
 		if (this.withMinMax && this.miniVal < this.maxiVal) {
 			context.beginPath();
 
-			let ___minAngle = (totalAngle * ((this.miniVal - this.minValue) / (this.maxValue - this.minValue))) - Utilities.toRadians(this.overlap) - (Math.PI);
-			let ___maxAngle = (totalAngle * ((this.maxiVal - this.minValue) / (this.maxValue - this.minValue))) - Utilities.toRadians(this.overlap) - (Math.PI);
+			let ___minAngle = (totalAngle * ((this.miniVal - this.minValue) / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap) - (Math.PI);
+			let ___maxAngle = (totalAngle * ((this.maxiVal - this.minValue) / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap) - (Math.PI);
 
 			//Center
 			context.moveTo(this.canvas.width / 2, radius + 10);
@@ -501,7 +501,7 @@ class AnalogDisplay extends HTMLElement {
 		context.beginPath();
 		for (let i = 0; i <= (this.maxValue - this.minValue); i++) {
 			if ((i + this.minValue) % this.majorTicks === 0) {
-				let currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - Utilities.toRadians(this.overlap);
+				let currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap);
 				let xFrom = (this.canvas.width / 2) - ((radius * 0.95) * Math.cos(currentAngle));
 				let yFrom = (radius + 10) - ((radius * 0.95) * Math.sin(currentAngle));
 				let xTo = (this.canvas.width / 2) - ((radius * 0.85) * Math.cos(currentAngle));
@@ -519,7 +519,7 @@ class AnalogDisplay extends HTMLElement {
 		if (this.minorTicks > 0) {
 			context.beginPath();
 			for (let i = 0; i <= (this.maxValue - this.minValue); i += this.minorTicks) {
-				let _currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - Utilities.toRadians(this.overlap);
+				let _currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap);
 
 				let xFrom = (this.canvas.width / 2) - ((radius * 0.95) * Math.cos(_currentAngle));
 				let yFrom = (radius + 10) - ((radius * 0.95) * Math.sin(_currentAngle));
@@ -542,7 +542,7 @@ class AnalogDisplay extends HTMLElement {
 				if ((i + this.minValue) % this.majorTicks === 0) {
 					context.save();
 					context.translate(this.canvas.width / 2, (radius + 10)); // canvas.height);
-					let __currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - Utilities.toRadians(this.overlap);
+					let __currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap);
 //      context.rotate((Math.PI * (i / maxValue)) - (Math.PI / 2));
 					context.rotate(__currentAngle - (Math.PI / 2));
 					context.font = "bold " + Math.round(scale * 15) + "px " + this.analogDisplayColorConfig.font; // Like "bold 15px Arial"
@@ -667,7 +667,7 @@ class AnalogDisplay extends HTMLElement {
 		let valInBoundaries = Math.min(analogValue, this._max_value);
 		valInBoundaries = Math.max(valInBoundaries, this._min_value);
 
-		let ___currentAngle = (totalAngle * ((valInBoundaries - this.minValue) / (this.maxValue - this.minValue))) - Utilities.toRadians(this.overlap);
+		let ___currentAngle = (totalAngle * ((valInBoundaries - this.minValue) / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap);
 		// Left
 		let x = (this.canvas.width / 2) - ((radius * 0.05) * Math.cos((___currentAngle - (Math.PI / 2))));
 		let y = (radius + 10) - ((radius * 0.05) * Math.sin((___currentAngle - (Math.PI / 2))));

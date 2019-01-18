@@ -18,13 +18,13 @@
 // TODO VMGs
 
 if (Math.toRadians === undefined) {
-	Math.toRadians = function(deg) {
+	Math.toRadians = (deg) => {
 		return deg * (Math.PI / 180);
 	};
 }
 
 if (Math.toDegrees === undefined) {
-	Math.toDegrees = function(rad) {
+	Math.toDegrees = (rad) => {
 		return rad * (180 / Math.PI);
 	};
 }

@@ -580,13 +580,13 @@ class DirectionDisplay extends HTMLElement {
 		context.moveTo(centerX, centerY);
 
 		// Left
-		let x = centerX - ((radius * 0.05) * Math.cos(Utilities.toRadians(dv))); //  - (Math.PI / 2))));
-		let y = centerY - ((radius * 0.05) * Math.sin(Utilities.toRadians(dv))); // - (Math.PI / 2))));
+		let x = centerX - ((radius * 0.05) * Math.cos(Math.toRadians(dv))); //  - (Math.PI / 2))));
+		let y = centerY - ((radius * 0.05) * Math.sin(Math.toRadians(dv))); // - (Math.PI / 2))));
 		context.lineTo(x, y);
 		if (this.hand !== 'wind') { // Regular needle
 			// Tip
-			x = centerX - ((radius * 0.90) * Math.cos(Utilities.toRadians(dv) + (Math.PI / 2)));
-			y = centerY - ((radius * 0.90) * Math.sin(Utilities.toRadians(dv) + (Math.PI / 2)));
+			x = centerX - ((radius * 0.90) * Math.cos(Math.toRadians(dv) + (Math.PI / 2)));
+			y = centerY - ((radius * 0.90) * Math.sin(Math.toRadians(dv) + (Math.PI / 2)));
 			context.lineTo(x, y);
 		} else {                    // Then draw wind arrow
 			/*
@@ -611,7 +611,7 @@ class DirectionDisplay extends HTMLElement {
 				{ x: + radius * 0.20, y: - radius * 0.60 }, // Right back fat side of the arrow head
 				{ x: + radius * 0.04, y: - radius * 0.30 }  // Right pointy side of the arrow head
 			];
-			let radAngle = Utilities.toRadians(dv); // + (Math.PI / 2);
+			let radAngle = Math.toRadians(dv); // + (Math.PI / 2);
 			// Apply rotation to the points of the needle
 			arrowPoints.forEach(pt => {
 				x = centerX + ((pt.x * Math.cos(radAngle)) - (pt.y * Math.sin(radAngle)));
@@ -620,8 +620,8 @@ class DirectionDisplay extends HTMLElement {
 			});
 		}
 		// Right
-		x = centerX - ((radius * 0.05) * Math.cos(Utilities.toRadians(dv) + (2 * Math.PI / 2)));
-		y = centerY - ((radius * 0.05) * Math.sin(Utilities.toRadians(dv) + (2 * Math.PI / 2)));
+		x = centerX - ((radius * 0.05) * Math.cos(Math.toRadians(dv) + (2 * Math.PI / 2)));
+		y = centerY - ((radius * 0.05) * Math.sin(Math.toRadians(dv) + (2 * Math.PI / 2)));
 		context.lineTo(x, y);
 
 		context.closePath();
