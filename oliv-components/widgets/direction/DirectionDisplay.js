@@ -66,7 +66,7 @@ const defaultDirectionColorConfig = {
 	font: 'Arial' /* 'Source Code Pro' */
 };
 
-import * as Utilities from "../utilities/Utilities.js";
+// import * as Utilities from "../utilities/Utilities.js";
 
 /* global HTMLElement */
 class DirectionDisplay extends HTMLElement {
@@ -262,7 +262,7 @@ class DirectionDisplay extends HTMLElement {
 							//				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();

@@ -808,7 +808,7 @@ class SkyMap extends HTMLElement {
 				}
 				if (this._constellationNames) {
 					// Calculate the center of the constellation
-					let minD = undefined, maxD = undefined, minRA = undefined, maxRA = undefined;
+					var minD, maxD, minRA, maxRA;
 					for (let s = 0; s < constellations[i].stars.length; s++) {
 						if (s === 0) {
 							minD = constellations[i].stars[s].d;

@@ -539,11 +539,11 @@ class WorldMap extends HTMLElement {
 			longitude -= 360;
 		}
 		let aries = { lat: Math.toRadians(obl), lng: Math.toRadians(longitude) };
-		let eclCenter = WorldMap.deadReckoningRadians(aries, 90 * 60, 0); // "Center" of the Ecliptic
+		let eclCenter = this.deadReckoningRadians(aries, 90 * 60, 0); // "Center" of the Ecliptic
 
 		context.fillStyle = this.worldmapColorConfig.tropicColor;
 		for (let hdg=0; hdg<360; hdg++) {
-			let pt = WorldMap.deadReckoningRadians(eclCenter, 90 * 60, hdg);
+			let pt = this.deadReckoningRadians(eclCenter, 90 * 60, hdg);
 			let pp = this.getPanelPoint(Math.toDegrees(pt.lat), Math.toDegrees(pt.lng));
 
 			let thisPointIsBehind = this.isBehind(pt.lat, pt.lng - Math.toRadians(this.globeViewLngOffset));
@@ -617,20 +617,6 @@ class WorldMap extends HTMLElement {
 		return s;
 	}
 
-	decToSex(val, ns_ew) {
-		return WorldMap.decToSex(val, ns_ew);
-	}
-
-	// Defined this way so it can be invoked on the WorldMap object (instance), from a callback for example.
-	toRadians(deg) {
-		return Math.toRadians(deg);
-	}
-
-	// Same as above
-	toDegrees(rad) {
-		return Math.toDegrees(rad);
-	}
-
 	computeGreatCircle(from, to, nb) {
 		return Utilities.calculateGreatCircleInDegrees(from, to, nb);
 	}
@@ -642,17 +628,13 @@ class WorldMap extends HTMLElement {
 	 * @param route route in Degrees
 	 * @return DR Position, L & G in Radians
 	 */
-	static deadReckoningRadians(from, dist, route) {
+	deadReckoningRadians(from, dist, route) {
 		let radianDistance = Math.toRadians(dist / 60);
 		let finalLat = (Math.asin((Math.sin(from.lat) * Math.cos(radianDistance)) +
 				(Math.cos(from.lat) * Math.sin(radianDistance) * Math.cos(Math.toRadians(route)))));
 		let finalLng = from.lng + Math.atan2(Math.sin(Math.toRadians(route)) * Math.sin(radianDistance) * Math.cos(from.lat),
 				Math.cos(radianDistance) - Math.sin(from.lat) * Math.sin(finalLat));
 		return {lat: finalLat, lng: finalLng};
-	}
-
-	deadReckoningRadians(from, dist, route) {
-		return WorldMap.deadReckoningRadians(from, dist, route);
 	}
 
 	drawNight(context, from, user, gha) {
@@ -668,7 +650,7 @@ class WorldMap extends HTMLElement {
 
 		// find first visible point of the night limb
 		for (let i=0; i<360; i++) {
-			let night = WorldMap.deadReckoningRadians(from, NINETY_DEGREES, i);
+			let night = this.deadReckoningRadians(from, NINETY_DEGREES, i);
 			let visible = this.isBehind(night.lat, night.lng - Math.toRadians(this.globeViewLngOffset)) ? INVISIBLE : VISIBLE;
 			if (visible === VISIBLE && visibility === INVISIBLE) { // Just became visible
 				firstVisible = i;
@@ -681,7 +663,7 @@ class WorldMap extends HTMLElement {
 		// Night limb
 		let firstPt, lastPt;
 		for (let dir=firstVisible; dir<firstVisible+360; dir++) {
-			let dr = WorldMap.deadReckoningRadians(from, NINETY_DEGREES, dir);
+			let dr = this.deadReckoningRadians(from, NINETY_DEGREES, dir);
 			let borderPt = this.getPanelPoint(Math.toDegrees(dr.lat), Math.toDegrees(dr.lng));
 			if (dir === firstVisible) {
 				context.moveTo(borderPt.x, borderPt.y);
@@ -732,7 +714,7 @@ class WorldMap extends HTMLElement {
 
 		let userPos = { lat: Math.toRadians(user.latitude), lng: Math.toRadians(user.longitude) };
 		for (let i=firstBoundary; (inc>0 && i<=lastBoundary) || (inc<0 && i>=lastBoundary); i+=inc) {
-			let limb = WorldMap.deadReckoningRadians(userPos, NINETY_DEGREES, i);
+			let limb = this.deadReckoningRadians(userPos, NINETY_DEGREES, i);
 			let limbPt = this.getPanelPoint(Math.toDegrees(limb.lat), Math.toDegrees(limb.lng));
 			context.lineTo(limbPt.x, limbPt.y);
 		}
@@ -786,10 +768,6 @@ class WorldMap extends HTMLElement {
 			lng += 360;
 		}
 		return lng;
-	}
-
-	plotPoint(context, pt, color) {
-		WorldMap.plot(context, pt, color);
 	}
 
 	static plot(context, pt, color) {
@@ -879,7 +857,7 @@ class WorldMap extends HTMLElement {
 							//				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();
@@ -1376,7 +1354,7 @@ class WorldMap extends HTMLElement {
 
 				if (this.astronomicalData.stars !== undefined && this.withStars) {
 					let instance = this;
-					this.astronomicalData.stars.forEach(function (star, idx) {
+					this.astronomicalData.stars.forEach((star, idx) => {
 						instance.positionBody(context, userPos, instance.worldmapColorConfig.starsColor, star.name, star.decl, star.gha, false, true);
 					});
 				}
@@ -1427,7 +1405,7 @@ class WorldMap extends HTMLElement {
 	plotPosToCanvas(context, lat, lng, label, color) {
 
 		let pt = this.posToCanvas(lat, lng);
-		this.plotPoint(context, pt, (color !== undefined ? color : this.worldmapColorConfig.defaultPlotPointColor));
+		WorldMap.plot(context, pt, (color !== undefined ? color : this.worldmapColorConfig.defaultPlotPointColor));
 		if (label !== undefined) {
 			try {
 				// BG
@@ -1583,7 +1561,7 @@ class WorldMap extends HTMLElement {
 		let nightRim = [];
 		// Calculate the night rim
 		for (let i=0; i<360; i++) {
-			let night = WorldMap.deadReckoningRadians(from, NINETY_DEGREES, i);
+			let night = this.deadReckoningRadians(from, NINETY_DEGREES, i);
 			nightRim.push(night);
 		}
 
@@ -1688,11 +1666,11 @@ class WorldMap extends HTMLElement {
 						longitude -= 360;
 					}
 					let ariesRad = { lat: Math.toRadians(this.astronomicalData.eclipticObliquity), lng: Math.toRadians(longitude) };
-					let eclCenter = WorldMap.deadReckoningRadians(ariesRad, 90 * 60, 0); // "Center" of the Ecliptic
+					let eclCenter = this.deadReckoningRadians(ariesRad, 90 * 60, 0); // "Center" of the Ecliptic
 
 					context.fillStyle = this.worldmapColorConfig.tropicColor;
 					for (let hdg=0; hdg<360; hdg++) {
-						let pt = WorldMap.deadReckoningRadians(eclCenter, 90 * 60, hdg);
+						let pt = this.deadReckoningRadians(eclCenter, 90 * 60, hdg);
 						let pp = this.posToCanvas(Math.toDegrees(pt.lat), WorldMap.toRealLng(Math.toDegrees(pt.lng)));
 						context.fillRect(pp.x, pp.y, 1, 1);
 					}
@@ -1721,7 +1699,7 @@ class WorldMap extends HTMLElement {
 
 			if (this.astronomicalData.stars !== undefined && this.withStars) {
 				let instance = this;
-				this.astronomicalData.stars.forEach(function(star, idx) {
+				this.astronomicalData.stars.forEach((star, idx) => {
 					instance.plotPosToCanvas(context, star.decl, WorldMap.haToLongitude(star.gha), star.name, instance.worldmapColorConfig.starsColor);
 				});
 			}

@@ -93,7 +93,7 @@ let NavigationHelper = {
 		let a = (rsX - rfX);
 		let b = (rfY - rsY);
 		csp = Math.sqrt((a * a) + (b * b));
-		cdr = this.directionFinder(a, b);
+		cdr = NavigationHelper.directionFinder(a, b);
 
 		return {'cdr': cdr, 'csp': csp};
 	},
@@ -153,7 +153,7 @@ let NavigationHelper = {
 	},
 
 	hdgFromHdc: (hdc, D, d) => {
-		let hdg = (hdc + this.variationCalculator(D, d)) % 360;
+		let hdg = (hdc + NavigationHelper.variationCalculator(D, d)) % 360;
 		while (hdg < 0) {
 			hdg += 360;
 		}

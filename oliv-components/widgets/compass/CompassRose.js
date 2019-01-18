@@ -141,7 +141,7 @@ class CompassRose extends HTMLElement {
 							//				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();
@@ -227,7 +227,7 @@ class CompassRose extends HTMLElement {
 		}
 
 		// Background
-		this.roundRect(context, 0, 0, this.width, this.height, 10, true, false);
+		CompassRose.roundRect(context, 0, 0, this.width, this.height, 10, true, false);
 
 		// Ticks
 		context.strokeStyle = this.compassRoseColorConfig.tickColor;
@@ -249,7 +249,7 @@ class CompassRose extends HTMLElement {
 			context.stroke();
 			if (tick % 15 === 0) {
 				let tk = tick;
-				while (tk < 0) { tk += 360 };
+				while (tk < 0) { tk += 360 }
 				let txt = tk.toString();
 				if (tick % 45 === 0) {
 					if (tick === 0) { txt = "N"; }
@@ -279,7 +279,7 @@ class CompassRose extends HTMLElement {
 		} else {
 			context.fillStyle = this.compassRoseColorConfig.displayBackgroundGradient.to;
 		}
-		this.roundRect(context, 2, 1, 42, 16, 3, true, true);
+		CompassRose.roundRect(context, 2, 1, 42, 16, 3, true, true);
 
 		context.fillStyle = this.compassRoseColorConfig.digitColor;
 		context.font = "bold " + Math.round(scale * 16) + "px Courier New"; // "bold 16px Arial"
@@ -299,7 +299,7 @@ class CompassRose extends HTMLElement {
 		context.closePath();
 	}
 
-	roundRect(ctx, x, y, width, height, radius, fill, stroke)  {
+	static roundRect(ctx, x, y, width, height, radius, fill, stroke)  {
 		if (fill === undefined)  {
 			fill = true;
 		}

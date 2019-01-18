@@ -56,7 +56,7 @@ const cardValues = [
 ];
 
 const FONT_SIZE = 60;
-import * as Utilities from "../utilities/Utilities.js";
+// import * as Utilities from "../utilities/Utilities.js";
 
 /* global HTMLElement */
 class Raw16PointsDir extends HTMLElement {
@@ -195,7 +195,7 @@ class Raw16PointsDir extends HTMLElement {
 						                                                                                                                                                     //				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();
@@ -293,15 +293,15 @@ class Raw16PointsDir extends HTMLElement {
 		// LEDs
 		for (let led=0; led<cardValues.length; led++) {
 			let angle = Math.toRadians(cardValues[led].value + 90);
-			// Led centrer
+			// Led center
 			let xLedCenter = (this.width / 2) - ((radius * 0.95) * Math.cos(angle));
 			let yLedCenter = (this.height / 2) - ((radius * 0.95) * Math.sin(angle));
 			let color = (dirValue.value === cardValues[led].value ? 'red' : 'gray');
-			this.fillLed(context, { x: xLedCenter, y: yLedCenter }, 6, color);
+			Raw16PointsDir.fillLed(context, { x: xLedCenter, y: yLedCenter }, 6, color);
 		}
 	}
 
-	fillLed(context, pt, radius, color) {
+	static fillLed(context, pt, radius, color) {
 		// let grd = context.createRadialGradient(pt.x - (radius / 3), pt.y - (radius / 3), radius / 3, pt.x, pt.y, radius);
 		// grd.addColorStop(0, this.marqueeColorConfig.fgColor.from);
 		// grd.addColorStop(1, this.marqueeColorConfig.fgColor.to);

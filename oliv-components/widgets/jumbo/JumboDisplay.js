@@ -157,7 +157,7 @@ class JumboDisplay extends HTMLElement {
 							//				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();
@@ -238,7 +238,7 @@ class JumboDisplay extends HTMLElement {
 		context.fillStyle = grd;
 
 		// Background
-		this.roundRect(context, 0, 0, this.canvas.width, this.canvas.height, 10, true, false);
+		JumboDisplay.roundRect(context, 0, 0, this.canvas.width, this.canvas.height, 10, true, false);
 		// Grid
 		//  1 - vertical
 		let nbVert = 5;
@@ -276,7 +276,7 @@ class JumboDisplay extends HTMLElement {
 		context.fillText(strVal, this.canvas.width - len - 5, this.canvas.height - 5);
 	}
 
-	roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+	static roundRect(ctx, x, y, width, height, radius, fill, stroke) {
 		if (fill === undefined) {
 			fill = true;
 		}

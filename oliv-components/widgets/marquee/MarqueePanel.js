@@ -23,7 +23,7 @@ const FONT_SIZE = 10; // Cannot be changed.
 const Mode = {
 	WHITE_ON_BLACK: 1,
 	BLACK_ON_WHITE: 2
-}
+};
 
 /* global HTMLElement */
 class MarqueePanel extends HTMLElement {
@@ -38,7 +38,7 @@ class MarqueePanel extends HTMLElement {
 		];
 	}
 
-	dummyDump() {
+	static dummyDump() {
 		console.log('We have %d character(s).', characters.length);
 	}
 
@@ -54,7 +54,7 @@ class MarqueePanel extends HTMLElement {
 		this.shadowRoot.appendChild(this.canvas);
 
 		// For tests of the import
-		// this.dummyDump();
+		// MarqueePanel.dummyDump();
 
 		// Default values
 		this._width       = 500;
@@ -189,7 +189,7 @@ class MarqueePanel extends HTMLElement {
 						  //				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();
@@ -232,7 +232,7 @@ class MarqueePanel extends HTMLElement {
 		}
 	}
 
-	findCharacter(char) {
+	static findCharacter(char) {
 		let matrix;
 		for (let c=0; c<characters.length; c++) {
 			if (characters[c].key === char) {
@@ -265,7 +265,7 @@ class MarqueePanel extends HTMLElement {
 		context.closePath();
 	}
 
-	invert(c) {
+	static invert(c) {
 		return (c === ' ' ? 'X' : ' ');
 	}
 
@@ -342,7 +342,7 @@ class MarqueePanel extends HTMLElement {
 		let screenColumn = xPx;
 		for (let i = 0; i < txt.length; i++) {         // For each character of the string to display
 			let c = txt.charAt(i);
-			let matrix = this.findCharacter(c);
+			let matrix = MarqueePanel.findCharacter(c);
 
 			if (matrix !== undefined) {
 				// Assume all pixel lines have the same length

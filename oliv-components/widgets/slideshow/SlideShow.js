@@ -194,10 +194,10 @@ class SlideShow extends HTMLElement {
 
 		this._forward = () => {
 			this.plusSlides(1);
-		}
+		};
 		this._backward = () => {
 			this.plusSlides(-1);
-		}
+		};
 
 		// Slide click. Do nothing by default.
 		this._onclick = src => {};
@@ -211,13 +211,13 @@ class SlideShow extends HTMLElement {
 			console.log("connectedCallback invoked");
 		}
 		// To dynamically add children
-		var observer = new MutationObserver(function(mutations) {
+		let observer = new MutationObserver(function(mutations) {
 			mutations.forEach(function(mutation) {
 				// Detect insertion
 				if (mutation.addedNodes.length > 0)
 					console.info('Node added: ', mutation.addedNodes[0]);
 			})
-		})
+		});
 		observer.observe(this, { childList: true });
 
 		if (slideshowVerbose) {

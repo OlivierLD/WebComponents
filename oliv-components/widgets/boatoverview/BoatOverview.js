@@ -318,7 +318,7 @@ class BoatOverview extends HTMLElement {
 		this._zoom = 1.0;
 
 		this._withCurrent = false;
-		this._withLabels = true
+		this._withLabels = true;
 		this._withGPS = true;
 		this._withWind = true;
 		this._withTrueWind = true;
@@ -448,7 +448,7 @@ class BoatOverview extends HTMLElement {
 				break;
 
 			case "boat-shape":
-				console.log('BoatShape changing')
+				console.log('BoatShape changing');
 				if (newVal === 'MONO' || newVal === 'CATA' || newVal === 'TRI' || newVal === 'PLANE') {
 					this._boatShape = newVal;
 				}
@@ -735,7 +735,7 @@ class BoatOverview extends HTMLElement {
 							//				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();
@@ -1456,7 +1456,7 @@ class BoatOverview extends HTMLElement {
 		for (let circ=1; circ<=this.speedScale; circ++) {
 			let radius = this._zoom * Math.round(circ * ((Math.min(cHeight, cWidth) / 2) / this.speedScale));
 			context.beginPath();
-			if (circ % 5 == 0) {
+			if (circ % 5 === 0) {
 				context.lineWidth = 3;
 			} else {
 				context.lineWidth = 1;
@@ -1495,7 +1495,7 @@ class BoatOverview extends HTMLElement {
 		context.fillStyle = this.boatOverviewColorConfig.nmeaDataDisplayColor;
 		context.font="bold 16px Courier New";
 		let txtY = 20;
-		var space = 18;
+		let space = 18;
 		let col1 = 10, col2 = 90;
 		context.fillText("BSP", col1, txtY);
 		context.fillText(this._bsp + " kts", col2, txtY);
@@ -1614,10 +1614,9 @@ class Line {
 	}
 
 
-	rotate(p, angle) {
-		let r = new Point(Math.round((p.x * Math.cos(Math.toRadians(angle))) + (p.y * Math.sin(Math.toRadians(angle)))),
+	static rotate(p, angle) {
+		return new Point(Math.round((p.x * Math.cos(Math.toRadians(angle))) + (p.y * Math.sin(Math.toRadians(angle)))),
 				Math.round((p.x * -Math.sin(Math.toRadians(angle))) + (p.y * Math.cos(Math.toRadians(angle)))));
-		return r;
 	}
 
 	drawWithArrowhead(ctx) {
@@ -1675,14 +1674,14 @@ class Line {
 		six = new Point(headWidth / 2, -(Math.round(len - headLength)));
 		seven = new Point(arrowWidth / 2, -(Math.round(len - headLength)));
 		eight = new Point(arrowWidth / 2, 0);
-		one = this.rotate(one, -dir);
-		two = this.rotate(two, -dir);
-		three = this.rotate(three, -dir);
-		four = this.rotate(four, -dir);
-		five = this.rotate(five, -dir);
-		six = this.rotate(six, -dir);
-		seven = this.rotate(seven, -dir);
-		eight = this.rotate(eight, -dir);
+		one = Line.rotate(one, -dir);
+		two = Line.rotate(two, -dir);
+		three = Line.rotate(three, -dir);
+		four = Line.rotate(four, -dir);
+		five = Line.rotate(five, -dir);
+		six = Line.rotate(six, -dir);
+		seven = Line.rotate(seven, -dir);
+		eight = Line.rotate(eight, -dir);
 
 		let x = [];
 		let y = [];

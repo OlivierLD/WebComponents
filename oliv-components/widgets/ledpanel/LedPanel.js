@@ -19,7 +19,7 @@ const NB_COLS = 128;
 const Mode = {
 	WHITE_ON_BLACK: 1,
 	BLACK_ON_WHITE: 2
-}
+};
 
 const withGradient = true;
 
@@ -177,7 +177,7 @@ class LedPanel extends HTMLElement {
 						  //				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();
@@ -235,7 +235,7 @@ class LedPanel extends HTMLElement {
 
 			for (let i = 0; i < this._h; i++) {
 				for (let j = 0; j < this._w; j++) {
-					this.screenMatrix[i][j] = (mode === Mode.WHITE_ON_BLACK ? false : true);
+					this.screenMatrix[i][j] = (mode !== Mode.WHITE_ON_BLACK);
 				}
 			}
 		}

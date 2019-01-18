@@ -246,7 +246,7 @@
 					// GPS Satellites in view
 					for (var sat in gpsSatelliteData) {
 						let satellite = gpsSatelliteData[sat];
-						let satellitePosition = worldMap.deadReckoningRadians({
+						let satellitePosition = WorldMap.deadReckoningRadians({
 							lat: Math.toRadians(worldMap.userPosition.latitude),
 							lng: Math.toRadians(worldMap.userPosition.longitude)
 						}, (90 - satellite.elevation) * 60, satellite.azimuth);

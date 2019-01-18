@@ -42,7 +42,7 @@ const ANALOG_TAG_NAME = 'analog-display';
  * spine-case to camelCase
  */
 const defaultAnalogDisplayColorConfig = {
-	bgColor: 'rgba(0, 0, 0, 0)', /* transparent, 'white', TODO*/
+	bgColor: 'rgba(0, 0, 0, 0)', /* transparent, 'white' */
 	digitColor: 'black',
 	withGradient: true,
 	displayBackgroundGradient: {
@@ -68,7 +68,7 @@ const defaultAnalogDisplayColorConfig = {
 	valueFontSizeFactor: 1
 };
 
-import * as Utilities from "../utilities/Utilities.js";
+// import * as Utilities from "../utilities/Utilities.js";
 
 /* global HTMLElement */
 class AnalogDisplay extends HTMLElement {
@@ -324,7 +324,7 @@ class AnalogDisplay extends HTMLElement {
 							//				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();

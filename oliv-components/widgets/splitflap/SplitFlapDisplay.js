@@ -167,7 +167,7 @@ class SplitFlapDisplay extends HTMLElement {
 						                                                                                                                                                           //				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();
@@ -263,7 +263,7 @@ class SplitFlapDisplay extends HTMLElement {
 		context.strokeStyle = this.splitFlapColorConfig.frameColor;
 		context.lineWidth = 0.5;
 		// Background
-		this.roundRect(context, x, y, w, h, 1, true, false);
+		SplitFlapDisplay.roundRect(context, x, y, w, h, 1, true, false);
 
 		context.beginPath();
 		context.moveTo(x, y + (h / 2));
@@ -354,14 +354,14 @@ class SplitFlapDisplay extends HTMLElement {
 
 		context.fillStyle = this.splitFlapColorConfig.bgColor;
 		// Background
-		this.roundRect(context, 0, 0, this.canvas.width, this.canvas.height, 5, true, false);
+		SplitFlapDisplay.roundRect(context, 0, 0, this.canvas.width, this.canvas.height, 5, true, false);
 
 		for (let i=0; i<upperCaseValue.length; i++) {
 			this.drawOneFlap(context, upperCaseValue[i], i * oneWidth, 0, oneWidth, height, scale);
 		}
 	}
 
-	roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+	static roundRect(ctx, x, y, width, height, radius, fill, stroke) {
 		if (fill === undefined) {
 			fill = true;
 		}

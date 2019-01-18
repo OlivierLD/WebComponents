@@ -267,7 +267,7 @@ class AnalogWatch extends HTMLElement {
 							//				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();
@@ -449,7 +449,7 @@ class AnalogWatch extends HTMLElement {
 			context.rotate((2 * Math.PI * (i / 12)));
 			context.font = "bold " + Math.round(scale * 15) + "px Arial"; // Like "bold 15px Arial"
 			context.fillStyle = digitColor;
-			let str = (this._hours_flavor === 'roman' ? this.toRomanDigit(i === 0 ? 12 : i) : ((i === 0 ? 12 : i).toString()));
+			let str = (this._hours_flavor === 'roman' ? AnalogWatch.toRomanDigit(i === 0 ? 12 : i) : ((i === 0 ? 12 : i).toString()));
 			let len = context.measureText(str).width;
 			context.fillText(str, -len / 2, (-(radius * .8) + 10));
 			context.lineWidth = 1;
@@ -621,7 +621,7 @@ class AnalogWatch extends HTMLElement {
 		context.stroke();
 	}
 
-	toRomanDigit(num) {
+	static toRomanDigit(num) {
 		let roman = "";
 		switch (num) {
 			case 1:

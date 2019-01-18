@@ -42,7 +42,7 @@ const WIND_ANGLE_TAG_NAME = 'wind-angle-display';
  * spine-case to camelCase
  */
 const defaultWindAngleDisplayColorConfig = {
-	bgColor: 'rgba(0, 0, 0, 0)', /* transparent, 'white', TODO */
+	bgColor: 'rgba(0, 0, 0, 0)', /* transparent, 'white' */
 	digitColor: 'black',
 	withGradient: true,
 	displayBackgroundGradient: {
@@ -68,7 +68,7 @@ const defaultWindAngleDisplayColorConfig = {
 	valueFontSizeFactor: 1
 };
 
-import * as Utilities from "../utilities/Utilities.js";
+// import * as Utilities from "../utilities/Utilities.js";
 
 /* global HTMLElement */
 class WindAngleDisplay extends HTMLElement {
@@ -264,7 +264,7 @@ class WindAngleDisplay extends HTMLElement {
 		//				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();

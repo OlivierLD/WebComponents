@@ -143,7 +143,7 @@ class CalendarDisplay extends HTMLElement {
 						                                                                                                                                                           //				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
-							cssTextElems.forEach(function (elem) {
+							cssTextElems.forEach((elem) => {
 								if (elem.trim().length > 0) {
 									let keyValPair = elem.split(":");
 									let key = keyValPair[0].trim();
@@ -183,10 +183,10 @@ class CalendarDisplay extends HTMLElement {
 	}
 
 	repaint() {
-		this.drawCalendar(this._value);
+		this.drawCalendar();
 	}
 
-	drawCalendar(dateValue) {
+	drawCalendar() {
 
 		let currentStyle = this.className;
 		if (this._previousClassName !== currentStyle || true) {
@@ -218,7 +218,7 @@ class CalendarDisplay extends HTMLElement {
 		context.fillStyle = grd;
 
 		// Background
-		this.roundRect(context, 0, 0, this.canvas.width, this.canvas.height, 10, true, false);
+		CalendarDisplay.roundRect(context, 0, 0, this.canvas.width, this.canvas.height, 10, true, false);
 
 		let dateElem = this._value.split("-");
 
@@ -259,7 +259,7 @@ class CalendarDisplay extends HTMLElement {
 		context.fillText(yearVal, (this.canvas.width / 2) - (len / 2), (scale * 30));
 	}
 
-	roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+	static roundRect(ctx, x, y, width, height, radius, fill, stroke) {
 		if (fill === undefined) {
 			fill = true;
 		}
