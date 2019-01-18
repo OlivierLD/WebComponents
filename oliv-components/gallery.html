@@ -879,7 +879,7 @@
 									 style="width: 50px; text-align: right;"
 									 value="0"/>
 						<br/>
-						<button onclick="setData('skeleton-value-01', 'skeleton-01')"
+						<button onclick="setData('skeleton-value-01', 'skeleton-01');"
 										title="Set Skeleton value above"
 										style="margin-top: 3px;">Set value</button>
 					</div>
@@ -4060,7 +4060,7 @@
 				"longitude": -122.5166988
 			};
 
-			function setData() {
+			function setSunPathData() {
 				let elem1 = document.getElementById('sun-path-01');
 				elem1.sunPath = sunPath1;
 				elem1.sunData = sunData1;
@@ -4134,7 +4134,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2"><button onclick="setData();">Set data</button></td>
+				<td colspan="2"><button onclick="setSunPathData();">Set data</button></td>
 			</tr>
 		</table>
 	</div>
