@@ -176,7 +176,7 @@
 
 		function plotSatellite(context, worldMap, userPos, satColor, name, satellite) {
 			let sat = worldMap.getPanelPoint(satellite.lat, satellite.lng);
-			let thisPointIsBehind = worldMap.isBehind(worldMap.toRadians(satellite.lat), worldMap.toRadians(satellite.lng - worldMap.globeViewLngOffset));
+			let thisPointIsBehind = worldMap.isBehind(Math.toRadians(satellite.lat), Math.toRadians(satellite.lng - worldMap.globeViewLngOffset));
 			if (!thisPointIsBehind || worldMap.transparentGlobe) {
 				// Draw Satellite
 				worldMap.plot(context, sat, satColor);
@@ -247,12 +247,12 @@
 					for (var sat in gpsSatelliteData) {
 						let satellite = gpsSatelliteData[sat];
 						let satellitePosition = worldMap.deadReckoningRadians({
-							lat: worldMap.toRadians(worldMap.userPosition.latitude),
-							lng: worldMap.toRadians(worldMap.userPosition.longitude)
+							lat: Math.toRadians(worldMap.userPosition.latitude),
+							lng: Math.toRadians(worldMap.userPosition.longitude)
 						}, (90 - satellite.elevation) * 60, satellite.azimuth);
 						plotSatellite(context, worldMap, userPos, getSNRColor(satellite.snr), sat, {
-							lat: worldMap.toDegrees(satellitePosition.lat),
-							lng: worldMap.toDegrees(satellitePosition.lng)
+							lat: Math.toDegrees(satellitePosition.lat),
+							lng: Math.toDegrees(satellitePosition.lng)
 						});
 					}
 				}
