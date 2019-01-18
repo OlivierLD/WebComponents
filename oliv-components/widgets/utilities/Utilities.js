@@ -63,28 +63,6 @@ const TO_WEST = 3;
  * @returns {Array}
  */
 export function calculateGreatCircle(start, arrival, nbPoints) {
-	var ewDir;
-	var nsDir;
-
-	if (arrival.lat > start.lat) {
-		nsDir = TO_NORTH;
-	} else {
-		nsDir = TO_SOUTH;
-	}
-	if (arrival.lng > start.lng) {
-		ewDir = TO_EAST;
-	} else {
-		ewDir = TO_WEST;
-	}
-	if (Math.abs(arrival.lng - start.lng) > Math.PI) {
-		if (ewDir === TO_EAST) {
-			ewDir = TO_WEST;
-			arrival.lng = (arrival.lng - (2 * Math.PI));
-		} else {
-			ewDir = TO_EAST;
-			arrival.lng = ((2 * Math.PI) + arrival.lng);
-		}
-	}
 	let deltaG = arrival.lng - start.lng;
 	let route = [];
 	let interval = deltaG / nbPoints;

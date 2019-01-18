@@ -784,7 +784,7 @@
 						updateFlap(idx);
 					}, 50);
 				}
-			};
+			}
 
 			for (let idx=0; idx<original.length; idx++) {
 				updateFlap(idx);
@@ -2294,7 +2294,7 @@
 						<input type="radio" name="proj-01" value="MERCATOR" onchange="setProjection('world-map-01', this);">Mercator
 						<input type="radio" name="proj-01" value="ANAXIMANDRE" onchange="setProjection('world-map-01', this);">Square
 						<hr/>
-						Callback samples: <button onclick="callBefore('world-map-01')">Before</button>&nbsp;&nbsp;<button onclick="callAfter('world-map-01')">After</button>
+						Callback samples: <button onclick="callBefore('world-map-01')">Before</button>&nbsp;&nbsp;<button onclick="callAfter('world-map-01')" title="Satellites and Great Circle (Paris-Hawaii)">After</button>
 					</div>
 				</td>
 				<td valign="top">

@@ -33,7 +33,7 @@ class SunPath extends HTMLElement {
 		return [
 			"width",   // Integer. Canvas width, default 400 px;
 			"height",  // Integer. Canvas height, default 400 px;
-			"tilt",    // Float. The inclination of the base. Default 10 degrees
+			"tilt",    // Float. The inclination of the base. Default -10 degrees
 			"z-offset" // Float. Z offset, default 0 degrees
 		];
 	}
@@ -64,7 +64,7 @@ class SunPath extends HTMLElement {
 
 		this.userPosition = undefined;
 
-		this.side =   0; // Left and right
+		this.side =     0;  // Left and right
 		this.addToZ = 180;  // 180 when pointing South (Sun in the South at noon). Combined with left right rotation
 		this.invertX =  1;  // +1/-1 . +1 when pointing south
 
