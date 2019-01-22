@@ -23,6 +23,7 @@
 	<script type="module" src="widgets/analogwatch/AnalogWatch.js"></script>
 	<script type="module" src="widgets/calendar/CalendarDisplay.js"></script>
 	<script type="module" src="widgets/compass/CompassRose.js"></script>
+	<script type="module" src="widgets/compass.2/CompassDisplay.js"></script>
 	<script type="module" src="widgets/worldmap/WorldMap.js"></script>
 	<script type="module" src="widgets/skymap/SkyMap.js"></script>
 	<script type="module" src="widgets/ledpanel/LedPanel.js"></script>
@@ -2247,6 +2248,57 @@
 		</table>
 	</div>
 	<hr/>
+
+	<!--
+		COMPASS DISPLAY. FLAT.
+	+-->
+	<div style="cursor: pointer;" onclick="showHide('compass-display');" tabindex="0"><b><u>Compass Rose (flat)</u></b></div>
+	<div id="compass-display" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;compass-display id="compass-display-01"
+                 class="day"
+                 title="Heading"
+                 value="45"
+                 label="HDG"
+                 width="300"
+                 height="300">&lt;/compass-display>
+		</pre>
+		<table>
+			<tr>
+				<td valign="top">
+					<div class="black-frame centered">
+						<compass-display id="compass-display-01"
+														 class="day"
+														 title="Heading"
+														 value="45"
+														 width="300"
+														 height="300"
+														 major-ticks="45"
+														 minor-ticks="5"
+														 label="HDG"></compass-display>
+					</div>
+					<div class="black-frame centered">
+						Value:
+						<input type="number"
+									 id="compass-display-value-01"
+									 placeholder="Heading"
+									 title="Heading"
+									 style="width: 40px; text-align: right;"
+									 value="45"/>
+						<br/>
+						<button onclick="setData('compass-display-value-01', 'compass-display-01')"
+										title="Set Heading"
+										style="margin-top: 3px;">Direct</button>
+						<button onclick="doAnimate('compass-display-value-01', 'compass-display-01', 1, true)"
+										title="Set Heading"
+										style="margin-top: 3px;">Animate</button>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<hr/>
+
 	<!--
 		WORLD MAP
 	+-->

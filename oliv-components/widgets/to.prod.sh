@@ -5,7 +5,7 @@ widgets=(
 	"compass" "direction" "jumbo" "ledpanel"
 	"marquee" "rain" "raw" "skymap" "splitflap"
 	"temperature" "windangle" "worldmap"
-	"boatoverview" "sunpath" "slideshow"
+	"boatoverview" "sunpath" "slideshow" "compass.2"
 )
 #
 HOME=$PWD
