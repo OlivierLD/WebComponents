@@ -3,34 +3,6 @@ const COMPASS_DISPLAY_TAG_NAME = 'compass-display';
 /*
 * The current heading always show on top in this version.
 *
-* See custom properties in CSS.
-* =============================
-* @see https://developer.mozilla.org/en-US/docs/Web/CSS/
-* Relies on those elements:
-*
-.xxxxxxxx {
-	--bg-color: rgba(0, 0, 0, 0);
-	--digit-color: black;
-	--with-gradient: true;
-	--display-background-gradient-from: LightGrey;
-	--display-background-gradient-to: white;
-	--display-line-color: rgba(255, 255, 255, 0.5);
-	--label-fill-color: rgba(255, 255, 255, 0.5);
-	--with-display-shadow: false;
-	--shadow-color: rgba(0, 0, 0, 0.75);
-	--outline-color: DarkGrey;
-	--major-tick-color: black;
-	--minor-tick-color: black;
-	--value-color: grey;
-	--value-outline-color: black;
-	--value-nb-decimal: 1;
-	--hand-color: red;
-	--hand-outline-color: black;
-	--with-hand-shadow: true;
-	--knob-color: DarkGrey;
-	--knob-outline-color: black;
-	--font: Arial;
-}
 */
 
 /**
@@ -60,9 +32,7 @@ const defaultCompassDisplayColorConfig = {
 	valueColor: 'grey',
 	valueOutlineColor: 'black',
 	valueNbDecimal: 0,
-	handColor: 'red', // 'rgba(0, 0, 100, 0.25)',
-	handOutlineColor: 'black',
-	withHandShadow: true,
+	crosshairColor: 'red', // 'rgba(0, 0, 100, 0.25)',
 	knobColor: 'DarkGrey',
 	knobOutlineColor: 'black',
 	font: 'Arial' /* 'Source Code Pro' */
@@ -304,14 +274,8 @@ class CompassDisplay extends HTMLElement {
 										case '--value-nb-decimal':
 											colorConfig.valueNbDecimal = value;
 											break;
-										case '--hand-color':
-											colorConfig.handColor = value;
-											break;
-										case '--hand-outline-color':
-											colorConfig.handOutlineColor = value;
-											break;
-										case '--with-hand-shadow':
-											colorConfig.withHandShadow = (value === 'true');
+										case '--cross-hair-color':
+											colorConfig.crosshairColor = value;
 											break;
 										case '--knob-color':
 											colorConfig.knobColor = value;
@@ -456,6 +420,8 @@ class CompassDisplay extends HTMLElement {
 			let NW = (315 + 90 - this._value) % 360;
 			let SW = (225 + 90 - this._value) % 360;
 
+			let smallFactor = 0.8;
+
 			// N-S
 			let xFrom = (this.canvas.width / 2) - (outsideRadius * Math.cos(2 * Math.PI * (N / 360)));
 			let yFrom = (radius + 10) - (outsideRadius * Math.sin(2 * Math.PI * (N / 360)));
@@ -471,17 +437,17 @@ class CompassDisplay extends HTMLElement {
 			context.moveTo(xFrom, yFrom);
 			context.lineTo(xTo, yTo);
 			// NE-SW
-			xFrom = (this.canvas.width / 2) - (outsideRadius * 0.9 * Math.cos(2 * Math.PI * (NE / 360)));
-			yFrom = (radius + 10) - (outsideRadius * 0.9 * Math.sin(2 * Math.PI * (NE / 360)));
-			xTo = (this.canvas.width / 2) - (outsideRadius * 0.9 * Math.cos(2 * Math.PI * (SW / 360)));
-			yTo = (radius + 10) - (outsideRadius * 0.9 * Math.sin(2 * Math.PI * (SW / 360)));
+			xFrom = (this.canvas.width / 2) - (outsideRadius * smallFactor * Math.cos(2 * Math.PI * (NE / 360)));
+			yFrom = (radius + 10) - (outsideRadius * smallFactor * Math.sin(2 * Math.PI * (NE / 360)));
+			xTo = (this.canvas.width / 2) - (outsideRadius * smallFactor * Math.cos(2 * Math.PI * (SW / 360)));
+			yTo = (radius + 10) - (outsideRadius * smallFactor * Math.sin(2 * Math.PI * (SW / 360)));
 			context.moveTo(xFrom, yFrom);
 			context.lineTo(xTo, yTo);
 			// NW-SE
-			xFrom = (this.canvas.width / 2) - (outsideRadius * 0.9 * Math.cos(2 * Math.PI * (NW / 360)));
-			yFrom = (radius + 10) - (outsideRadius * 0.9 * Math.sin(2 * Math.PI * (NW / 360)));
-			xTo = (this.canvas.width / 2) - (outsideRadius * 0.9 * Math.cos(2 * Math.PI * (SE / 360)));
-			yTo = (radius + 10) - (outsideRadius * 0.9 * Math.sin(2 * Math.PI * (SE / 360)));
+			xFrom = (this.canvas.width / 2) - (outsideRadius * smallFactor * Math.cos(2 * Math.PI * (NW / 360)));
+			yFrom = (radius + 10) - (outsideRadius * smallFactor * Math.sin(2 * Math.PI * (NW / 360)));
+			xTo = (this.canvas.width / 2) - (outsideRadius * smallFactor * Math.cos(2 * Math.PI * (SE / 360)));
+			yTo = (radius + 10) - (outsideRadius * smallFactor * Math.sin(2 * Math.PI * (SE / 360)));
 			context.moveTo(xFrom, yFrom);
 			context.lineTo(xTo, yTo);
 
@@ -490,10 +456,10 @@ class CompassDisplay extends HTMLElement {
 			this.drawSpike(radius, outsideRadius, insideRadius, E, context);
 			this.drawSpike(radius, outsideRadius, insideRadius, W, context);
 
-			this.drawSpike(radius, outsideRadius * 0.9, insideRadius, NE, context);
-			this.drawSpike(radius, outsideRadius * 0.9, insideRadius, SE, context);
-			this.drawSpike(radius, outsideRadius * 0.9, insideRadius, SW, context);
-			this.drawSpike(radius, outsideRadius * 0.9, insideRadius, NW, context);
+			this.drawSpike(radius, outsideRadius * smallFactor, insideRadius, NE, context);
+			this.drawSpike(radius, outsideRadius * smallFactor, insideRadius, SE, context);
+			this.drawSpike(radius, outsideRadius * smallFactor, insideRadius, SW, context);
+			this.drawSpike(radius, outsideRadius * smallFactor, insideRadius, NW, context);
 
 			context.strokeStyle = this.compassDisplayColorConfig.displayLineColor;
 			context.stroke();
@@ -560,7 +526,20 @@ class CompassDisplay extends HTMLElement {
 			context.closePath();
 		}
 
-		// No Hand
+		// No Hand, cross-hair, fixed.
+		context.beginPath();
+		context.lineWidth = 1;
+		context.strokeStyle = this.compassDisplayColorConfig.crosshairColor;
+		// Left
+		context.moveTo((this.canvas.width / 2) - 3, (radius + 10));
+		context.lineTo((this.canvas.width / 2) - 3, 10);
+		context.stroke();
+		// Right
+		context.moveTo((this.canvas.width / 2) + 3, (radius + 10));
+		context.lineTo((this.canvas.width / 2) + 3, 10);
+		context.stroke();
+
+		context.closePath();
 
 		// Knob
 		context.beginPath();

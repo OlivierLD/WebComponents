@@ -1818,7 +1818,7 @@
 &lt;wind-angle-display class="analogdisplay-day"
                     title="Apparent Wind Speed in Knots"
                     id="aw-01"
-                    value="{ &amp;quot;wa&amp;quot;: 60, &amp;quot;ws&amp;quot;: 10.2 }"
+                    value="{ 'wa': 60, 'ws': 10.2 }"
                     major-ticks="45"
                     minor-ticks="5"
                     with-border="true"
@@ -2290,6 +2290,37 @@
 										title="Set Heading"
 										style="margin-top: 3px;">Direct</button>
 						<button onclick="doAnimate('compass-display-value-01', 'compass-display-01', 1, true)"
+										title="Set Heading"
+										style="margin-top: 3px;">Animate</button>
+					</div>
+				</td>
+				<td valign="top">
+					<div class="black-frame centered">
+						<compass-display id="compass-display-02"
+														 class="green"
+														 title="Heading"
+														 value="145"
+														 width="250"
+														 height="250"
+														 major-ticks="45"
+														 minor-ticks="5"
+														 label="COG"></compass-display>
+					</div>
+					<div class="black-frame centered">
+						Value:
+						<input type="number"
+									 id="compass-display-value-02"
+									 placeholder="Heading"
+									 title="Heading"
+									 style="width: 40px; text-align: right;"
+									 value="145"/>
+						<input type="checkbox" onchange="setBorder(this, 'compass-display-02');" checked>With Border
+						<input type="checkbox" onchange="setRose(this, 'compass-display-02');" checked>With Rose
+						<br/>
+						<button onclick="setData('compass-display-value-02', 'compass-display-02')"
+										title="Set Heading"
+										style="margin-top: 3px;">Direct</button>
+						<button onclick="doAnimate('compass-display-value-02', 'compass-display-02', 1, true)"
 										title="Set Heading"
 										style="margin-top: 3px;">Animate</button>
 					</div>
