@@ -2,7 +2,7 @@
   "name": "compass-display",
   "private": false,
   "version": "0.5.0",
-  "description": "Direction on 360 degrees, flat",
+  "description": "Compass on 360 degrees, flat",
   "main": "CompassDisplay.js",
   "scripts": {
     "build": "webpack --env dev && webpack --env build"

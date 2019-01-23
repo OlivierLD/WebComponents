@@ -22,8 +22,8 @@
 widgets=(
   "analogdisplay" "analogwatch" "calendar" "compass" "direction"
   "jumbo" "ledpanel" "marquee" "rain" "raw" "skymap" "splitflap"
-  "temperature" "windangle" "worldmap" "boatoverview" "sunpath" "slideshow"
-  "compass.2"
+  "temperature" "windangle" "worldmap" "boatoverview" "sunpath"
+  "slideshow" "compass.2"
 )
 #
 echo -e "+-------------------------+"

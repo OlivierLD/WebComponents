@@ -19,10 +19,10 @@ if (env === 'build') {
 
 const config = {
   mode: mode,
-  entry: __dirname + '/DirectionDisplay.js',
+  entry: __dirname + '/CompassDisplay.js',
   devtool: 'source-map',
   output: {
-    path: __dirname + '../../../lib/direction',
+    path: __dirname + '../../../lib/compass.2',
     filename: outputFile,
     library: libraryName,
     libraryTarget: 'umd',
