@@ -40,7 +40,7 @@ let linkClk = document.querySelector('link[rel="import"][id="import-03"]');
 let contentClk = linkClk.import;
 
 // Grab DOMs from the templates.
-let cal = contentCal.querySelector('#calendar-id');
+let cal = contentCal.querySelector('#calendar-id').content;
 document.getElementById("calendar-placeholder").appendChild(cal.cloneNode(true));
 
 let sf = contentSF.querySelector('#split-flap-id');
@@ -50,7 +50,7 @@ let sc = contentClk.querySelector('#svg-clock-id');
 document.getElementById("svg-clock-placeholder").appendChild(sc.cloneNode(true));
 
 window.onload = () => {
-	updateCalendar();
+	updateCalendar(); // Set to current date. Defined in the template.
 };
 	</script>
 

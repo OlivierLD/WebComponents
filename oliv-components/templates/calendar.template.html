@@ -1,26 +1,41 @@
-<div id="calendar-id">
+<!--
+ ! Note: the root of the template can be any thing (a div, a template, whatever).
+ ! The important element is the id attribute, that will be used to get to the template,
+ ! and to its content.
+ ! Important!!!: <template> is not a valid HTML name! You need to refer to its content, using
+ ! the element.content. Otherwise you'd end up adding a <template> to your page, that would not be rendered, because unknown
 
-	<script>
-		const WEEK_DAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-		function updateCalendar() {
-			let now = new Date();
-			let d = now.getDate();
-			let m = now.getMonth();
-			let y = now.getFullYear();
-			let date = new Date(y, m, d);
-			document.getElementById('calendar-01').value = d + '-' + (m + 1) + '-' + y + '-' + WEEK_DAYS[date.getDay()];
-			document.getElementById('calendar-01').repaint();
-		}
-	</script>
+ let linkCal = document.querySelector('link[rel="import"][id="import-01"]'); // Simplify this, document.getElementById('import-01') does the job.
+ let contentCal = linkCal.import;
 
-	<div class="black-frame">
-		<calendar-display id="calendar-01"
-											class="calendar-01"
-											title="Day-Month-Year"
-											width="150"
-											height="180"
-											value="28-08-2018-tuesday"></calendar-display>
+ let cal = contentCal.querySelector('#calendar-id').content; // can be a getElementById as well.
+ document.getElementById("calendar-placeholder").appendChild(cal.cloneNode(true));
+
+ +-->
+<template id="calendar-id">
+	<div>
+		<script>
+			const WEEK_DAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+
+			// Update to current date.
+			function updateCalendar() {
+				let now = new Date();
+				let d = now.getDate();
+				let m = now.getMonth();
+				let y = now.getFullYear();
+				let date = new Date(y, m, d);
+				document.getElementById('calendar-01').value = d + '-' + (m + 1) + '-' + y + '-' + WEEK_DAYS[date.getDay()];
+				document.getElementById('calendar-01').repaint();
+			}
+		</script>
+
+		<div class="black-frame">
+			<calendar-display id="calendar-01"
+												class="calendar-01"
+												title="Day-Month-Year"
+												width="150"
+												height="180"
+												value="28-08-2018-tuesday"></calendar-display>
+		</div>
 	</div>
-
-</div>
-
+</template>
