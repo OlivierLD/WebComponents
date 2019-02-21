@@ -69,10 +69,28 @@
 		}
 
 		.smooth {
+			/*height: 0;*/
+			/*visibility: hidden;*/
+			/*opacity: 0;*/
+			/*transition: visibility 0.5s, height 0.5s, opacity 0.5s linear;*/
 			height: 0;
-			visibility: hidden;
+			max-height: 0;
+			margin: auto;
+			/*transition: transform 0.5s, max-height 1s, height 1s;*/
+			transition: all 0.5s ease;
 			opacity: 0;
-			transition: visibility 0.5s, height 0.5s, opacity 0.5s linear;
+			transform: scaleY(0);
+			transform-origin: top;
+			overflow: hidden;
+		}
+
+		.visible-div {
+			opacity: 1;
+			width: auto;
+			height: auto;
+			max-height: 1600px;
+			transform: scaleY(1);
+			margin-top: 5px;
 		}
 
 		.mirror {
@@ -289,6 +307,9 @@
 
 		function showHide(divId) {
 			let elmt = document.getElementById(divId);
+
+			elmt.classList.toggle('visible-div');
+
 			// let status = elmt.style.display;
 			// elmt.style.display = (status === 'none' ? 'inline' : 'none');
 			let h = elmt.style.height;
