@@ -86,8 +86,9 @@ class AnalogDisplay extends HTMLElement {
 			"with-digits",      // Boolean, default true. Index Values for major-ticks
 			"with-border",      // Boolean, default true
 			"label",            // String.
+			"rotate-digits",    // Boolean, default true. false means display all values straight, no rotation
 			"digital-data-len", // Integer, optional, to display instead of label, like log value along with BSP. Number of characters to display
-			"digital-data-val", // Float, optional. Must be present idf the above exists.
+			"digital-data-val", // Float, optional. Must be present if the above exists.
 			"value"             // Float. Value to display
 		];
 	}
@@ -115,6 +116,7 @@ class AnalogDisplay extends HTMLElement {
 		this._with_min_max     = false;
 		this._with_digits      = true;
 		this._with_border      = true;
+		this._rotate_digits    = true;
 		this._label            = undefined;
 		this._digital_data_len = undefined;
 		this._digital_data_val = undefined;
@@ -180,6 +182,9 @@ class AnalogDisplay extends HTMLElement {
 			case "with-digits":
 				this._with_digits = ("true" === newVal);
 				break;
+			case "rotate-digits":
+				this._rotate_digits = ("true" === newVal);
+				break;
 			case "with-border":
 				this._with_border = ("true" === newVal);
 				break;
@@ -233,6 +238,9 @@ class AnalogDisplay extends HTMLElement {
 	set withDigits(val) {
 		this.setAttribute("with-digits", val);
 	}
+	set rotateDigits(val) {
+		this.setAttribute("rotate-digits", val);
+	}
 	set withBorder(val) {
 		this.setAttribute("with-border", val);
 	}
@@ -278,6 +286,9 @@ class AnalogDisplay extends HTMLElement {
 	}
 	get withDigits() {
 		return this._with_digits;
+	}
+	get rotateDigits() {
+		return this._rotate_digits;
 	}
 	get withBorder() {
 		return this._with_border;
@@ -411,7 +422,6 @@ class AnalogDisplay extends HTMLElement {
 		return colorConfig;
 	}
 
-
 	drawDisplay(analogValue) {
 
 		let currentStyle = this.className;
@@ -541,18 +551,27 @@ class AnalogDisplay extends HTMLElement {
 			for (let i = 0; i <= (this.maxValue - this.minValue); i++) {
 				if ((i + this.minValue) % this.majorTicks === 0) {
 					context.save();
-					context.translate(this.canvas.width / 2, (radius + 10)); // canvas.height);
-					let __currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap);
-//      context.rotate((Math.PI * (i / maxValue)) - (Math.PI / 2));
-					context.rotate(__currentAngle - (Math.PI / 2));
 					context.font = "bold " + Math.round(scale * 15) + "px " + this.analogDisplayColorConfig.font; // Like "bold 15px Arial"
 					context.fillStyle = digitColor;
 					let str = (i + this.minValue).toString();
 					let len = context.measureText(str).width;
-					context.fillText(str, -len / 2, (-(radius * .8) + 10));
-					context.lineWidth = 1;
-					context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
-					context.strokeText(str, -len / 2, (-(radius * .8) + 10)); // Outlined
+					let __currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap);
+					if (this.rotateDigits) { // Rotate
+						context.translate(this.canvas.width / 2, (radius + 10)); // canvas.height);
+//          context.rotate((Math.PI * (i / maxValue)) - (Math.PI / 2));
+						context.rotate(__currentAngle - (Math.PI / 2));
+						context.fillText(str, -len / 2, (-(radius * .8) + 10));
+						context.lineWidth = 1;
+						context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
+						context.strokeText(str, -len / 2, (-(radius * .8) + 10)); // Outlined
+					} else {                // Don't rotate
+						let xTo = (this.canvas.width / 2) - ((radius * 0.75) * Math.cos(__currentAngle));
+						let yTo = (radius + 10) - ((radius * 0.75) * Math.sin(__currentAngle));
+						context.fillText(str, xTo - (len / 2), yTo + (scale * 11 / 2));
+						context.lineWidth = 1;
+						context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
+						context.strokeText(str, xTo - (len / 2), yTo + (scale * 11 / 2)); // Outlined
+					}
 					context.restore();
 				}
 			}
