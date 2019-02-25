@@ -9,7 +9,7 @@ if (Math.toRadians === undefined) {
 	};
 }
 
-import * as Utilities from "./utilities/Utilities.js";
+import * as Utilities from "../utilities/Utilities.js";
 
 const sunPathDefaultColorConfig = {
 	bgColor: 'black', // Used if withGradient = false
