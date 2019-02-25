@@ -1,7 +1,7 @@
 "use strict";
 
 const sunPathVerbose = false;
-const SUN_PATH_TAG_NAME = 'sun-path';
+const SUNPATH_TAG_NAME = 'sun-path';
 
 if (Math.toRadians === undefined) {
 	Math.toRadians = (deg) => {
@@ -9,7 +9,7 @@ if (Math.toRadians === undefined) {
 	};
 }
 
-import * as Utilities from "../utilities/Utilities.js";
+import * as Utilities from "./utilities/Utilities.js";
 
 const sunPathDefaultColorConfig = {
 	bgColor: 'black', // Used if withGradient = false
@@ -33,7 +33,7 @@ class SunPath extends HTMLElement {
 		return [
 			"width",   // Integer. Canvas width, default 400 px;
 			"height",  // Integer. Canvas height, default 400 px;
-			"tilt",    // Float. The inclination of the base. Default -10 degrees
+			"tilt",    // Float. The inclination of the base. Default 10 degrees
 			"z-offset" // Float. Z offset, default 0 degrees
 		];
 	}
@@ -63,8 +63,10 @@ class SunPath extends HTMLElement {
 		this.sunZ = undefined;
 
 		this.userPosition = undefined;
+		this._sunRise = undefined;
+		this._sunSet = undefined;
 
-		this.side =     0;  // Left and right
+		this.side =   0; // Left and right
 		this.addToZ = 180;  // 180 when pointing South (Sun in the South at noon). Combined with left right rotation
 		this.invertX =  1;  // +1/-1 . +1 when pointing south
 
@@ -149,7 +151,7 @@ class SunPath extends HTMLElement {
 		for (let idx=0; idx<json.length; idx++) {
 			if (json[idx].alt < lastAlt) { // Culmination reached
 				let zAtNoon = lastZ;
-	//		console.log("Z at noon:", zAtNoon);
+				//		console.log("Z at noon:", zAtNoon);
 				if (zAtNoon > 90 && zAtNoon < 270) {
 					this.invertX = 1;   // +1 when pointing south
 					if (sunPathVerbose) {
@@ -181,6 +183,14 @@ class SunPath extends HTMLElement {
 
 	set userPos(position) { // { latitude: xxx, longitude: xxx }
 		this.userPosition = position;
+	}
+
+	set sunRise(sr) { // { time: epoch, z: degrees }
+		this._sunRise = sr;
+	}
+
+	set sunSet(ss) { // { time: epoch, z: degrees }
+		this._sunSet = ss;
 	}
 
 	set shadowRoot(val) {
@@ -219,7 +229,7 @@ class SunPath extends HTMLElement {
 					for (let r = 0; document.styleSheets[s].cssRules !== null && r < document.styleSheets[s].cssRules.length; r++) {
 						let selector = document.styleSheets[s].cssRules[r].selectorText;
 						//			console.log(">>> ", selector);
-						if (selector !== undefined && (selector === '.' + cssClassName || (selector.indexOf('.' + cssClassName) > -1 && selector.indexOf(SUN_PATH_TAG_NAME) > -1))) { // Cases like "tag-name .className"
+						if (selector !== undefined && (selector === '.' + cssClassName || (selector.indexOf('.' + cssClassName) > -1 && selector.indexOf(SUNPATH_TAG_NAME) > -1))) { // Cases like "tag-name .className"
 							//				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
@@ -284,12 +294,9 @@ class SunPath extends HTMLElement {
 	 *
 	 * @param lat in degrees
 	 * @param lng in degrees
-	 * @param rotationAroundY in degrees
-	 * @param rotationAroundX in degrees
-	 * @param addToLng in degrees
 	 * @return x, y, z. Cartesian coordinates.
 	 */
-	static rotateBothWays(lat, lng, rotationAroundY, rotationAroundX, addToLng) {
+	rotateBothWays(lat, lng, rotationAroundY, rotationAroundX, addToLng) {
 
 		let x = Math.cos(Math.toRadians(lat)) * Math.sin(Math.toRadians(lng + addToLng));
 		let y = Math.sin(Math.toRadians(lat));
@@ -342,7 +349,7 @@ class SunPath extends HTMLElement {
 		}
 
 		let context = this.canvas.getContext('2d');
-		// let scale = 1.0;
+		let scale = 1.0;
 
 		if (this.width === 0 || this.height === 0) { // Not visible
 			return;
@@ -388,7 +395,7 @@ class SunPath extends HTMLElement {
 		context.beginPath();
 		for (let alfa=0; alfa<=360; alfa += 1) {
 //		console.log("Base rotation", rotation);
-			let panelPoint = SunPath.rotateBothWays(this.rotation, alfa, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
+			let panelPoint = this.rotateBothWays(this.rotation, alfa, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
 			if (alfa === 0) {
 				context.moveTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 			} else {
@@ -403,11 +410,11 @@ class SunPath extends HTMLElement {
 
 		context.beginPath();
 		context.moveTo(center.x, center.y); // Start from center
-		let panelPoint = SunPath.rotateBothWays(this.rotation, minZ, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
+		let panelPoint = this.rotateBothWays(this.rotation, minZ, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
 		context.lineTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 		for (let alfa=minZ; alfa<=maxZ; alfa += 1) {
 //		console.log("Base rotation", rotation);
-			panelPoint = SunPath.rotateBothWays(this.rotation, alfa, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
+			panelPoint = this.rotateBothWays(this.rotation, alfa, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
 			context.lineTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 		}
 		context.closePath();
@@ -418,7 +425,7 @@ class SunPath extends HTMLElement {
 
 		// Close the base
 		context.lineWidth = 1;
-		panelPoint = SunPath.rotateBothWays(this.rotation, minZ, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
+		panelPoint = this.rotateBothWays(this.rotation, minZ, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
 		context.beginPath();
 		context.moveTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 		context.lineTo(center.x, center.y);
@@ -435,21 +442,21 @@ class SunPath extends HTMLElement {
 		context.fillStyle = this.sunPathColorConfig.cardPointColor;
 		let len = 0;
 
-		panelPoint = SunPath.rotateBothWays(this.rotation, 180, this.side, this._tilt, (this.addToZ + this._zOffset));
+		panelPoint = this.rotateBothWays(this.rotation, 180, this.side, this._tilt, (this.addToZ + this._zOffset));
 //	context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 		let text = (this.invertX === 1 ? "S" : "N");
 		let metrics = context.measureText(text);
 		len = metrics.width;
 		context.fillText(text, center.x + (panelPoint.x * radius) - (len / 2), center.y - (panelPoint.y * radius));
 
-		panelPoint = SunPath.rotateBothWays(this.rotation, 90, this.side, this._tilt, (this.addToZ + this._zOffset));
+		panelPoint = this.rotateBothWays(this.rotation, 90, this.side, this._tilt, (this.addToZ + this._zOffset));
 		context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 		text = (this.invertX === 1 ? "E" : "W");
 		metrics = context.measureText(text);
 		len = metrics.width;
 		context.fillText(text, center.x + (panelPoint.x * radius) - (len / 2), center.y - (panelPoint.y * radius));
 
-		panelPoint = SunPath.rotateBothWays(this.rotation, 270, this.side, this._tilt, (this.addToZ + this._zOffset));
+		panelPoint = this.rotateBothWays(this.rotation, 270, this.side, this._tilt, (this.addToZ + this._zOffset));
 		context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 		text = (this.invertX === 1 ? "W" : "E");
 		metrics = context.measureText(text);
@@ -460,11 +467,11 @@ class SunPath extends HTMLElement {
 
 		// Meridians.
 		for (let alfa = minZ; alfa <= maxZ; alfa += 10) { // Longitude
-			panelPoint = SunPath.rotateBothWays(this.rotation, alfa, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
+			panelPoint = this.rotateBothWays(this.rotation, alfa, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
 			context.beginPath();
 			context.moveTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 			for (let beta = 0; beta <= 90; beta += 1) { // Latitude
-				panelPoint = SunPath.rotateBothWays(beta + this.rotation, alfa, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
+				panelPoint = this.rotateBothWays(beta + this.rotation, alfa, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
 				context.lineTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 			}
 			context.stroke();
@@ -473,11 +480,11 @@ class SunPath extends HTMLElement {
 
 		// Parallels
 		for (let alfa = 10; alfa < 90; alfa += 10) { // Latitude
-			panelPoint = SunPath.rotateBothWays(alfa + this.rotation, minZ, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
+			panelPoint = this.rotateBothWays(alfa + this.rotation, minZ, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
 			context.beginPath();
 			context.moveTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 			for (let beta = minZ; beta <= maxZ; beta += 1) { // Longitude
-				panelPoint = SunPath.rotateBothWays(alfa + this.rotation, beta, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
+				panelPoint = this.rotateBothWays(alfa + this.rotation, beta, this.side, this._tilt * this.invertX, (this.addToZ + (this.invertX * this._zOffset)));
 				context.lineTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 			}
 			context.stroke();
@@ -486,7 +493,7 @@ class SunPath extends HTMLElement {
 			text = alfa + "°";
 			context.fillStyle = this.sunPathColorConfig.altitudeValueColor;
 			context.beginPath();
-			panelPoint = SunPath.rotateBothWays(alfa + this.rotation, 180, this.side, this._tilt, (this.addToZ + this._zOffset));
+			panelPoint = this.rotateBothWays(alfa + this.rotation, 180, this.side, this._tilt, (this.addToZ + this._zOffset));
 			context.moveTo(center.x + (panelPoint.x * radius), center.y - (panelPoint.y * radius));
 			metrics = context.measureText(text);
 			len = metrics.width;
@@ -498,10 +505,10 @@ class SunPath extends HTMLElement {
 		if (this._sunPath !== undefined) {
 			context.lineWidth = 3;
 			context.strokeStyle = this.sunPathColorConfig.sunColor;
-			panelPoint = SunPath.rotateBothWays(this._sunPath[0].alt + this.rotation, this._sunPath[0].z, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
+			panelPoint = this.rotateBothWays(this._sunPath[0].alt + this.rotation, this._sunPath[0].z, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
 			context.beginPath();
 			for (let i = 1; i < this._sunPath.length; i++) {
-				panelPoint = SunPath.rotateBothWays(this._sunPath[i].alt + this.rotation, this._sunPath[i].z, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
+				panelPoint = this.rotateBothWays(this._sunPath[i].alt + this.rotation, this._sunPath[i].z, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
 				context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 			}
 			context.stroke();
@@ -511,7 +518,7 @@ class SunPath extends HTMLElement {
 		// Current Sun Pos.
 		if (this.sunHe !== undefined && this.sunZ !== undefined) {
 			context.strokeStyle = this.sunPathColorConfig.sunColor;
-			panelPoint = SunPath.rotateBothWays(this.rotation, this.sunZ, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset)); // Horizon under the Sun
+			panelPoint = this.rotateBothWays(this.rotation, this.sunZ, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset)); // Horizon under the Sun
 			// From center to horizon
 			context.beginPath();
 			context.moveTo(center.x, center.y);
@@ -522,10 +529,10 @@ class SunPath extends HTMLElement {
 			context.beginPath();
 			context.moveTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 			for (let alt = 0; alt <= this.sunHe; alt++) {
-				panelPoint = SunPath.rotateBothWays(alt + this.rotation, this.sunZ, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
+				panelPoint = this.rotateBothWays(alt + this.rotation, this.sunZ, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
 				context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 			}
-			panelPoint = SunPath.rotateBothWays(this.sunHe + this.rotation, this.sunZ, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
+			panelPoint = this.rotateBothWays(this.sunHe + this.rotation, this.sunZ, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
 			context.lineTo(center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
 			context.stroke();
 			context.closePath();
@@ -551,7 +558,7 @@ class SunPath extends HTMLElement {
 			let strAlt = Utilities.decToSex(this.sunHe);
 			let strZ = Utilities.decToSex(this.sunZ);
 			context.fillText("Elevation:" + strAlt, 10, 20);
-			context.fillText("Azimuth  :" + strZ, 10, 40);
+			context.fillText("Azimuth:" + strZ, 10, 40);
 			if (this.userPosition !== undefined) {
 				let strLat = Utilities.decToSex(this.userPosition.latitude, 'NS');
 				let strLng = Utilities.decToSex(this.userPosition.longitude, 'EW');
@@ -562,10 +569,36 @@ class SunPath extends HTMLElement {
 				len = metrics.width;
 				context.fillText(strLng, this._width - 10 - len, 40);
 			}
+			context.fillStyle = this.sunPathColorConfig.cardPointColor;
+			if (this._sunRise !== undefined) {
+				let strRiseTime = new Date(this._sunRise.time).format('H:i:s Z');
+				let strRiseZ = Utilities.decToSex(this._sunRise.z);
+				context.fillText("Sun Rise", 10, this._height - 60);
+				context.fillText("Time:" + strRiseTime, 10, this._height - 40);
+				context.fillText("Azimuth  :" + strRiseZ, 10, this._height - 20);
+			}
+			if (this._sunSet !== undefined) {
+				let strSetTime = new Date(this._sunSet.time).format('H:i:s Z');
+				let strSetZ = Utilities.decToSex(this._sunSet.z);
+				let displayData = "Sun Set";
+				let metrics = context.measureText(displayData);
+				context.fillText(displayData, this._width - metrics.width - 10, this._height - 60);
+				displayData = "Time:" + strSetTime;
+				metrics = context.measureText(displayData);
+				context.fillText(displayData, this._width - metrics.width - 10, this._height - 40);
+				displayData = "Azimuth:" + strSetZ;
+				metrics = context.measureText(displayData);
+				context.fillText(displayData, this._width - metrics.width - 10, this._height - 20);
+			}
 			context.restore();
 		}
 	}
+
+	decToSex(val, ns_ew) {
+		return Utilities.decToSex(val, ns_ew);
+	}
+
 }
 
 // Associate the tag and the class
-window.customElements.define(SUN_PATH_TAG_NAME, SunPath);
+window.customElements.define(SUNPATH_TAG_NAME, SunPath);
