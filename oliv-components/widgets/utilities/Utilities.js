@@ -167,6 +167,7 @@ export function decToSex(val, ns_ew) {
 	return s;
 }
 
+// TODO See Math.atan2
 export function getDir(x, y) {
 	let dir = 0.0;
 	if (y !== 0) {

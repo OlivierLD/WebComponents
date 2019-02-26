@@ -10,6 +10,7 @@ if (Math.toRadians === undefined) {
 }
 
 import * as Utilities from "../utilities/Utilities.js";
+import '../utilities/date.proto.js';
 
 const sunPathDefaultColorConfig = {
 	bgColor: 'black', // Used if withGradient = false

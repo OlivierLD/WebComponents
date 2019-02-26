@@ -6,7 +6,7 @@
 
 // Provide month names
 Date.prototype.getMonthName = function () {
-	var month_names = [
+	const monthNames = [
 		'January',
 		'February',
 		'March',
@@ -20,13 +20,12 @@ Date.prototype.getMonthName = function () {
 		'November',
 		'December'
 	];
-
-	return month_names[this.getMonth()];
+	return monthNames[this.getMonth()];
 };
 
 // Provide month abbreviation
 Date.prototype.getMonthAbbr = function () {
-	var month_abbrs = [
+	const monthAbbrs = [
 		'Jan',
 		'Feb',
 		'Mar',
@@ -40,13 +39,12 @@ Date.prototype.getMonthAbbr = function () {
 		'Nov',
 		'Dec'
 	];
-
-	return month_abbrs[this.getMonth()];
+	return monthAbbrs[this.getMonth()];
 };
 
 // Provide full day of week name
 Date.prototype.getDayFull = function () {
-	var days_full = [
+	const daysFull = [
 		'Sunday',
 		'Monday',
 		'Tuesday',
@@ -55,12 +53,12 @@ Date.prototype.getDayFull = function () {
 		'Friday',
 		'Saturday'
 	];
-	return days_full[this.getDay()];
+	return daysFull[this.getDay()];
 };
 
 // Provide full day of week name
 Date.prototype.getDayAbbr = function () {
-	var days_abbr = [
+	const daysAbbr = [
 		'Sun',
 		'Mon',
 		'Tue',
@@ -69,33 +67,33 @@ Date.prototype.getDayAbbr = function () {
 		'Fri',
 		'Sat'
 	];
-	return days_abbr[this.getDay()];
+	return daysAbbr[this.getDay()];
 };
 
 // Provide the day of year 1-365
 Date.prototype.getDayOfYear = function () {
-	var onejan = new Date(this.getFullYear(), 0, 1);
-	return Math.ceil((this - onejan) / 86400000);
+	let janFirst = new Date(this.getFullYear(), 0, 1);
+	return Math.ceil((this - janFirst) / 86400000);
 };
 
 // Provide the day suffix (st,nd,rd,th)
 Date.prototype.getDaySuffix = function () {
-	var d = this.getDate();
-	var sfx = ["th", "st", "nd", "rd"];
-	var val = d % 100;
+	let d = this.getDate();
+	const sfx = ["th", "st", "nd", "rd"];
+	let val = d % 100;
 
 	return (sfx[(val - 20) % 10] || sfx[val] || sfx[0]);
 };
 
 // Provide Week of Year
 Date.prototype.getWeekOfYear = function () {
-	var onejan = new Date(this.getFullYear(), 0, 1);
-	return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+	let janFirst = new Date(this.getFullYear(), 0, 1);
+	return Math.ceil((((this - janFirst) / 86400000) + janFirst.getDay() + 1) / 7);
 };
 
 // Provide if it is a leap year or not
 Date.prototype.isLeapYear = function () {
-	var yr = this.getFullYear();
+	let yr = this.getFullYear();
 	if ((parseInt(yr) % 4) === 0) {
 		if (parseInt(yr) % 100 === 0) {
 			if (parseInt(yr) % 400 !== 0)
@@ -112,7 +110,7 @@ Date.prototype.isLeapYear = function () {
 
 // Provide Number of Days in a given month
 Date.prototype.getMonthDayCount = function () {
-	var month_day_counts = [
+	const monthDayCounts = [
 		31,
 		this.isLeapYear() ? 29 : 28,
 		31,
@@ -126,8 +124,7 @@ Date.prototype.getMonthDayCount = function () {
 		30,
 		31
 	];
-
-	return month_day_counts[this.getMonth()];
+	return monthDayCounts[this.getMonth()];
 };
 
 // format provided date into this.format format
@@ -135,7 +132,7 @@ Date.prototype.format = function (dateFormat) {
 	// break apart format string into array of characters
 	dateFormat = dateFormat.split("");
 
-	var date = this.getDate(),
+	let date = this.getDate(),
 			month = this.getMonth(),
 			hours = this.getHours(),
 			minutes = this.getMinutes(),
@@ -144,8 +141,8 @@ Date.prototype.format = function (dateFormat) {
 			tzName = this.toString().substring(this.toString().indexOf('(') + 1, this.toString().indexOf(')')),
 			tzOffset = -(this.getTimezoneOffset() / 60);
 
-	var lpad = function (s, w, len) {
-		var str = s;
+	let lpad = function (s, w, len) {
+		let str = s;
 		while (str.length < len) {
 			str = w + str;
 		}
@@ -153,7 +150,7 @@ Date.prototype.format = function (dateFormat) {
 	};
 
 	// get all date properties ( based on PHP date object functionality )
-	var date_props = {
+	let dateProps = {
 		d: date < 10 ? '0' + date : date,
 		D: this.getDayAbbr(),
 		j: this.getDate(),
@@ -184,14 +181,14 @@ Date.prototype.format = function (dateFormat) {
 	};
 
 	// loop through format array of characters and add matching data else add the format character (:,/, etc.)
-	var date_string = "";
-	for (var i = 0; i < dateFormat.length; i++) {
-		var f = dateFormat[i];
+	let dateString = "";
+	for (let i = 0; i < dateFormat.length; i++) {
+		let f = dateFormat[i];
 		if (f.match(/[a-zA-Z|_]/g)) {
-			date_string += date_props[f] ? date_props[f] : f; //'';
+			dateString += dateProps[f] ? dateProps[f] : f; //'';
 		} else {
-			date_string += f;
+			dateString += f;
 		}
 	}
-	return date_string;
+	return dateString;
 };
