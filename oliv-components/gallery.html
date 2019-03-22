@@ -4,6 +4,8 @@
  ! I know, this is a big file...
  ! !! This is an example !!
  ! This resources used here are not minified.
+ !
+ ! There is ABSOLUTELY NO external dependencies (no jQuery, no Knockout, etc).
  +-->
 <head>
 	<meta charset="UTF-8">
@@ -139,11 +141,14 @@
 		function collapseExpandHeadsup() {
 			let cmdElem = document.getElementById("head-up-command");
 			let slidersElem = document.getElementById("heads-up-sliders");
+			let buttonZone = document.getElementById("button-span-zone");
 			if (headUpExpanded) {
 				slidersElem.style.display = 'none';
+				buttonZone.style.display = 'none';
 				cmdElem.innerText = "+ Head up";
 			} else {
 				slidersElem.style.display = 'block';
+				buttonZone.style.display = 'inline';
 				cmdElem.innerText = "- Head up";
 			}
 			headUpExpanded = !headUpExpanded;
@@ -824,15 +829,16 @@
 			<td><h2>Web Components Samples</h2></td>
 			<td><h2 class="mirror">Web Components Samples</h2></td>
 		</tr>
+		<tr>
+			<td>Requires <i>absolutely NO</i> external library</td>
+			<td><span class="mirror">Requires <i>absolutely NO</i> external library</span></td>
+		</tr>
 	</table>
 	<hr/>
 
-	<!-- TODO Link to repo -->
-
 	<!-- Perspective sliders -->
-	<span id="head-up-command" onclick="collapseExpandHeadsup();" style="cursor: pointer;" tabindex="0">+ Head up</span>
+	<span id="head-up-command" onclick="collapseExpandHeadsup();" style="cursor: pointer;" tabindex="0" title="Show/Hide HeadUp Controls">+ Head up</span> <span id="button-span-zone" style="display: none;"><button onclick="toggleHeadsUp();" style="border-radius: 5px; margin: 5px;" title="Click this for HeadUp display, is a wind shield for example...">Head Up</button></span>
 	<div id="heads-up-sliders" style="display: none;">
-		<button onclick="toggleHeadsUp();" style="border-radius: 5px;">Head Up</button>
 		<table width="100%">
 			<tr>
 				<td width="50%">
