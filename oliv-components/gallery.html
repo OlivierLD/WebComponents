@@ -855,7 +855,15 @@
 		</table>
 	</div>
 	<hr/>
-	<h5>Pluviometer, Thermometer, Displays and other such marvels...</h5>
+	<h5>
+		<script type="text/javascript">
+			if (document.documentElement.lang === 'fr' || document.documentElement.lang === 'FR') { // Navigator.lang could be tested as well...
+				document.write('Pluviomètres, Thermomètres, Cadrans et autres merveilles...');
+			} else {
+				document.write('Pluviometers, Thermometers, Displays and other such marvels...');
+			}
+		</script>
+	</h5>
 	<!-- Page BG -->
 	Page Background
 	<input type="radio" name="page-bg" value="DARK" checked onchange="changeBG(this.value);">Dark
