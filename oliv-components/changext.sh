@@ -4,5 +4,6 @@
 #
 for image in *.JPG
 do
-  mv "$image" "$basename "$image" .JPG).jpg"
+  # mv "$image" "$basename "$image" .JPG).jpg"
+  mv "$image" "${image%.JPG}.jpg"
 done
