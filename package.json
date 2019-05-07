@@ -4,6 +4,6 @@
 	"license": "MIT",
 	"dependencies": {},
 	"scripts": {
-		"start": "node server.js"
+		"start": "echo '+-------------------------+'; echo '| Starting TinyNodeServer |'; echo '+-------------------------+'; node server.js &"
 	}
 }

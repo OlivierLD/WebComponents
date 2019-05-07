@@ -42,6 +42,7 @@
 		:root {
 			--perspective: 100em;
 			--rotateX: -15deg;
+			--scaleY: 1;
 		}
 
 		html {
@@ -108,7 +109,8 @@
 			-webkit-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
 			-moz-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
 			-o-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
-			transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+			transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX)) scaleY(var(--scaleY));
+			transform-origin: center;
 		}
 
 	</style>
@@ -775,6 +777,11 @@
 			document.body.style.setProperty("--rotateX", v + "deg");
 		}
 
+		function setScaleY(e) {
+			var v = this.value;
+			document.body.style.setProperty("--scaleY", v);
+		}
+
 		let intervalRandomId = null;
 		function randomLed() {
 			let ledPanel = document.getElementById("led-panel-01");
@@ -841,15 +848,20 @@
 	<div id="heads-up-sliders" style="display: none;">
 		<table width="100%">
 			<tr>
-				<td width="50%">
+				<td width="33%">
 					<h5 style="color: cyan;">Perspective</h5>
 					<input type="range" value="100" min="0" max="100" style="width: 90%;" oninput="setPerspective.call(this, event); perspective01.value = this.value;" />
 					<output name="perspective" id="perspective01" style="color: cyan;"></output>
 				</td>
-				<td width="50%">
+				<td width="33%">
 					<h5 style="color: cyan;">Rotate X</h5>
 					<input type="range" value="-15" min="-100" max="100" style="width: 90%;" oninput="setRotateX.call(this, event); perspective02.value = this.value;" />
 					<output name="perspective" id="perspective02" style="color: cyan;"></output>
+				</td>
+				<td width="33%">
+					<h5 style="color: cyan;">Scale Y</h5>
+					<input type="range" value="1" min="0" max="5" step="0.1" style="width: 90%;" oninput="setScaleY.call(this, event); scaleY02.value = this.value;" />
+					<output name="scaleY" id="scaleY02" style="color: cyan;"></output>
 				</td>
 			</tr>
 		</table>
