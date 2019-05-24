@@ -23,7 +23,7 @@ widgets=(
   "analogdisplay" "analogwatch" "calendar" "compass" "direction"
   "jumbo" "ledpanel" "marquee" "rain" "raw" "skymap" "splitflap"
   "temperature" "windangle" "worldmap" "boatoverview" "sunpath"
-  "slideshow" "compass.2"
+  "slideshow" "compass.2" "satelliteplotter"
 )
 #
 echo -e "+-------------------------+"
@@ -48,6 +48,7 @@ echo -e "| 16. Boat Overview       |"
 echo -e "| 17. Sun Path            |"
 echo -e "| 18. Slide Show          |"
 echo -e "| 19. Compass Display     |"
+echo -e "| 20. Satellite Plotter   |"
 echo -e "| ...                     |"
 echo -e "+-------------------------+"
 echo -e "| Q to quit               |"
@@ -56,7 +57,7 @@ echo -en "- You choose > "
 read response
 #
 case "$response" in
-  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17" | "18" | "19")
+  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17" | "18" | "19" | "20" )
     echo -e "--- npm config ---"
     npm config list
     #
