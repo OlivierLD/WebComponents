@@ -1,0 +1,74 @@
+{
+	"3": {
+		"svID": 3,
+		"elevation": 42,
+		"azimuth": 178,
+		"snr": 44
+	},
+	"4": {
+		"svID": 4,
+		"elevation": 13,
+		"azimuth": 52,
+		"snr": 31
+	},
+	"6": {
+		"svID": 6,
+		"elevation": 11,
+		"azimuth": 277,
+		"snr": 26
+	},
+	"7": {
+		"svID": 7,
+		"elevation": 42,
+		"azimuth": 259,
+		"snr": 34
+	},
+	"8": {
+		"svID": 8,
+		"elevation": 2,
+		"azimuth": 142,
+		"snr": 0
+	},
+	"9": {
+		"svID": 9,
+		"elevation": 54,
+		"azimuth": 319,
+		"snr": 35
+	},
+	"16": {
+		"svID": 16,
+		"elevation": 47,
+		"azimuth": 66,
+		"snr": 42
+	},
+	"22": {
+		"svID": 22,
+		"elevation": 18,
+		"azimuth": 164,
+		"snr": 29
+	},
+	"23": {
+		"svID": 23,
+		"elevation": 74,
+		"azimuth": 38,
+		"snr": 38
+	},
+	"26": {
+		"svID": 26,
+		"elevation": 24,
+		"azimuth": 45,
+		"snr": 31
+	},
+	"27": {
+		"svID": 27,
+		"elevation": 8,
+		"azimuth": 111,
+		"snr": 26
+	},
+	"30": {
+		"svID": 30,
+		"elevation": 7,
+		"azimuth": 246,
+		"snr": 22
+	}
+}

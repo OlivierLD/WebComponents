@@ -35,6 +35,7 @@
 	<script type="module" src="widgets/boatoverview/BoatOverview.js"></script>
 	<script type="module" src="widgets/sunpath/SunPath.js"></script>
 	<script type="module" src="widgets/slideshow/SlideShow.js"></script>
+	<script type="module" src="widgets/satelliteplotter/SatellitePlotter.js"></script>
 
 	<script type="text/javascript" src="utils/NavigationHelper.js"></script>
 
@@ -4456,6 +4457,72 @@
 			</tr>
 			<tr>
 				<td colspan="1"><input type="checkbox" onchange="setAuto('slide-show-01', this);">Auto</input></td>
+			</tr>
+		</table>
+	</div>
+	<hr/>
+
+	<!--
+		SATELLITE PLOTTER
+  +-->
+	<div style="cursor: pointer;" onclick="showHide('sat-plot');" tabindex="0"><b><u>Satellite Plotter</u></b></div>
+	<div id="sat-plot" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;satellite-plotter class="sat-plot-01"
+                   title="Satellite Plotter"
+                   id="sp-01"
+                   width="200"
+                   height="100">&lt;/satellite-plotter>
+		</pre>
+		<script type="text/javascript">
+			let satData = {
+				"3": {"svID": 3, "elevation": 42, "azimuth": 178, "snr": 44},
+				"4": {"svID": 4, "elevation": 13, "azimuth": 52, "snr": 31},
+				"6": {"svID": 6, "elevation": 11, "azimuth": 277, "snr": 26},
+				"7": {"svID": 7, "elevation": 42, "azimuth": 259, "snr": 34},
+				"8": {"svID": 8, "elevation": 2, "azimuth": 142, "snr": 0},
+				"9": {"svID": 9, "elevation": 54, "azimuth": 319, "snr": 35},
+				"16": {"svID": 16, "elevation": 47, "azimuth": 66, "snr": 42},
+				"22": {"svID": 22, "elevation": 18, "azimuth": 164, "snr": 29},
+				"23": {"svID": 23, "elevation": 74, "azimuth": 38, "snr": 38},
+				"26": {"svID": 26, "elevation": 24, "azimuth": 45, "snr": 31},
+				"27": {"svID": 27, "elevation": 8, "azimuth": 111, "snr": 26},
+				"30": {"svID": 30, "elevation": 7, "azimuth": 246, "snr": 22}
+			};
+			function plotSat(id) {
+				let elmt = document.getElementById(id);
+				elmt.setSatellites(satData);
+				elmt.repaint();
+			}
+		</script>
+		<table>
+			<tr>
+				<td valign="top">
+					<div id="sp-top-cell-1" class="black-frame centered" style="background-color: white;">
+						<satellite-plotter class="sat-plot-01"
+															 title="Satellites in view"
+															 id="sp-01"
+															 width="400"
+															 height="400"
+															 sat-in-view='{}'></satellite-plotter>
+					</div>
+					<div>
+						<button onclick="plotSat('sp-01');">Plot Sats</button>
+					</div>
+				</td>
+				<td valign="top">
+					<div id="sp-top-cell-2" class="black-frame centered" style="background-color: black;">
+						<satellite-plotter class="sat-plot-02"
+															 title="Satellites in view"
+															 id="sp-02"
+															 width="400"
+															 height="400"
+															 sat-in-view='{}'></satellite-plotter>
+					</div>
+					<div>
+						<button onclick="plotSat('sp-02');">Plot Sats</button>
+					</div>
+				</td>
 			</tr>
 		</table>
 	</div>
