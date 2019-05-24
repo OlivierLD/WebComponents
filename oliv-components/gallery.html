@@ -43,6 +43,7 @@
 			--perspective: 100em;
 			--rotateX: -15deg;
 			--scaleY: 1;
+			--slider-scale: 0.5;
 		}
 
 		html {
@@ -113,6 +114,76 @@
 			transform-origin: center;
 		}
 
+		/* For the switch (slider) */
+		.switch {
+			position: relative;
+			display: inline-block;
+			width: calc(var(--slider-scale) * 60px);
+			height: calc(var(--slider-scale) * 34px);
+		}
+
+		.switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+
+		.slider {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: #ccc;
+			-webkit-transition: .4s;
+			transition: .4s;
+		}
+
+		.slider:before {
+			position: absolute;
+			content: "";
+			height: calc(var(--slider-scale) * 26px);
+			width: calc(var(--slider-scale) * 26px);
+			left: calc(var(--slider-scale) * 4px);
+			bottom: calc(var(--slider-scale) * 4px);
+			background-color: white;
+			-webkit-transition: .4s;
+			transition: .4s;
+		}
+
+		input:checked + .slider {
+			background-color: #2196f3;
+		}
+
+		input:focus + .slider {
+			box-shadow: 0 0 1px #2196f3;
+		}
+
+		input:checked + .slider:before {
+			-webkit-transform: translateX(calc(var(--slider-scale) * 26px));
+			-ms-transform: translateX(calc(var(--slider-scale) * 26px));
+			transform: translateX(calc(var(--slider-scale) * 26px));
+		}
+
+		/* Rounded sliders */
+		.slider.round {
+			border-radius: calc(var(--slider-scale) * 34px);
+		}
+
+		.slider.round:before {
+			border-radius: 50%;
+		}
+
+		/* Switch grid */
+		.switch-container {
+			display: grid;
+			grid-template-columns: 26px calc(var(--slider-scale) * 64px) 26px;
+		}
+		.switch-element {
+			place-self: center;
+		}
+
 	</style>
 
 	<script type="text/javascript">
@@ -137,6 +208,20 @@
 				bodyStyle.background = 'radial-gradient(at top, DarkGrey -8%, black 55%)';
 				htmlStyle.backgroundColor = 'black';
 			}
+		}
+		function onThemeChange(flip) {
+			// console.log(flip.checked);
+
+			if (flip.checked === false) { // Day to Night
+				changeBG('DARK');
+			} else {                      // Night to Day
+				changeBG('LIGHT');
+			}
+		}
+
+		function changeScale(value) {
+			console.log('Scale value is now', value);
+			document.documentElement.style.setProperty('--slider-scale', value);
 		}
 
 		let headUpExpanded = false;
@@ -877,9 +962,20 @@
 		</script>
 	</h5>
 	<!-- Page BG -->
+	<!--
 	Page Background
 	<input type="radio" name="page-bg" value="DARK" checked onchange="changeBG(this.value);">Dark
 	<input type="radio" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
+  -->
+	<div class="switch-container">
+		<span class="switch-element" style="font-size: 24px; font-weight: bold; padding-bottom: 6px;">&#9789</span>
+		<label class="switch switch-element">
+			<input id="bg-slider" type="checkbox" onchange="onThemeChange(this);">
+			<span class="slider round"></span>
+		</label>
+		<span class="switch-element" style="font-size: 24px; font-weight: bold;">&#9788</span>
+	</div>
+
 	<p>
 		Click on the <b>category titles</b> below, they all represent different configurations of <i>one</i> WebComponent each.
 		<br/>
