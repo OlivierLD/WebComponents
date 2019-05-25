@@ -246,7 +246,7 @@ class SatellitePlotter extends HTMLElement {
 
 		let center = {
 			x: this.canvas.width / 2,
-			y: (this.canvas.height / 2) - 10
+			y: (this.canvas.height / 2)
 		};
 
 		context.beginPath();

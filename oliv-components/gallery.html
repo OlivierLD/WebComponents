@@ -4471,8 +4471,8 @@
 &lt;satellite-plotter class="sat-plot-01"
                    title="Satellite Plotter"
                    id="sp-01"
-                   width="200"
-                   height="100">&lt;/satellite-plotter>
+                   width="400"
+                   height="400">&lt;/satellite-plotter>
 		</pre>
 		<script type="text/javascript">
 			let satData = {
@@ -4489,6 +4489,7 @@
 				"27": {"svID": 27, "elevation": 8, "azimuth": 111, "snr": 26},
 				"30": {"svID": 30, "elevation": 7, "azimuth": 246, "snr": 22}
 			};
+
 			function plotSat(id) {
 				let elmt = document.getElementById(id);
 				elmt.setSatellites(satData);
@@ -4506,7 +4507,7 @@
 															 height="400"
 															 sat-in-view='{}'></satellite-plotter>
 					</div>
-					<div>
+					<div style="padding: 5px;">
 						<button onclick="plotSat('sp-01');">Plot Sats</button>
 					</div>
 				</td>
@@ -4519,7 +4520,7 @@
 															 height="400"
 															 sat-in-view='{}'></satellite-plotter>
 					</div>
-					<div>
+					<div style="padding: 5px;">
 						<button onclick="plotSat('sp-02');">Plot Sats</button>
 					</div>
 				</td>
