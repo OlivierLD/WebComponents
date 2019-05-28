@@ -593,7 +593,7 @@ compass-display .green {
 }
 
 .sat-plot-01 {
-	--bg-color: black;
+	--border-color: darkGrey;
 	--with-gradient: true;
 	--display-background-gradient-from: LightGrey;
 	--display-background-gradient-to: DarkGrey;
@@ -604,11 +604,22 @@ compass-display .green {
 }
 
 .sat-plot-02 {
-	--bg-color: black;
+	--border-color: silver;
 	--with-gradient: true;
 	--display-background-gradient-from: DarkGrey;
 	--display-background-gradient-to: black;
 	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--line-color: lightGreen;
+	--font: Arial;
+}
+
+.sat-plot-03 {
+	--border-color: white;
+	--with-gradient: false;
+	--display-background-gradient-from: DarkGrey;
+	--display-background-gradient-to: DarkGrey;
+	--with-display-shadow: false;
 	--shadow-color: rgba(0, 0, 0, 0.75);
 	--line-color: lightGreen;
 	--font: Arial;

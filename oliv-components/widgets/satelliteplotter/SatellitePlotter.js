@@ -8,7 +8,7 @@ const SAT_PLOT_TAG_NAME = 'satellite-plotter';
 * Relies on those elements:
 *
 .xxxxxxxx {
-	--bg-color: rgba(0, 0, 0, 0);
+	--border-color: rgba(0, 0, 0, 0);
 	--with-gradient: true;
 	--display-background-gradient-from: LightGrey;
 	--display-background-gradient-to: white;
@@ -29,7 +29,7 @@ const SAT_PLOT_TAG_NAME = 'satellite-plotter';
  * spine-case to camelCase
  */
 const defaultSatPlotColorConfig = {
-	bgColor: 'black',
+	borderColor: 'black',
 	withGradient: true,
 	displayBackgroundGradient: {
 		from: 'DarkGrey',
@@ -50,6 +50,7 @@ class SatellitePlotter extends HTMLElement {
 		return [
 			"width",            // Integer. Canvas width
 			"height",           // Integer. Canvas height
+			"with-border",      // Boolean
 			"sat-in-view"       // Stringified JSON
 		];
 	}
@@ -68,6 +69,7 @@ class SatellitePlotter extends HTMLElement {
 		// Default values
 		this._width            = 150;
 		this._height           = 150;
+		this._with_border      = true;
 
 		this._satellites = {};
 
@@ -106,6 +108,9 @@ class SatellitePlotter extends HTMLElement {
 			case "height":
 				this._height = parseInt(newVal);
 				break;
+			case "with-border":
+				this._with_border = ("true" === newVal);
+				break;
 			case "sat-in-view":
 				this._satellites = JSON.parse(newVal);
 				break;
@@ -128,6 +133,9 @@ class SatellitePlotter extends HTMLElement {
 	set height(val) {
 		this.setAttribute("height", val);
 	}
+	set withBorder(val) {
+		this.setAttribute("with-border", val);
+	}
 	set satInView(val) {
 		this.setAttribute("sat-in-view", val);
 	}
@@ -140,6 +148,9 @@ class SatellitePlotter extends HTMLElement {
 	}
 	get height() {
 		return this._height;
+	}
+	get withBorder() {
+		return this._with_border;
 	}
 	get satInView() {
 		return this._satellites;
@@ -178,8 +189,8 @@ class SatellitePlotter extends HTMLElement {
 									let key = keyValPair[0].trim();
 									let value = keyValPair[1].trim();
 									switch (key) {
-										case '--bg-color':
-											colorConfig.bgColor = value;
+										case '--border-color':
+											colorConfig.borderColor = value;
 											break;
 										case '--with-gradient':
 											colorConfig.withGradient = (value === 'true');
@@ -232,10 +243,10 @@ class SatellitePlotter extends HTMLElement {
 			this._previousClassName = currentStyle;
 		}
 
-		let bgColor = this.satPlotColorConfig.bgColor;
+		let borderColor = this.satPlotColorConfig.borderColor;
 
 		let context = this.canvas.getContext('2d');
-		context.fillStyle = bgColor;
+		context.fillStyle = 'transparent';
 		context.fillRect(0, 0, this._width, this._height);
 
 		let radius = (Math.min(this._width, this._height) / 2) * 0.90;
@@ -251,9 +262,12 @@ class SatellitePlotter extends HTMLElement {
 
 		context.beginPath();
 
-		if (/* this.withBorder === */ true) {
-			context.arc(this.canvas.width / 2, radius + 10, radius, 0, 2 * Math.PI, false);
-			context.lineWidth = 5;
+		if (this.withBorder === true) {
+			context.strokeStyle = borderColor;
+			// context.arc(this.canvas.width / 2, radius + 10, radius, 0, 2 * Math.PI, false);
+			context.arc(center.x, center.y, radius, 0, 2 * Math.PI, false);
+			context.lineWidth = 15;
+			context.stroke();
 		}
 
 		if (this.satPlotColorConfig.withGradient) {
@@ -277,6 +291,7 @@ class SatellitePlotter extends HTMLElement {
 		}
 		context.lineJoin = "round";
 		context.fill();
+
 		context.closePath();
 
 		// Axis: N-S, E-W, NE-SW, NW-SE
