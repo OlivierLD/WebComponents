@@ -43,7 +43,7 @@ After starting the `node` server as mentioned above, you can also reach
 - Wind Angle. &#9989; Done
 - Globe and Map (with `import` and `module`). &#9989; Done <!-- &#10140; WIP -->
 - Compass Rose. &#9989; Done
-- Digital Display (like a log). TODO ⏰
+- Digital Display (like a log). TODO ⏰ (or use the split-flap display below)
 - Date (calendar) display. &#9989; Done
 - Watch/Clock (analog). &#9989; Done
 - Marquee. &#9989; Done

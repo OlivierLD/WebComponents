@@ -87,6 +87,10 @@ class AnalogDisplay extends HTMLElement {
 			"with-border",      // Boolean, default true
 			"label",            // String.
 			"rotate-digits",    // Boolean, default true. false means display all values straight, no rotation
+			"major-ticks-2",    // Float. For an inner scale, value between major ticks (those with labels)
+			"minor-ticks-2",    // Float. For an inner scale, value between minor ticks
+			"min-value-2",      // Float. For an inner scale, Min value. Default 0
+			"max-value-2",      // Float. For an inner scale, Max value.
 			"digital-data-len", // Integer, optional, to display instead of label, like log value along with BSP. Number of characters to display
 			"digital-data-val", // Float, optional. Must be present if the above exists.
 			"value"             // Float. Value to display
@@ -120,6 +124,11 @@ class AnalogDisplay extends HTMLElement {
 		this._label            = undefined;
 		this._digital_data_len = undefined;
 		this._digital_data_val = undefined;
+
+		this._major_ticks_2    = undefined;
+		this._minor_ticks_2    = undefined;
+		this._min_value_2      = 0;
+		this._max_value_2      = undefined;
 
 		this.miniVal =  10000000;
 		this.maxiVal = -10000000;
@@ -175,6 +184,18 @@ class AnalogDisplay extends HTMLElement {
 				break;
 			case "max-value":
 				this._max_value = parseFloat(newVal);
+				break;
+			case "major-ticks-2":
+				this._major_ticks_2 = parseFloat(newVal);
+				break;
+			case "minor-ticks-2":
+				this._minor_ticks_2 = parseFloat(newVal);
+				break;
+			case "min-value-2":
+				this._min_value_2 = parseFloat(newVal);
+				break;
+			case "max-value-2":
+				this._max_value_2 = parseFloat(newVal);
 				break;
 			case "overlap":
 				this._overlap = parseInt(newVal);
@@ -232,6 +253,12 @@ class AnalogDisplay extends HTMLElement {
 	set minorTicks(val) {
 		this.setAttribute("minor-ticks", val);
 	}
+	set majorTicks2(val) {
+		this.setAttribute("major-ticks-2", val);
+	}
+	set minorTicks2(val) {
+		this.setAttribute("minor-ticks-2", val);
+	}
 	set withMinMax(val) {
 		this.setAttribute("with-min-max", val);
 	}
@@ -252,6 +279,12 @@ class AnalogDisplay extends HTMLElement {
 	}
 	set maxValue(val) {
 		this.setAttribute("max-value", val);
+	}
+	set minValue2(val) {
+		this.setAttribute("min-value-2", val);
+	}
+	set maxValue2(val) {
+		this.setAttribute("max-value-2", val);
 	}
 	set label(val) {
 		this.setAttribute("label", val);
@@ -281,6 +314,12 @@ class AnalogDisplay extends HTMLElement {
 	get majorTicks() {
 		return this._major_ticks;
 	}
+	get minorTicks2() {
+		return this._minor_ticks_2;
+	}
+	get majorTicks2() {
+		return this._major_ticks_2;
+	}
 	get withMinMax() {
 		return this._with_min_max;
 	}
@@ -298,6 +337,12 @@ class AnalogDisplay extends HTMLElement {
 	}
 	get maxValue() {
 		return this._max_value;
+	}
+	get minValue2() {
+		return this._min_value_2;
+	}
+	get maxValue2() {
+		return this._max_value_2;
 	}
 	get overlap() {
 		return this._overlap;
@@ -544,8 +589,48 @@ class AnalogDisplay extends HTMLElement {
 			context.closePath();
 		}
 
+		let smallScaleRatio = 0.65;
+		// Second scale?
+		if (this.majorTicks2 !== undefined && this.maxValue2 !== undefined) {
+			context.beginPath();
+			for (let i = 0; i <= (this.maxValue2 - this.minValue2); i++) {
+				if ((i + this.minValue2) % this.majorTicks2 === 0) {
+					let currentAngle = (totalAngle * (i / (this.maxValue2 - this.minValue2))) - Math.toRadians(this.overlap);
+					let xFrom = (this.canvas.width / 2) - ((radius * smallScaleRatio * 0.95) * Math.cos(currentAngle));
+					let yFrom = (radius + 10) - ((radius * smallScaleRatio * 0.95) * Math.sin(currentAngle));
+					let xTo = (this.canvas.width / 2) - ((radius * smallScaleRatio * 0.85) * Math.cos(currentAngle));
+					let yTo = (radius + 10) - ((radius * smallScaleRatio * 0.85) * Math.sin(currentAngle));
+					context.moveTo(xFrom, yFrom);
+					context.lineTo(xTo, yTo);
+				}
+			}
+			context.lineWidth = 2;
+			context.strokeStyle = this.analogDisplayColorConfig.majorTickColor;
+			context.stroke();
+			context.closePath();
+
+			// Minor Ticks ?
+			if (this.minorTicks2 !== undefined && this.minorTicks2 > 0) {
+				context.beginPath();
+				for (let i = 0; i <= (this.maxValue2- this.minValue2); i += this.minorTicks2) {
+					let _currentAngle = (totalAngle * (i / (this.maxValue2 - this.minValue2))) - Math.toRadians(this.overlap);
+
+					let xFrom = (this.canvas.width / 2) - ((radius * smallScaleRatio * 0.95) * Math.cos(_currentAngle));
+					let yFrom = (radius + 10) - ((radius * smallScaleRatio * 0.95) * Math.sin(_currentAngle));
+					let xTo = (this.canvas.width / 2) - ((radius * smallScaleRatio * 0.90) * Math.cos(_currentAngle));
+					let yTo = (radius + 10) - ((radius * smallScaleRatio * 0.90) * Math.sin(_currentAngle));
+					context.moveTo(xFrom, yFrom);
+					context.lineTo(xTo, yTo);
+				}
+				context.lineWidth = 1;
+				context.strokeStyle = this.analogDisplayColorConfig.minorTickColor;
+				context.stroke();
+				context.closePath();
+			}
+		}
+
 		let scale = radius / 100;
-		// Numbers (indexes) on major ticks
+		// Numbers (indexes) on major (and major-2) ticks
 		if (this.withDigits) {
 			context.beginPath();
 			for (let i = 0; i <= (this.maxValue - this.minValue); i++) {
@@ -576,22 +661,63 @@ class AnalogDisplay extends HTMLElement {
 				}
 			}
 			context.closePath();
+
+			if (this.majorTicks2 !== undefined && this.maxValue2 !== undefined) {
+				context.beginPath();
+				for (let i = 0; i <= (this.maxValue2 - this.minValue2); i++) {
+					if ((i + this.minValue2) % this.majorTicks2 === 0) {
+						context.save();
+						context.font = "bold " + Math.round(scale * 8) + "px " + this.analogDisplayColorConfig.font; // Like "bold 15px Arial"
+						context.fillStyle = digitColor;
+						let str = (i + this.minValue2).toString();
+						let len = context.measureText(str).width;
+						let __currentAngle = (totalAngle * (i / (this.maxValue2 - this.minValue2))) - Math.toRadians(this.overlap);
+						if (this.rotateDigits) { // Rotate
+							context.translate(this.canvas.width / 2, (radius + 10)); // canvas.height);
+//          context.rotate((Math.PI * (i / maxValue)) - (Math.PI / 2));
+							context.rotate(__currentAngle - (Math.PI / 2));
+							context.fillText(str, -len / 2, (-(radius * smallScaleRatio * .8) + 10));
+							context.lineWidth = 1;
+							context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
+							context.strokeText(str, -len / 2, (-(radius * smallScaleRatio * .8) + 10)); // Outlined
+						} else {                // Don't rotate
+							let xTo = (this.canvas.width / 2) - ((radius * smallScaleRatio * 0.75) * Math.cos(__currentAngle));
+							let yTo = (radius + 10) - ((radius * smallScaleRatio * 0.75) * Math.sin(__currentAngle));
+							context.fillText(str, xTo - (len / 2), yTo + (scale * 5 / 2));
+							context.lineWidth = 1;
+							context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
+							context.strokeText(str, xTo - (len / 2), yTo + (scale * 5 / 2)); // Outlined
+						}
+						context.restore();
+					}
+				}
+				context.closePath();
+
+			}
 		}
 
 		// Value
 		let text = analogValue.toFixed(this.analogDisplayColorConfig.valueNbDecimal);
 //  text = displayValue.toFixed(nbDecimal); // analogDisplayColorConfig.valueNbDecimal);
 		let len = 0;
-		context.font = "bold " + Math.round(scale * 40 * this.analogDisplayColorConfig.valueFontSizeFactor) + "px " + this.analogDisplayColorConfig.font; // "bold 40px Arial"
+		let fontCoeff = 40;
+		if (this.majorTicks2 !== undefined && this.maxValue2 !== undefined) { // Display value smaller if there is a second scale.
+			fontCoeff /= 1.5;
+		}
+		context.font = "bold " + Math.round(scale * fontCoeff * this.analogDisplayColorConfig.valueFontSizeFactor) + "px " + this.analogDisplayColorConfig.font; // "bold 40px Arial"
 		let metrics = context.measureText(text);
 		len = metrics.width;
 
+		let yValueOffsetCoeff = .75;
+		if (this.majorTicks2 !== undefined && this.maxValue2 !== undefined) { // Display value smaller if there is a second scale.
+			yValueOffsetCoeff = .85;
+		}
 		context.beginPath();
 		context.fillStyle = this.analogDisplayColorConfig.valueColor;
-		context.fillText(text, (this.canvas.width / 2) - (len / 2), ((radius * .75) + 10));
+		context.fillText(text, (this.canvas.width / 2) - (len / 2), ((radius * yValueOffsetCoeff) + 10));
 		context.lineWidth = 1;
 		context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
-		context.strokeText(text, (this.canvas.width / 2) - (len / 2), ((radius * .75) + 10)); // Outlined
+		context.strokeText(text, (this.canvas.width / 2) - (len / 2), ((radius * yValueOffsetCoeff) + 10)); // Outlined
 		context.closePath();
 
 		// Label ?
