@@ -2111,7 +2111,7 @@
 						<input type="checkbox" onchange="setBorder(this, 'analog-dyn-03');" checked>With Border
 						<input type="checkbox" onchange="setMinMax(this, 'analog-dyn-03');">With Min &amp; Max
 						<br/>
-						<input type="range" min="-30" max="30" step="0.1" value="12.5" onchange="document.getElementById('analog-dyn-03').value = this.value; document.getElementById('analog-dyn-02').value2 = this.value * 0.514444;" style="width: 100%;"/>
+						<input type="range" min="-30" max="30" step="0.1" value="12.5" onchange="document.getElementById('analog-dyn-03').value = this.value; document.getElementById('analog-dyn-03').value2 = (this.value * (9/5)) + 32;" style="width: 100%;"/>
 					</div>
 				</td>
 			</tr>
