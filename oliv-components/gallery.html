@@ -953,29 +953,37 @@
 		</table>
 	</div>
 	<hr/>
-	<h5>
-		<script type="text/javascript">
-			if (document.documentElement.lang === 'fr' || document.documentElement.lang === 'FR') { // Navigator.lang could be tested as well...
-				document.write('Pluviomètres, Thermomètres, Cadrans et autres merveilles...');
-			} else {
-				document.write('Pluviometers, Thermometers, Displays and other such marvels...');
-			}
-		</script>
-	</h5>
-	<!-- Page BG -->
-	<!--
-	Page Background
-	<input type="radio" name="page-bg" value="DARK" checked onchange="changeBG(this.value);">Dark
-	<input type="radio" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
-  -->
-	<div class="switch-container">
-		<span class="switch-element" style="font-size: 24px; font-weight: bold; padding-bottom: 6px;">&#9789</span>
-		<label class="switch switch-element">
-			<input id="bg-slider" type="checkbox" onchange="onThemeChange(this);">
-			<span class="slider round"></span>
-		</label>
-		<span class="switch-element" style="font-size: 24px; font-weight: bold;">&#9788</span>
-	</div>
+	<table width="98%" style="margin: auto;">
+		<tr>
+			<td>
+				<h5>
+					<script type="text/javascript">
+						if (document.documentElement.lang === 'fr' || document.documentElement.lang === 'FR') { // Navigator.lang could be tested as well...
+							document.write('Pluviomètres, Thermomètres, Cadrans et autres merveilles...');
+						} else {
+							document.write('Pluviometers, Thermometers, Displays and other such marvels...');
+						}
+					</script>
+				</h5>
+			</td>
+			<td align="right">
+				<!-- Page BG -->
+				<!--
+				Page Background
+				<input type="radio" name="page-bg" value="DARK" checked onchange="changeBG(this.value);">Dark
+				<input type="radio" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
+				-->
+				<div class="switch-container">
+					<span class="switch-element" style="font-size: 24px; font-weight: bold; padding-bottom: 6px;">&#9789</span>
+					<label class="switch switch-element">
+						<input id="bg-slider" type="checkbox" onchange="onThemeChange(this);">
+						<span class="slider round"></span>
+					</label>
+					<span class="switch-element" style="font-size: 24px; font-weight: bold;">&#9788</span>
+				</div>
+			</td>
+		</tr>
+	</table>
 
 	<p>
 		Click on the <b>category titles</b> below, they all represent different configurations of <i>one</i> WebComponent each.
@@ -1554,7 +1562,10 @@
 	+-->
 	<div style="cursor: pointer;" onclick="showHide('analog');" tabindex="0"><b><u>Analog Displays</u></b></div>
 	<div id="analog" class="smooth">
-		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+		<table cellpadding="10">
+			<tr>
+				<td valign="top">
+					<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;analog-display class="analogdisplay-day"
                 title="Boat Speed in Knots"
                 id="bsp-01"
@@ -1568,7 +1579,34 @@
                 rotate-digits="true"
                 width="200"
                 height="100">&lt;/analog-display>
-		</pre>
+					</pre>
+				</td>
+				<td valign="top">
+					<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;analog-display class="analogdisplay-monochrome-orange"
+                title="True Wind Speed in knots and m/s, rotate-digits: false"
+                id="analog-dyn-02"
+                min-value="0"
+                max-value="60"
+                value="12.5"
+                value-2="12.5"
+                major-ticks="10"
+                minor-ticks="1"
+                with-border="true"
+                rotate-digits="false"
+                overlap="40"
+                label="TWS"
+                max-value-2="30.8667"
+                major-ticks-2="5"
+                minor-ticks-2="1"
+                unit="kn"
+                unit-2="m/s"
+                width="300"
+                height="300">&lt;/analog-display>
+					</pre>
+				</td>
+			</tr>
+		</table>
 		<table border="1">
 			<tr>
 				<td valign="top">
@@ -1813,11 +1851,12 @@
 						<input type="radio" name="bg" value="transparent" onchange="applyBackground('bg-cell-2', this.value);">None</input>
 						<hr/>
 						<analog-display class="analogdisplay-monochrome-orange"
-														title="True Wind Speed in knots and m/s, rotate-digits: false"
+														title="True Wind Speed&#13;in knots and m/s,&#13;rotate-digits: false"
 														id="analog-dyn-02"
 														min-value="0"
 														max-value="60"
 														value="12.5"
+														value-2="6.4305625"
 														major-ticks="10"
 														minor-ticks="1"
 														with-border="true"
@@ -1827,6 +1866,8 @@
 														max-value-2="30.8667"
 														major-ticks-2="5"
 														minor-ticks-2="1"
+														unit="kn"
+														unit-2="m/s"
 														width="300"
 														height="300"></analog-display>
 					</div>
@@ -1849,7 +1890,7 @@
 						<input type="checkbox" onchange="setBorder(this, 'analog-dyn-02');" checked>With Border
 						<input type="checkbox" onchange="setMinMax(this, 'analog-dyn-02');">With Min &amp; Max
 						<br/>
-						<input type="range" min="0" max="60" step="0.1" value="12" onchange="document.getElementById('analog-dyn-02').value = this.value;" style="width: 100%;"/>
+						<input type="range" min="0" max="60" step="0.1" value="12" onchange="document.getElementById('analog-dyn-02').value = this.value; document.getElementById('analog-dyn-02').value2 = this.value * 0.514444;" style="width: 100%;"/>
 					</div>
 				</td>
 			</tr>
