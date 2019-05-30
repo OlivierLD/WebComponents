@@ -2051,6 +2051,69 @@
 						<input type="range" min="0" max="60" step="0.1" value="24" onchange="document.getElementById('tws-03').value = this.value;" style="width: 100%;"/>
 					</div>
 				</td>
+				<td valign="top">
+					<!-- Applying a style, dynamically -->
+					<div class="black-frame centered" id="bg-cell-3" style="background-color: black;">
+						<small>Try to combine Style, BG, border.</small><br/>
+						Style:
+						<select onchange="applyClass('analog-dyn-03', this);">
+							<option value="analogdisplay-day">Day</option>
+							<option value="analogdisplay-night">Night</option>
+							<option value="analogdisplay-monochrome-cyan">Cyan</option>
+							<option value="analogdisplay-monochrome-orange" selected>Orange</option>
+							<option value="analogdisplay-flat-gray">Flat Gray</option>
+							<option value="analogdisplay-flat-black">Flat Black</option>
+						</select>
+						<br/>
+						BG:
+						<input type="radio" name="bg3-1" value="black" onchange="applyBackground('bg-cell-3', this.value);" checked>Black</input>
+						<input type="radio" name="bg3-1" value="white" onchange="applyBackground('bg-cell-3', this.value);">White</input>
+						<input type="radio" name="bg3-1" value="transparent" onchange="applyBackground('bg-cell-3', this.value);">None</input>
+						<hr/>
+						<analog-display class="analogdisplay-monochrome-orange"
+														title="Temperature&#13;in Celcius and Fahrenheit,&#13;rotate-digits: false"
+														id="analog-dyn-03"
+														min-value="-30"
+														max-value="30"
+														value="12.5"
+														value-2="54.5"
+														major-ticks="10"
+														minor-ticks="1"
+														with-border="true"
+														rotate-digits="false"
+														overlap="40"
+														label="Temp."
+														min-value-2="-22"
+														max-value-2="86"
+														major-ticks-2="10"
+														minor-ticks-2="1"
+														unit="&deg;C"
+														unit-2="&deg;F"
+														width="300"
+														height="300"></analog-display>
+					</div>
+					<div class="black-frame centered">
+						Value:
+						<input type="number"
+									 id="analog-dyn-value-03"
+									 placeholder="Temperature Celcius"
+									 title="&deg;C"
+									 style="width: 50px; text-align: right;"
+									 value="12.5"/>
+						<br/>
+						<button onclick="setData('analog-dyn-value-03', 'analog-dyn-03')"
+										title="Set Temperature"
+										style="margin-top: 3px;">Direct</button>
+						<button onclick="doAnimate('analog-dyn-value-03', 'analog-dyn-03')"
+										title="Set Temperature"
+										style="margin-top: 3px;">Animate</button>
+						<br/>
+						<input type="checkbox" onchange="setBorder(this, 'analog-dyn-03');" checked>With Border
+						<input type="checkbox" onchange="setMinMax(this, 'analog-dyn-03');">With Min &amp; Max
+						<br/>
+						<input type="range" min="-30" max="30" step="0.1" value="12.5" onchange="document.getElementById('analog-dyn-03').value = this.value; document.getElementById('analog-dyn-02').value2 = this.value * 0.514444;" style="width: 100%;"/>
+					</div>
+				</td>
 			</tr>
 		</table>
 	</div>
