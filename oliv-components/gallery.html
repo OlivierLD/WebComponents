@@ -4617,9 +4617,29 @@
 						</script>
 					</div>
 				</td>
+				<td valign="top">
+					You can click on the slides...
+					<div class="black-frame" style="height: 600px;">
+						<slide-show id="slide-show-02"
+												width="338"
+												height="600">
+							<slide-show-image src="./images/sand-dollar/01.jpg" title="Douglas Fir"></slide-show-image>
+							<slide-show-image src="./images/sand-dollar/02.jpg" title="Waxed"></slide-show-image>
+							<slide-show-image src="./images/sand-dollar/03.jpg" title="Rubber"></slide-show-image>
+							<slide-show-image src="./images/sand-dollar/05.jpg" title="The mold"></slide-show-image>
+							<slide-show-image src="./images/sand-dollar/08.jpg" title="Casting"></slide-show-image>
+						</slide-show>
+						<script type="text/javascript">
+							window.onload = () => { // Important: window.onload
+								document.getElementById("slide-show-02").slideclick = onSlideShowClick;
+							}
+						</script>
+					</div>
+				</td>
 			</tr>
-			<tr>
+			<tr>2650
 				<td colspan="1"><input type="checkbox" onchange="setAuto('slide-show-01', this);">Auto</input></td>
+				<td colspan="1"><input type="checkbox" onchange="setAuto('slide-show-02', this);">Auto</input></td>
 			</tr>
 		</table>
 	</div>
