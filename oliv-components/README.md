@@ -57,7 +57,7 @@ After starting the `node` server as mentioned above, you can also reach
 - Simple Slide Show. &#9989; Done
 - T900 Templates (Dieumegard Bataille). TODO ⏰
 - GPS Satellites Plotter. &#9989; Done
-- Knob and display. TODO ⏰
+- Knob and display. &#9989; Done
 
 #### <img src="./images/cone.png" alt="WIP" width="48" height="48" align="middle"> TODO
 - &#x1F6A7; Replace (or duplicate) canvases with [SVG](https://www.w3.org/TR/SVG11/)s 🚧
