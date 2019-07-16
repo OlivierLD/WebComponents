@@ -638,7 +638,8 @@ compass-display .green {
 	--needle-outline-color: black;
 	--needle-fill-color: red;
 	--tick-color: rgba(0, 0, 0, 0.9);
-	--display-color: cyan;
+	--value-color: cyan;
+	--label-color: cyan;
 	--value-nb-decimal: 2;
 	--label-font: 'Courier New';
 	--value-font: Arial;
@@ -657,7 +658,8 @@ compass-display .green {
 	--needle-outline-color: black;
 	--needle-fill-color: orange;
 	--tick-color: white;
-	--display-color: black;
+	--value-color: black;
+	--label-color: white;
 	--value-nb-decimal: 2;
 	--label-font: Verdana;
 	--value-font: Arial;

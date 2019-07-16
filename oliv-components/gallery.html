@@ -4756,8 +4756,14 @@
 							document.getElementById('knob-value-01').value = value;
 						}
 					</script>
+					<style>
+						knob-and-display:focus {
+							outline: none;
+						}
+					</style>
 					<div class="black-frame centered">
 						<knob-and-display id="knob-01"
+															tabindex="-1"
 															class="knob-01"
 															width="200"
 															height="200"
@@ -4776,6 +4782,39 @@
 									 value="0.5"/>
 						<br/>
 						<button onclick="setData('knob-value-01', 'knob-01');"
+										title="Set Knob value above"
+										style="margin-top: 3px;">Set value</button>
+					</div>
+				</td>
+				<td valign="top">
+					<script type="text/javascript">
+						function knobCallback2(value) {
+							// console.log(value);
+							document.getElementById('knob-value-01-bis').value = value;
+						}
+					</script>
+					<div class="black-frame centered">
+						<knob-and-display id="knob-01-bis"
+															class="knob-01"
+															width="200"
+															height="200"
+															minimum="-1"
+															maximum="1"
+															value="0.5"
+															label="W-1"
+															onchange="knobCallback2"
+															title="Drag the knob's index around to change the value"/>
+					</div>
+					<div class="black-frame centered">
+						Value:
+						<input type="number"
+									 id="knob-value-01-bis"
+									 placeholder="Value"
+									 title="No unit"
+									 style="width: 50px; text-align: right;"
+									 value="0.5"/>
+						<br/>
+						<button onclick="setData('knob-value-01-bis', 'knob-01-bis');"
 										title="Set Knob value above"
 										style="margin-top: 3px;">Set value</button>
 					</div>
@@ -4809,6 +4848,32 @@
 			</tr>
 		</table>
 	</div>
+	<script type="text/javascript">
+		let knob1 = document.getElementById("knob-01");
+		knob1.addEventListener(
+				'keydown',
+				evt => { // ArrowRight, ArrowUp, ArrowLeft, ArrowDown
+					if (evt.key !== undefined) {
+						let val = knob1.value;
+						console.log("Key:", evt.key, "Code:", evt.keyCode);
+						if (evt.key === 'ArrowUp' || evt.key === 'ArrowRight') {
+							if (val < knob1.maximum) {
+								let newVal = val + 0.01;
+								knob1.value = newVal;
+								knob1.repaint();
+							}
+						} else if (evt.key === 'ArrowDown' || evt.key === 'ArrowLeft') {
+							if (val > knob1.minimum) {
+								let newVal = val - 0.01;
+								knob1.value = newVal;
+								knob1.repaint();
+							}
+						}
+					} else {
+						console.log('... Bad.');
+					}
+				}, false);
+	</script>
 	<hr/>
 
 	<!-- The end -->

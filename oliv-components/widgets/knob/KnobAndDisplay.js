@@ -9,6 +9,8 @@
 const knobVerbose = false;
 const KNOB_TAG_NAME = 'knob-and-display';
 
+import * as Utilities from "../utilities/Utilities.js";
+
 const knobDefaultColorConfig = {
 	displayBackgroundGradient: {
 		from: 'gray',
@@ -28,9 +30,10 @@ const knobDefaultColorConfig = {
 	needleOutlineColor: 'black',
 	needleFillColor: 'red',
 	tickColor: 'rgba(0, 0, 0, 0.9)',
-	displayColor: 'cyan',
+	valueColor: 'cyan',
 	valueNbDecimal: 2,
 	labelFont: 'Courier New',
+	labelColor: 'cyan',
 	valueFont: 'Arial'
 };
 
@@ -107,7 +110,7 @@ class KnobAndDisplay extends HTMLElement {
 				let mouseToCenter = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 				// console.log("Mouse to Center", mouseToCenter, "Knob Radius", self._knobRadius);
 				if (mouseToCenter < self._knobRadius) {
-					let mouseAngle = self.getAngle(deltaX, deltaY);
+					let mouseAngle = Utilities.getDir(deltaX, deltaY);
 					let newValue = self._minimum + (mouseAngle * (self._maximum - self._minimum) / 360);
 					// console.log('Dragging! Angle is %f => value: %f', mouseAngle, newValue);
 					self.value = Math.min(Math.max(newValue, self._minimum), self._maximum);
@@ -325,8 +328,11 @@ class KnobAndDisplay extends HTMLElement {
 										case '--tick-color':
 											colorConfig.tickColor = value;
 											break;
-										case '--display-color':
-											colorConfig.displayColor = value;
+										case '--value-color':
+											colorConfig.valueColor = value;
+											break;
+										case '--label-color':
+											colorConfig.labelColor = value;
 											break;
 										case '--value-nb-decimal':
 											colorConfig.valueNbDecimal = value;
@@ -354,39 +360,6 @@ class KnobAndDisplay extends HTMLElement {
 
 	repaint() {
 		this.drawKnob();
-	}
-
-	getAngle(x, y) {
-		let dir = 0.0;
-		if (y != 0) {
-			dir = Math.toDegrees(Math.atan(x / y));
-		}
-		if (x <= 0 || y <= 0) {
-			if (x > 0 && y < 0) {
-				dir += 180;
-			} else if (x < 0 && y > 0) {
-				dir += 360;
-			} else if (x < 0 && y < 0) {
-				dir += 180;
-			} else if (x === 0) {
-				if (y > 0) {
-					dir = 0.0;
-				} else {
-					dir = 180;
-				}
-			} else if (y === 0) {
-				if (x > 0) {
-					dir = 90;
-				} else {
-					dir = 270;
-				}
-			}
-		}
-		dir += 180;
-		while (dir >= 360) {
-			dir -= 360;
-		}
-		return dir;
 	}
 
 	drawKnob() {
@@ -421,8 +394,6 @@ class KnobAndDisplay extends HTMLElement {
 
 		// Background
 		KnobAndDisplay.roundRect(context, 0, 0, this.canvas.width, this.canvas.height, 10, true, false);
-
-		context.fillStyle = this.knobColorConfig.displayColor;
 
 		// knob
 		let center = {
@@ -479,7 +450,7 @@ class KnobAndDisplay extends HTMLElement {
 		// Label
 		if (this._label.length > 0) {
 			let strVal = this._label;
-			context.fillStyle = this.knobColorConfig.displayColor;
+			context.fillStyle = this.knobColorConfig.labelColor;
 			context.font = "bold " + Math.round(scale * 16) + "px " + this.knobColorConfig.labelFont;
 			let metrics = context.measureText(strVal);
 			let len = metrics.width;
@@ -555,7 +526,7 @@ class KnobAndDisplay extends HTMLElement {
 		context.closePath();
 
 		// Value
-		context.fillStyle = this.knobColorConfig.displayColor;
+		context.fillStyle = this.knobColorConfig.valueColor;
 		context.font = "bold " + Math.round(scale * 14) + "px " + this.knobColorConfig.valueFont;
 		let strVal = this._value.toFixed(this.knobColorConfig.valueNbDecimal);
 		let metrics = context.measureText(strVal);
