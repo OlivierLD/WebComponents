@@ -4784,6 +4784,8 @@
 						<button onclick="setData('knob-value-01', 'knob-01');"
 										title="Set Knob value above"
 										style="margin-top: 3px;">Set value</button>
+						<br/>
+						<small>You can also use arrow-keys on this one</small>
 					</div>
 				</td>
 				<td valign="top">
@@ -4861,12 +4863,14 @@
 								let newVal = val + 0.01;
 								knob1.value = newVal;
 								knob1.repaint();
+								knobCallback(newVal);
 							}
 						} else if (evt.key === 'ArrowDown' || evt.key === 'ArrowLeft') {
 							if (val > knob1.minimum) {
 								let newVal = val - 0.01;
 								knob1.value = newVal;
 								knob1.repaint();
+								knobCallback(newVal);
 							}
 						}
 					} else {
