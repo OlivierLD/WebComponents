@@ -34,8 +34,10 @@
 	<script type="module" src="widgets/splitflap/SplitFlapDisplay.js"></script>
 	<script type="module" src="widgets/boatoverview/BoatOverview.js"></script>
 	<script type="module" src="widgets/sunpath/SunPath.js"></script>
-	<script type="module" src="widgets/slideshow/SlideShow.js"></script>
+	<!--script type="module" src="widgets/slideshow/SlideShow.js"></script-->
+	<script type="module" src="lib/slideshow/slide-show.min.js"></script>
 	<script type="module" src="widgets/satelliteplotter/SatellitePlotter.js"></script>
+	<script type="module" src="widgets/knob/KnobAndDisplay.js"></script>
 
 	<script type="text/javascript" src="utils/NavigationHelper.js"></script>
 
@@ -4724,6 +4726,84 @@
 					<div style="padding: 5px;">
 						<button onclick="plotSat('sp-03');">Plot Sats</button>
 						<input type="checkbox" onchange="setBorder(this, 'sp-03');" checked>With Border
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<hr/>
+	<!--
+			KNOB and DISPLAY
+	+-->
+	<div style="cursor: pointer;" onclick="showHide('knob');" tabindex="0"><b><u>Knob and Display</u></b></div>
+	<div id="knob" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;knob-and-display id="knob-01"
+                  width="200"
+                  height="200"
+                  value="0.5"
+                  label="Weight"
+                  onchange="knobCallback"
+                  title="Drag the knob's index around to change the value"/>
+		</pre>
+
+		<table>
+			<tr>
+				<td valign="top">
+					<script type="text/javascript">
+						function knobCallback(value) {
+							// console.log(value);
+							document.getElementById('knob-value-01').value = value;
+						}
+					</script>
+					<div class="black-frame centered">
+						<knob-and-display id="knob-01"
+															class="knob-01"
+															width="200"
+															height="200"
+															value="0.5"
+															label="Weight"
+															onchange="knobCallback"
+															title="Drag the knob's index around to change the value"/>
+					</div>
+					<div class="black-frame centered">
+						Value:
+						<input type="number"
+									 id="knob-value-01"
+									 placeholder="Value"
+									 title="No unit"
+									 style="width: 50px; text-align: right;"
+									 value="0.5"/>
+						<br/>
+						<button onclick="setData('knob-value-01', 'knob-01');"
+										title="Set Knob value above"
+										style="margin-top: 3px;">Set value</button>
+					</div>
+				</td>
+				<td valign="top">
+					<div class="black-frame centered">
+						<knob-and-display id="knob-02"
+															class="knob-02"
+															width="200"
+															height="200"
+															minimum="10"
+															maximum="100"
+															value="25"
+															label="Value"
+															title="Drag the knob's index around to change the value"/>
+					</div>
+					<div class="black-frame centered">
+						Value:
+						<input type="number"
+									 id="knob-value-02"
+									 placeholder="Value"
+									 title="No unit"
+									 style="width: 50px; text-align: right;"
+									 value="25"/>
+						<br/>
+						<button onclick="setData('knob-value-02', 'knob-02');"
+										title="Set Knob value above"
+										style="margin-top: 3px;">Set value</button>
 					</div>
 				</td>
 			</tr>

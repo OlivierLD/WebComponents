@@ -650,7 +650,7 @@ class AnalogDisplay extends HTMLElement {
 			// Minor Ticks ?
 			if (this.minorTicks2 !== undefined && this.minorTicks2 > 0) {
 				context.beginPath();
-				for (let i = 0; i <= (this.maxValue2- this.minValue2); i += this.minorTicks2) {
+				for (let i = 0; i <= (this.maxValue2 - this.minValue2); i += this.minorTicks2) {
 					let _currentAngle = (totalAngle * (i / (this.maxValue2 - this.minValue2))) - Math.toRadians(this.overlap);
 
 					let xFrom = (this.canvas.width / 2) - ((radius * smallScaleRatio * 0.95) * Math.cos(_currentAngle));

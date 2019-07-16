@@ -624,3 +624,41 @@ compass-display .green {
 	--line-color: lightGreen;
 	--font: Arial;
 }
+
+.knob-01 {
+	--display-background-gradient-from: transparent;
+	--display-background-gradient-to: transparent;
+	--knob-radial-gradient-from: black;
+	--knob-radial-gradient-to: silver;
+	--index-radial-gradient-from: black;
+	--index-radial-gradient-to: white;
+	--display-outline-color: silver;
+	--display-background-color: white;
+	--display-ticks-color: darkgray;
+	--needle-outline-color: black;
+	--needle-fill-color: red;
+	--tick-color: rgba(0, 0, 0, 0.9);
+	--display-color: cyan;
+	--value-nb-decimal: 2;
+	--label-font: 'Courier New';
+	--value-font: Arial;
+}
+
+.knob-02 {
+	--display-background-gradient-from: yellow;
+	--display-background-gradient-to: orange;
+	--knob-radial-gradient-from: green;
+	--knob-radial-gradient-to: red;
+	--index-radial-gradient-from: blue;
+	--index-radial-gradient-to: cyan;
+	--display-outline-color: black;
+	--display-background-color: silver;
+	--display-ticks-color: black;
+	--needle-outline-color: black;
+	--needle-fill-color: orange;
+	--tick-color: white;
+	--display-color: black;
+	--value-nb-decimal: 2;
+	--label-font: Verdana;
+	--value-font: Arial;
+}
