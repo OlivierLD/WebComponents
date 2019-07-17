@@ -2,7 +2,9 @@
 	"name": "WebComponents",
 	"version": "1.0.0",
 	"license": "MIT",
-	"dependencies": {},
+	"dependencies": {
+		"yarn": "^1.13.0"
+	},
 	"scripts": {
 		"start": "echo '+-------------------------+'; echo '| Starting TinyNodeServer |'; echo '+-------------------------+'; node server.js"
 	}
