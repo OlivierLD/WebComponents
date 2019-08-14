@@ -11,6 +11,8 @@ const SLIDE_SHOW_TAG_NAME = 'slide-show';
  *   <slide-show-image></slide-show-image>
  *   <slide-show-image></slide-show-image>
  * </slide-show>
+ *
+ * Also supports different ratios for the image of the same slideshow.
  */
 
 /* global HTMLElement */
@@ -385,8 +387,43 @@ class SlideShow extends HTMLElement {
 							let image = document.createElement("img");
 							let src = childNode.getAttribute('src');
 							let title = childNode.getAttribute('title');
-							image.setAttribute('width', self._width);
-							image.setAttribute('height', self._height);
+
+							// Get the actual size of the image, make sure it fits the slide
+							let realImage = new Image();
+							realImage.src = src;
+							realImage.onload = () => {
+								let imageRatio = (realImage.width / realImage.height);
+								let slideRatio = (self._width / self._height);
+								if (imageRatio !== slideRatio) { // Resize required
+									// console.log("Resizing: Real image dimension for " + src + ":" + realImage.width + 'x' + realImage.height +
+									// 		", ratio=" + imageRatio + ", compare to " + slideRatio);
+									if (imageRatio > slideRatio) { // image wider than slide
+										let factor = slideRatio / imageRatio;
+										// Keep width, adjust (shrink) height
+										image.setAttribute('width', self._width);
+										image.setAttribute('height', self._height * factor);
+										// Margin top
+										let margin = (self._height / 2) - (self._height * factor / 2);
+										// console.log('Margin top:' + margin);
+										image.style.marginTop = margin.toFixed(0) + 'px';
+									} else { // image higher than slide
+										let factor = imageRatio / slideRatio;
+										// Keep height, adjust (shrink) width
+										image.setAttribute('width', self._width * factor);
+										image.setAttribute('height', self._height);
+										// Margin left
+										let margin = (self._width / 2) - (self._width * factor / 2);
+										// console.log('Margin top:' + margin);
+										image.style.marginLeft = margin.toFixed(0) + 'px';
+									}
+								} else {
+									image.setAttribute('width', self._width);
+									image.setAttribute('height', self._height);
+								}
+							}
+
+							// image.setAttribute('width', self._width);
+							// image.setAttribute('height', self._height);
 							image.setAttribute('src', src);
 							image.setAttribute('title', title);
 							slide.appendChild(image);
