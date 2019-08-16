@@ -58,17 +58,17 @@
 
   <script>
 //  var link = document.querySelector('link[rel="import"]'); // OK when there is only one...
-		var linkWM = document.querySelector('link[rel="import"][id="import-01"]'); // Simplify this, is [rel="import"] necessary?
-		var contentWM = linkWM.import;
+		let linkWM = document.querySelector('link[rel="import"][id="import-01"]'); // Simplify this, is [rel="import"] necessary?
+		let contentWM = linkWM.import;
 
-		var linkSF = document.querySelector('link[rel="import"][id="import-02"]');
-		var contentSF = linkSF.import;
+		let linkSF = document.querySelector('link[rel="import"][id="import-02"]');
+		let contentSF = linkSF.import;
 
 		// Grab DOMs from the templates.
-		var wm = contentWM.querySelector('#world-map-id');
+		let wm = contentWM.querySelector('#world-map-id');
 		document.getElementById("world-map-placeholder").appendChild(wm.cloneNode(true));
 
-		var sf = contentSF.querySelector('#split-flap-id');
+		let sf = contentSF.querySelector('#split-flap-id');
 		document.getElementById("split-flap-placeholder").appendChild(sf.cloneNode(true));
   </script>
 
