@@ -694,7 +694,7 @@ class SunPath extends HTMLElement {
 			context.font = "" + Math.round(fontSize) + "px " + this.sunPathColorConfig.font;
 			let strAlt = Utilities.decToSex(this.sunHe);
 			let strZ = Utilities.decToSex(this.sunZ);
-			context.fillText("Elevation:" + strAlt, 10, 20);
+			context.fillText("\u2609 Elevation:" + strAlt, 10, 20);
 			context.fillText("Azimuth:" + strZ, 10, 40);
 			if (this.userPosition !== undefined) {
 				let strLat = Utilities.decToSex(this.userPosition.latitude, 'NS');
@@ -822,7 +822,7 @@ class SunPath extends HTMLElement {
 			context.font = "" + Math.round(fontSize) + "px " + this.sunPathColorConfig.font;
 			let strAlt = Utilities.decToSex(this.moonHe);
 			let strZ = Utilities.decToSex(this.moonZ);
-			context.fillText("Elevation:" + strAlt, 10, 60);
+			context.fillText("\u263D Elevation:" + strAlt, 10, 60);
 			context.fillText("Azimuth:" + strZ, 10, 80);
 			context.restore();
 		}
@@ -880,7 +880,13 @@ class SunPath extends HTMLElement {
 			context.save();
 			let fontSize = 10;
 			context.font = "" + Math.round(fontSize) + "px " + this.sunPathColorConfig.font;
-			context.fillText(name, 5 + center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius));
+			context.fillText(name, 5 + center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius) + 5);
+
+			let strAlt = Utilities.decToSex(he);
+			let strZ = Utilities.decToSex(z);
+			context.fillText("El.:" + strAlt, 5 + center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius) + 17);
+			context.fillText("Z:" + strZ, 5 + center.x + (panelPoint.x * radius * this.invertX), center.y - (panelPoint.y * radius) + 29);
+
 			context.restore();
 		}
 		// Dotted line to center
