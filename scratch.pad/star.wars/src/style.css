@@ -1,0 +1,141 @@
+h1 {
+	width: 100%;
+	text-align: center;
+	color: #f8ff00;
+	position: absolute;
+	top: 30%;
+	font-size: 12vw;
+	font-family: Helvetica, sans-serif;
+	font-weight: bold;
+	-webkit-animation: logo 4s linear; /* Chrome, Safari, Opera */
+	animation: logo 4s linear;
+	-webkit-transform: scale(0);
+	transform: scale(0);
+}
+
+#container {
+	text-align: center;
+	width: 300px;
+	margin: 0 auto;
+	-webkit-perspective: 600em;
+	perspective: 600em;
+	transition: all .5s;
+
+}
+
+section {
+	font-smooth: always;
+	transition: all 5s;
+	font-size: 22px;
+	font-family: Helvetica, sans-serif;
+	width: 100%;
+	height: 100px;
+	color: #f8ff00;
+	-webkit-transform: rotateX(70deg) translate(0, -1800px);
+	transform: rotateX(70deg) translate(0, -1800px);
+	-webkit-animation: mymove 140s linear; /* Chrome, Safari, Opera */
+	animation: mymove 140s linear;
+}
+
+section p {
+	line-height: 30px;
+	font-size: 14px;
+	font-smooth: always;
+	text-align: justify;
+}
+
+@-webkit-keyframes logo {
+	0% {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+	}
+	50% {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+	}
+	100% {
+		-webkit-transform: scale(0);
+		transform: scale(0);
+	}
+}
+
+@keyframes logo {
+	0% {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+	}
+	50% {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+	}
+	100% {
+		-webkit-transform: scale(0);
+		transform: scale(0);
+	}
+}
+
+@-webkit-keyframes mymove {
+	from {
+		-webkit-transform: rotateX(70deg) translate(0, 550px);
+		transform: rotateX(70deg) translate(0, 550px);
+	}
+	to {
+		-webkit-transform: rotateX(70deg) translate(0, -1800px);
+		transform: rotateX(70deg) translate(0, -1800px);
+	}
+}
+
+/* Standard syntax */
+@keyframes mymove {
+	from {
+		-webkit-transform: rotateX(70deg) translate(0, 550px);
+		transform: rotateX(70deg) translate(0, 550px);
+	}
+	to {
+		-webkit-transform: rotateX(70deg) translate(0, -1800px);
+		transform: rotateX(70deg) translate(0, -1800px);
+	}
+}
+
+/* Background */
+body {
+	background-color: #000;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+canvas {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 1000;
+}
+
+.cleartxt {
+	top: 80px;
+	position: fixed;
+	z-index: 999;
+	width: 100%;
+	height: 80px;
+	background: rgba(0, 0, 0, 1);
+	background: -moz-linear-gradient(top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0, 0, 0, 1)), color-stop(100%, rgba(0, 0, 0, 0)));
+	background: -webkit-linear-gradient(top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+	background: -o-linear-gradient(top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+	background: -ms-linear-gradient(top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#000000', GradientType=0);
+}
+
+.black {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	background-color: #000;
+	z-index: 999;
+	height: 80px;
+	width: 100%;
+}
+
+/* End Background */
