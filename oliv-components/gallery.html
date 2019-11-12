@@ -859,7 +859,7 @@
 					if (yOffset < -(arrayCardinality * 12)) {
 						yOffset = marqueeObj.nbLines;
 					}
-					marqueeObj.yOffset = yOffset;	
+					marqueeObj.yOffset = yOffset;
 
 					marqueeObj.displayData = JSON.stringify(data);
 					marqueeObj.repaint();
@@ -4524,7 +4524,7 @@
 				elem1.marsPos = marsPos;
 				elem1.jupiterPos = jupiterPos;
 				elem1.saturnPos = saturnPos;
-				
+
 				elem1.repaint();
 
 				let elem2 = document.getElementById('sun-path-02');
@@ -4679,11 +4679,11 @@
 							<slide-show-image src="./images/tongareva.jpg" title="Tongareva"></slide-show-image>
 							<slide-show-image src="./images/banian.jpg" title="Banian"></slide-show-image>
 						</slide-show>
-						<script type="text/javascript">
+						<!--script type="text/javascript">
 							window.onload = () => { // Important: window.onload
 								document.getElementById("slide-show-01").slideclick = onSlideShowClick;
 							}
-						</script>
+						</script-->
 					</div>
 				</td>
 				<td valign="top">
@@ -4701,6 +4701,7 @@
 						</slide-show>
 						<script type="text/javascript">
 							window.onload = () => { // Important: window.onload
+								document.getElementById("slide-show-01").slideclick = onSlideShowClick;
 								document.getElementById("slide-show-02").slideclick = onSlideShowClick;
 							}
 						</script>
