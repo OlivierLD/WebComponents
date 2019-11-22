@@ -556,6 +556,7 @@ class WorldMap extends HTMLElement {
 
 	/**
 	 * Get the direction
+	 * TODO See if atan2 does the job.
 	 *
 	 * @param x horizontal displacement
 	 * @param y vertical displacement

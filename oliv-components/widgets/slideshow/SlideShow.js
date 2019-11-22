@@ -213,8 +213,8 @@ class SlideShow extends HTMLElement {
 			console.log("connectedCallback invoked");
 		}
 		// To dynamically add children
-		let observer = new MutationObserver(function(mutations) {
-			mutations.forEach(function(mutation) {
+		let observer = new MutationObserver((mutations) => {
+			mutations.forEach((mutation) => {
 				// Detect insertion
 				if (mutation.addedNodes.length > 0)
 					console.info('Node added: ', mutation.addedNodes[0]);
