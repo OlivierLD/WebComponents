@@ -23,7 +23,7 @@ widgets=(
   "analogdisplay" "analogwatch" "calendar" "compass" "direction"
   "jumbo" "ledpanel" "marquee" "rain" "raw" "skymap" "splitflap"
   "temperature" "windangle" "worldmap" "boatoverview" "sunpath"
-  "slideshow" "compass.2" "satelliteplotter" "knob"
+  "slideshow" "compass.2" "satelliteplotter" "knob" "graph"
 )
 #
 echo -e "+-------------------------+"
@@ -50,6 +50,7 @@ echo -e "| 18. Slide Show          |"
 echo -e "| 19. Compass Display     |"
 echo -e "| 20. Satellite Plotter   |"
 echo -e "| 21. Knob and Display    |"
+echo -e "| 22. Graph Display       |"
 echo -e "| ...                     |"
 echo -e "+-------------------------+"
 echo -e "| Q to quit               |"
@@ -58,7 +59,7 @@ echo -en "- You choose > "
 read response
 #
 case "$response" in
-  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17" | "18" | "19" | "20" | "21" )
+  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17" | "18" | "19" | "20" | "21" | "22" )
     echo -e "--- npm config ---"
     npm config list
     #

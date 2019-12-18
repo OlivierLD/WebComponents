@@ -12,18 +12,18 @@
 			/* Evolved from DHTML version
 				 @ http://www.dhteumeuleu.com */
 
-			var xmlns = "http://www.w3.org/2000/svg";
-			var xlinkns = "http://www.w3.org/1999/xlink";
+			const xmlns = "http://www.w3.org/2000/svg";
+			const xlinkns = "http://www.w3.org/1999/xlink";
 
-			var backX0;
-			var backY0;
-			var backWidth;
-			var backHeight;
+			let backX0;
+			let backY0;
+			let backWidth;
+			let backHeight;
 
-			var O = [];
-			var TM = [];
-			var Tm = [];
-			var A = 1000;
+			let O = [];
+			let TM = [];
+			let Tm = [];
+			let A = 1000;
 
 
 			const digits = [
@@ -108,13 +108,13 @@
 
 				// leds lighting
 				if (zz > 0) {
-					this.o.setAttributeNS(null, "fill", "#ff0000");
+					this.o.setAttributeNS(null, "fill", "#ff0000"); // Outside, red.
 					this.o.setAttributeNS(null, "cx", x);
 					this.o.setAttributeNS(null, "cy", y);
 					this.o.setAttributeNS(null, "r", "5");
 					this.o.setAttributeNS(null, "opacity", "1.0");
 				} else {
-					this.o.setAttributeNS(null, "fill", "#d9d9d9"); // "#00ff00");
+					this.o.setAttributeNS(null, "fill", "#d9d9d9"); // "#00ff00"); // Inside, gray.
 					this.o.setAttributeNS(null, "cx", x);
 					this.o.setAttributeNS(null, "cy", y);
 					this.o.setAttributeNS(null, "r", "5");
