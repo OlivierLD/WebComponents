@@ -4,6 +4,7 @@
 #
 echo -e "Will cleanup the following:"
 find . -type d -name node_modules -maxdepth 2
+find . -type f -name yarn.lock -maxdepth 2
 echo -en "Proceed y|[n] ? > "
 read resp
 if [[ ! ${resp} =~ ^(yes|y|Y)$ ]]
@@ -13,4 +14,5 @@ then
 fi
 echo -e "Cleaning..."
 find . -type d -name node_modules -maxdepth 2 -exec rm -rf {} \;
+find . -type f -name yarn.lock -maxdepth 2 -exec rm {} \;
 echo "Done"
