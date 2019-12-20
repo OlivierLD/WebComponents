@@ -22,7 +22,7 @@ const config = {
   entry: __dirname + '/Raw16PointsDir.js',
   devtool: 'source-map',
   output: {
-    path: __dirname + '../../../lib/raw16',
+    path: __dirname + '../../../lib/raw',
     filename: outputFile,
     library: libraryName,
     libraryTarget: 'umd',

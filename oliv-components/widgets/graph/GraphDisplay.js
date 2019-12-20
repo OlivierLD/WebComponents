@@ -91,11 +91,11 @@ class GraphDisplay extends HTMLElement {
 
 		this._hGridLabelsCallback = (value) => {
 			return value.toFixed(0);
-		}
+		};
 
 		this._vGridLabelsCallback = (value) => {
 			return value.toFixed(1);
-		}
+		};
 
 		this._previousClassName = "";
 		this.graphDisplayColorConfig = graphDisplayDefaultColorConfig;
@@ -391,8 +391,8 @@ class GraphDisplay extends HTMLElement {
 								context.fillStyle = this.graphDisplayColorConfig.gridColor;
 								context.font = Math.round(scale * 12) + "px " + this.graphDisplayColorConfig.labelFont;
 								let strVal = this._vGridLabelsCallback(abscissa);
-								let metrics = context.measureText(strVal);
-								let len = metrics.width;
+								// let metrics = context.measureText(strVal);
+								// let len = metrics.width;
 								// Rotate
 								context.save();
 								context.translate(_x, this.canvas.height);
@@ -443,7 +443,7 @@ class GraphDisplay extends HTMLElement {
 			}
 
 			// Curves
-			for (let i=0; i<this._data.data.length; i++) {
+			for (let i = 0; i < this._data.data.length; i++) {
 				let curve = this._data.data[i];
 				if (curve.values.length !== curve.x.length) {
 					console.log(`Cardinality mismatch at index ${i}: ${curve.x.length} x, ${curve.values.length} y`);
@@ -457,8 +457,8 @@ class GraphDisplay extends HTMLElement {
 					console.log(`Moving to ${_x} / ${_y}`);
 				}
 				context.moveTo(_x, _y);
-				let first_X = _x, first_Y = _y;
-				for (let x=1; x<curve.x.length; x++) {
+				let firstX = _x, firstY = _y;
+				for (let x = 1; x < curve.x.length; x++) {
 					_x = this._padding + ((curve.x[x] - xOffset) * xRatio);
 					_y = this._height - this._padding - ((curve.values[x] - yOffset) * yRatio);
 					if (graphDisplayVerbose) {
@@ -470,8 +470,8 @@ class GraphDisplay extends HTMLElement {
 				context.strokeStyle = curve.lineColor;
 				if (curve.fillColor !== null) {
 					context.lineTo(_x, this._height - this._padding); // Last abscissa, bottom
-					context.lineTo(first_X, this._height - this._padding); // First abscissa, bottom
-					context.lineTo(first_X, first_Y); // First point
+					context.lineTo(firstX, this._height - this._padding); // First abscissa, bottom
+					context.lineTo(firstX, firstY); // First point
 					context.fillStyle = curve.fillColor;
 					context.fill();
 				}
