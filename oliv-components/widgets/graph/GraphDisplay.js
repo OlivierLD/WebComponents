@@ -469,7 +469,7 @@ class GraphDisplay extends HTMLElement {
 				context.lineWidth = curve.thickness;
 				context.strokeStyle = curve.lineColor;
 				if (curve.fillColor !== null) {
-					context.lineTo(_x, this._height - this._padding); // Last abscissa, bottom
+					context.lineTo(_x, this._height - this._padding);     // Last abscissa, bottom
 					context.lineTo(firstX, this._height - this._padding); // First abscissa, bottom
 					context.lineTo(firstX, firstY); // First point
 					context.fillStyle = curve.fillColor;
