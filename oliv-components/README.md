@@ -52,7 +52,7 @@ After starting the `node` server as mentioned above, you can also reach
 - Generic Graphs. &#9989; Done
 - Sky Map and Star Finder (along with some `REST` service(s)). &#9989; Done
 - Split-flap Display. &#9989; Done
-- Deviation Curve. TODO ⏰
+- Deviation Curve. => Use the Generic Graph, in its vertical configuration.
 - Sun Path Display (fed by some `REST` services). &#9989; Done <!-- &#10140; 🚧 In progress -->
 - Simple Slide Show. &#9989; Done
 - T900 Templates (Dieumegard Bataille). TODO ⏰
