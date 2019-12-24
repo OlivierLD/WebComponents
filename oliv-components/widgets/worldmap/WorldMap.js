@@ -19,7 +19,7 @@ const mapProjections = {
 	}
 };
 
-const tropicLat = 23.43686; // Earth Tilt
+const tropicLat = 23.43686; // Earth Tilt, 23 deg 26.21'
 
 const worldMapDefaultColorConfig = {
 	canvasBackground: "rgba(0, 0, 100, 1.0)",  // Remove this?
@@ -1456,7 +1456,7 @@ class WorldMap extends HTMLElement {
 
 		let incSouth = 0, incLat = 0;
 
-		switch (this.projection) {
+		switch (this._projection) {
 			case undefined:
 			case mapProjections.anaximandre:
 				//	x = (180 + lng) * (canvas.width / 360);
@@ -1553,6 +1553,19 @@ class WorldMap extends HTMLElement {
 		return g;
 	}
 
+	static lngOn360(g) {
+		return (g < 0 ? 360 + g : g);
+	}
+
+	/**
+	 *
+	 * @param a Lng on 360
+	 * @param b Lng on 360
+	 */
+	static deltaLng(a, b) {
+		return Math.abs((a > 180 ? a : a + 360) - (b > 180 ? b : b + 360))
+	}
+
 	drawFlatNight(context, from, user, gha) {
 		const NINETY_DEGREES = 90 * 60; // in nm
 
@@ -1567,16 +1580,20 @@ class WorldMap extends HTMLElement {
 		}
 
 		// Night limb
-		// Find the first point (west) of the rim
+		// Find the first point (west) of the rim. Minimal diff in longitude.
 		let first = 0;
+		let smallestDiff = Number.MAX_VALUE;
 		for (let x=0; x<nightRim.length; x++) {
 			let lng = WorldMap.toRealLng(Math.toDegrees(nightRim[x].lng));
-//		console.log("Night lng: " + lng);
-			if (lng > this._west) {
-				first = Math.max(0, x - 1);
-				break;
+			// console.log(`Night lng (x=${x}): Comparing ${this._west} and  ${lng} (actually ${WorldMap.lngOn360(this._west)} to ${WorldMap.lngOn360(lng)})`);
+			let deltaLng = WorldMap.deltaLng(WorldMap.lngOn360(lng), WorldMap.lngOn360(this._west));
+			if (deltaLng < smallestDiff) {
+				first = x;
+				smallestDiff = deltaLng;
 			}
 		}
+		// console.log(`First point of the night at ${first}`);
+		// console.log("--------------------------------------");
 		context.beginPath();
 		let pt = this.posToCanvas(Math.toDegrees(nightRim[first].lat), WorldMap.toRealLng(Math.toDegrees(nightRim[first].lng)));
 		context.moveTo(-10 /*pt.x*/, pt.y); // left++
@@ -1633,6 +1650,10 @@ class WorldMap extends HTMLElement {
 		context.fill();
 	}
 
+	/**
+	 * Sun & Moon light, wandering bodies, ecliptic, etc.
+	 * @param context
+	 */
 	drawFlatCelestialOptions(context) {
 		if (this.astronomicalData !== {}) {
 			if (this.astronomicalData.sun !== undefined && this.withSun) { // TODO Separate sun and sunlight
@@ -1867,9 +1888,9 @@ class WorldMap extends HTMLElement {
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;
 
-		if (this.projection === mapProjections.anaximandre) {
+		if (this._projection === mapProjections.anaximandre) {
 			this.drawAnaximandreChart(context);
-		} else if (this.projection === mapProjections.mercator) {
+		} else if (this._projection === mapProjections.mercator) {
 			this.drawMercatorChart(context);
 		} else { // Default is globe
 			this.drawGlobe(context);
