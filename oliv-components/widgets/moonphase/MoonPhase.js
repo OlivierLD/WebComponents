@@ -1,5 +1,6 @@
 /**
  * MoonPhase
+ * TODO Invert visual if observed from South hemisphere
  */
 
 const moonPhaseVerbose = false;
@@ -13,7 +14,7 @@ const moonPhaseDefaultColorConfig = {
 	},
 	gridColor: 'rgba(255, 255, 255, 0.7)',
 	displayColor: 'cyan',
-	valueNbDecimal: 2,
+	valueNbDecimal: 1,
 	labelFont: 'Courier New',
 	valueFont: 'Arial'
 };
@@ -237,8 +238,7 @@ class MoonPhaseDisplay extends HTMLElement {
 		}
 
 		let context = this.canvas.getContext('2d');
-		let scale = 1.0;
-
+		let scale = this.height / 200;
 		if (this.width === 0 || this.height === 0) { // Not visible
 			return;
 		}
@@ -264,8 +264,8 @@ class MoonPhaseDisplay extends HTMLElement {
 		context.fillText(this.label, 5, 18);
 
 		// Phase Value
-		context.font = "bold " + Math.round(scale * 30) + "px " + this.moonPhaseColorConfig.valueFont;
-		let strVal = this.phase.toFixed(this.moonPhaseColorConfig.valueNbDecimal);
+		context.font = "bold " + Math.round(scale * 24) + "px " + this.moonPhaseColorConfig.valueFont;
+		let strVal = this.phase.toFixed(this.moonPhaseColorConfig.valueNbDecimal) + "°";
 		let metrics = context.measureText(strVal);
 		let len = metrics.width;
 
