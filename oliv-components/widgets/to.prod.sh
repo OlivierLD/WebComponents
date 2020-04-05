@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 #
+# Publish ll available WebComponents
+#
 widgets=(
 	"analogdisplay" "analogwatch" "calendar"
 	"compass" "direction" "jumbo" "ledpanel"
 	"marquee" "rain" "raw" "skymap" "splitflap"
 	"temperature" "windangle" "worldmap"
 	"boatoverview" "sunpath" "slideshow" "compass.2"
-	"satelliteplotter" "knob" "graph"
+	"satelliteplotter" "knob" "graph" "moonphase"
 )
 #
 HOME=$PWD

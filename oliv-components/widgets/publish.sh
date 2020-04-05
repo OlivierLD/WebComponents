@@ -12,7 +12,7 @@
 # Make sure you've set the registry to the local one:
 # $ npm set registry http://127.0.0.1:5080
 # To switch back to what it was :
-# $ npm set registry https://registry.npmjs.org (or whatever it was, like "http://artifactory-slc.oraclecorp.com/artifactory/api/npm/npm-virtual")
+# $ npm set registry https://registry.npmjs.org (or whatever it was for you, like "http://artifactory-slc.oraclecorp.com/artifactory/api/npm/npm-virtual")
 #
 # To browse the local registry:
 #  http://localhost:5080/_browse
@@ -23,43 +23,33 @@ widgets=(
   "analogdisplay" "analogwatch" "calendar" "compass" "direction"
   "jumbo" "ledpanel" "marquee" "rain" "raw" "skymap" "splitflap"
   "temperature" "windangle" "worldmap" "boatoverview" "sunpath"
-  "slideshow" "compass.2" "satelliteplotter" "knob" "graph"
+  "slideshow" "compass.2" "satelliteplotter" "knob" "graph" "moonphase"
 )
 #
-echo -e "+-------------------------+"
-echo -e "+-- P U B L I S H I N G --+"
-echo -e "+-------------------------+"
-echo -e "|  1. AnalogDisplay       |"
-echo -e "|  2. AnalogWatch         |"
-echo -e "|  3. CalendarDisplay     |"
-echo -e "|  4. Compass             |"
-echo -e "|  5. Direction Display   |"
-echo -e "|  6. Jumbo Display       |"
-echo -e "|  7. Led Panel           |"
-echo -e "|  8. Marquee Panel       |"
-echo -e "|  9. Rain Meter          |"
-echo -e "| 10. 16 Points Display   |"
-echo -e "| 11. Sky Map             |"
-echo -e "| 12. Split Flap          |"
-echo -e "| 13. Thermometer         |"
-echo -e "| 14. Wind Angle          |"
-echo -e "| 15. World Map           |"
-echo -e "| 16. Boat Overview       |"
-echo -e "| 17. Sun Path            |"
-echo -e "| 18. Slide Show          |"
-echo -e "| 19. Compass Display     |"
-echo -e "| 20. Satellite Plotter   |"
-echo -e "| 21. Knob and Display    |"
-echo -e "| 22. Graph Display       |"
-echo -e "| ...                     |"
-echo -e "+-------------------------+"
-echo -e "| Q to quit               |"
-echo -e "+-------------------------+"
+echo -e "+---------------------------------------------------+"
+echo -e "+--------------  P U B L I S H I N G  --------------+"
+echo -e "+-------------------------+-------------------------+"
+echo -e "|  1. AnalogDisplay       |  2. AnalogWatch         |"
+echo -e "|  3. CalendarDisplay     |  4. Compass             |"
+echo -e "|  5. Direction Display   |  6. Jumbo Display       |"
+echo -e "|  7. Led Panel           |  8. Marquee Panel       |"
+echo -e "|  9. Rain Meter          | 10. 16 Points Display   |"
+echo -e "| 11. Sky Map             | 12. Split Flap          |"
+echo -e "| 13. Thermometer         | 14. Wind Angle          |"
+echo -e "| 15. World Map           | 16. Boat Overview       |"
+echo -e "| 17. Sun Path            | 18. Slide Show          |"
+echo -e "| 19. Compass Display     | 20. Satellite Plotter   |"
+echo -e "| 21. Knob and Display    | 22. Graph Display       |"
+echo -e "| 23. Moon Phase and Tilt |                         |"
+echo -e "| ...                     |                         |"
+echo -e "+-------------------------+-------------------------+"
+echo -e "| Q to quit               |                         |"
+echo -e "+-------------------------+-------------------------+"
 echo -en "- You choose > "
 read response
 #
 case "$response" in
-  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17" | "18" | "19" | "20" | "21" | "22" )
+  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17" | "18" | "19" | "20" | "21" | "22" | "23" )
     echo -e "--- npm config ---"
     npm config list
     #
