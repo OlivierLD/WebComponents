@@ -79,7 +79,7 @@ SkyMap in its `Sky Map` configuration:
 - Satellite plotter? &#10140; See the `doAfter` callback on the Globe examples.
 - Tide Graph?
 - Current Display?
-- Generic curve(s) display
+- Generic curve(s) display. Done.
 
 #### To build for prod
 You need `npm` or `yarn` to be installed. Some scripts will minimized the scripts, and use `webpack` to put everything need in only one file.
@@ -136,5 +136,5 @@ Also see [this document](widgets/README.md), in the same project.
 There is also a [transpiler on-line](http://babeljs.io/en/repl.html), that works correctly.
 
 ---
-&copy; 2018, by Oliv Soft.
+&copy; 2018, and after, by Oliv Soft.
 
