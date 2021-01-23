@@ -82,7 +82,7 @@ SkyMap in its `Sky Map` configuration:
 - Generic curve(s) display. Done.
 
 #### To build for prod
-You need `npm` or `yarn` to be installed. Some scripts will minimized the scripts, and use `webpack` to put everything need in only one file.
+  You need `npm` or `yarn` to be installed. Some scripts will minimized the scripts, and use `webpack` to put everything need in only one file.
 
 Follow [those instructions](./widgets/README.md).
 

@@ -56,6 +56,6 @@ Two scripts are available:
     - to build all the available components.
 
 The scripts are available in the `oliv-components/widgets/` folder.
-As previously said, the expected articfacts are in the `lib` directory.
+As previously said, the expected artifacts are in the `lib` directory.
 
 ---
