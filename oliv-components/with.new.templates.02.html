@@ -1,4 +1,49 @@
-<div id="world-map-id">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Using templates</title>
+
+	<link rel="icon" type="image/png" href="../logo-192x192.png">
+
+	<link rel="stylesheet" href="css/stylesheet.css">
+	<link rel="stylesheet" href="css/web-components.css">
+
+	<!-- Minified -->
+	<!--script type="module" src="lib/worldmap/world-map.min.js"></script>
+	<script type="module" src="lib/splitflap/split-flap-display.min.js"></script-->
+	<!-- Debug -->
+	<script type="module" src="widgets/worldmap/WorldMap.js"></script>
+	<script type="module" src="widgets/splitflap/SplitFlapDisplay.js"></script>
+
+	<!-- HTML imports are now obsolete -->
+	<!-- R.I.P. HTML Imports
+	<link rel="import" id="import-01" href="templates/world.map.template.html">
+	<link rel="import" id="import-02" href="templates/split.flap.template.html">
+	-->
+	<script type="text/javascript">
+
+		/*
+		 * From https://stackoverflow.com/questions/55080103/how-to-separate-web-components-to-individual-files-and-load-them/55081177#55081177
+		 * Interesting, but cannot get it to work as the templates did...
+		 */
+
+		fetch("templates/world.map.template.html")
+				.then(stream => stream.text())
+				.then(text => define(text));
+
+		function define(html) {
+			class XWorldMap extends HTMLElement {
+				constructor() {
+					super();
+
+					let shadow = this.attachShadow({mode: 'open'});
+					shadow.innerHTML = html;
+				}
+			}
+			customElements.define('x-world-map', XWorldMap);
+		}
+	</script>
 
 	<script type="text/javascript">
 
@@ -400,69 +445,46 @@
 
 	</script>
 
-	<table>
-		<tr>
-			<td valign="top">
-				<div class="black-frame centered">
-					<world-map id="world-map-01"
-										 class="worldmap-display"
-										 title="World Map on the left"
-										 width="700"
-										 height="500"></world-map>
-				</div>
-				<div class="black-frame centered">
-					<button onclick="console.log('Click on button'); simulateAstroData('world-map-01');"
-									title="Set Astro Data"
-									style="margin-top: 3px;">Pos to SF</button>
-					<input type="checkbox" onchange="setTransparency('world-map-01', this);"/>Transparent
-					<input type="checkbox" onchange="setGrid('world-map-01', this);" checked/>Grid
-					<input type="checkbox" onchange="setSun('world-map-01', this);" checked/>Sun
-					<input type="checkbox" onchange="setMoon('world-map-01', this);" checked/>Moon
-					<input type="checkbox" onchange="setSunlight('world-map-01', this);"/>Sunlight
-					<input type="checkbox" onchange="setMoonlight('world-map-01', this);"/>Moonlight
-					<input type="checkbox" onchange="setWanderingBodies('world-map-01', this);"/>Wandering bodies
-					<input type="checkbox" onchange="setStars('world-map-01', this);"/>Stars
-					<input type="checkbox" onchange="setTropics('world-map-01', this);"/>Tropics
-					<br/>
-					Spin <button onclick="spin('world-map-01', 1);">Clockwise</button> <button onclick="spin('world-map-01', -1);">Counter Clockwise</button>
-					<br/>
-					<input type="radio" name="proj-01" value="GLOBE" onchange="setProjection('world-map-01', this);" checked>Globe
-					<input type="radio" name="proj-01" value="MERCATOR" onchange="setProjection('world-map-01', this);">Mercator
-					<input type="radio" name="proj-01" value="ANAXIMANDRE" onchange="setProjection('world-map-01', this);">Square
-					<hr/>
-					Callback samples: <button onclick="callBefore('world-map-01')">Before</button>&nbsp;&nbsp;<button onclick="callAfter('world-map-01')">After</button>
-				</div>
-			</td>
-			<td valign="top">
-				<div class="black-frame centered">
-					<world-map id="world-map-02"
-										 class="worldmap-display-02"
-										 title="World Map on the right"
-										 width="700"
-										 height="500"></world-map>
-				</div>
-				<div class="black-frame centered">
-					<button onclick="simulateAstroData('world-map-02');"
-									title="Set Astro Data"
-									style="margin-top: 3px;">Pos to SF</button>
-					<input type="checkbox" onchange="setTransparency('world-map-02', this);"/>Transparent
-					<input type="checkbox" onchange="setGrid('world-map-02', this);" checked/>Grid
-					<input type="checkbox" onchange="setSun('world-map-02', this);" checked/>Sun
-					<input type="checkbox" onchange="setMoon('world-map-02', this);" checked/>Moon
-					<input type="checkbox" onchange="setSunlight('world-map-02', this);"/>Sunlight
-					<input type="checkbox" onchange="setMoonlight('world-map-02', this);"/>Moonlight
-					<input type="checkbox" onchange="setWanderingBodies('world-map-02', this);"/>Wandering bodies
-					<input type="checkbox" onchange="setStars('world-map-02', this);"/>Stars
-					<input type="checkbox" onchange="setTropics('world-map-02', this);"/>Tropics
-					<br/>
-					Spin <button onclick="spin('world-map-02', 1);">Clockwise</button> <button onclick="spin('world-map-02', -1);">Counter Clockwise</button>
-					<br/>
-					<input type="radio" name="proj-02" value="GLOBE" onchange="setProjection('world-map-02', this);" checked>Globe
-					<input type="radio" name="proj-02" value="MERCATOR" onchange="setProjection('world-map-02', this);">Mercator
-					<input type="radio" name="proj-02" value="ANAXIMANDRE" onchange="setProjection('world-map-02', this);">Square
-				</div>
-			</td>
-		</tr>
-	</table>
-</div>
+	<style>
+		html {
+			height: 100%;
+			width: 100%;
+		}
 
+		body {
+			color: gray;
+			font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
+			/* background-image: linear-gradient(to bottom right, #4d4d4d, black); */
+			background: radial-gradient(at top, red -8%, orange 55%);
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
+
+		.black-frame {
+			padding: 3px;
+			margin: 1px;
+			border-radius: 5px;
+			border: 1px solid silver;
+			box-shadow: 3px 3px #ccc;
+		}
+
+		.centered {
+			text-align: center;
+		}
+
+	</style>
+</head>
+<body>
+
+	<h1 class="black-frame">These are Web Components in HTML Templates</h1>
+
+  	<x-world-map></x-world-map>
+
+	<div id="split-flap-placeholder"></div>
+
+	<hr/>
+	<small>Take a look at the page source, it's really worth it.</small>
+
+</body>
+
+</html>

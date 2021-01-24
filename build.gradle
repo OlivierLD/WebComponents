@@ -2,7 +2,7 @@ plugins {
   id "com.eriwen.gradle.js" version "2.14.1"
 }
 
-group = 'oliv.pi4j.samples'
+group = 'oliv.web.components'
 version = '1.0'
 
 javascript.source {
@@ -40,7 +40,8 @@ minifyJs {
   }
 }
 
-import com.eriwen.gradle.js.tasks.MinifyJsTask
+//import com.eriwen.gradle.js.tasks.MinifyJsTask
+
 task minifyJS
 minifyJS.doLast {
     fileTree(dir: 'oliv-components/widgets', include: ['*.js'], exclude: ['WorldMap.js', 'minjs/*']).eachWithIndex { file, index ->

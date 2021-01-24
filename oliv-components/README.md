@@ -119,6 +119,9 @@ Components above, live at [CodePen](http://codepen.io/OlivierLD/), when released
 - [Sun Path](https://codepen.io/OlivierLD/pen/zyLoQj).
 
 #### HTML Templates &amp; Imports
+
+> Warning: This feature is now deprecated...
+
 Along the same lines as Web Components, for re-usability, modularity, etc.
 See the examples in this module.
 
