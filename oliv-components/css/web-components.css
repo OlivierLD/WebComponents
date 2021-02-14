@@ -526,6 +526,15 @@ compass-display .green {
 	--value-font: Verdana;
 }
 
+.scroll-digit-01 {
+	--bg-color: transparent;
+	--display-background-gradient-from: black;
+	--display-background-gradient-to: gray;
+	--display-color: white;
+	--frame-color: silver;
+	--value-font: Arial;
+}
+
 .boat-overview-01 {
 	--grid-color: gray;
 	--display-background-gradient-from: darkgray;

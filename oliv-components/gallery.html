@@ -31,6 +31,7 @@
 	<script type="module" src="widgets/ledpanel/LedPanel.js"></script>
 	<script type="module" src="widgets/marquee/MarqueePanel.js"></script>
 	<script type="module" src="widgets/raw/Raw16PointsDir.js"></script>
+	<script type="module" src="widgets/scrolldigit/ScrollDigit.js"></script>
 	<script type="module" src="widgets/splitflap/SplitFlapDisplay.js"></script>
 	<script type="module" src="widgets/boatoverview/BoatOverview.js"></script>
 	<script type="module" src="widgets/sunpath/SunPath.js"></script>
@@ -986,6 +987,39 @@
 
 			for (let idx=0; idx<original.length; idx++) {
 				updateFlap(idx);
+			}
+//		elem.value = value;
+//		elem.repaint();
+		}
+
+		function setScrollDigitValue(id, value) {
+			let elem = document.getElementById(id);
+			// Character by character, flap-flap-flap
+			let original = elem.paddedValue;
+			let newPaddedValue = elem.getPaddedValue(elem.cleanString(value));
+			//	console.log("Old [%s], new [%s]", original, newPaddedValue);
+			//	assert(old.length === new.length);
+			let floatFrom = parseFloat(original);
+			let floatTo = parseFloat(newPaddedValue);
+			let sign = 0;
+			if (floatFrom !== floatTo) {
+				sign = (floatTo > floatFrom) ? +1 : -1;
+			}
+
+			function updateValue(idx) { // THIS is balaise.
+				if (original.charAt(idx).toUpperCase() !== newPaddedValue.charAt(idx).toUpperCase()) {
+					setTimeout(() => {
+						let next = elem.getNextChar(original.charAt(idx), sign);
+//					console.log("Updating %s with %s", original, next);
+						elem.setCharAt(idx, next, sign);
+						original = elem.paddedValue;
+						updateValue(idx);
+					}, 50);
+				}
+			}
+
+			for (let idx=0; idx<original.length; idx++) {
+				updateValue(idx);
 			}
 //		elem.value = value;
 //		elem.repaint();
@@ -3320,6 +3354,36 @@
 																value="02-sep-2018 10:19:00"></split-flap-display>
 						<br/>
 						Change the text, and tab out... <input type="text" size="40" value="02-sep-2018 10:19:00" onblur="setSplitFlapValue('split-flap-display-02', this.value);">
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<hr/>
+	<!--
+			SCROLL-DIGIT
+	+-->
+	<div style="cursor: pointer;" onclick="showHide('scroll-digit');" tabindex="0"><b><u>Scroll Digit Display</u></b></div>
+	<div id="scroll-digit" class="smooth">
+		<pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;scroll-digit-display id="split-flap-display-01"
+                      nb-char="5"
+                      font-size="40"
+                      justified="RIGHT"
+                      value="12.43">&lt;/scroll-digit-display>
+		</pre>
+		<table>
+			<tr>
+				<td valign="top">
+					<div class="black-frame">
+						<scroll-digit-display id="scroll-digit-display-01"
+											class="scroll-digit-01"
+											nb-char="5"
+											font-size="40"
+											justified="RIGHT"
+											value="12.34"></scroll-digit-display>
+						<br/>
+						Change the value, and tab out... <input type="text" size="6" value="12.34" onblur="setScrollDigitValue('scroll-digit-display-01', this.value);">
 					</div>
 				</td>
 			</tr>
