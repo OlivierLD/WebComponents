@@ -227,27 +227,13 @@ class ScrollDigitDisplay extends HTMLElement {
 
 		let intValue = parseInt(char);
 		intValue += sign;
-		if (intValue >= 10) {
+		if (intValue > 9) {
 			intValue = 0;
 		}
 		if (intValue < 0) {
 			intValue = 9;
 		}
-
 		return intValue.toFixed(0);
-
-		// let idx = -1;
-		// for (let i=0; i<SCROLL_DIGIT_CHARACTERS.length; i++) {
-		// 	if (SCROLL_DIGIT_CHARACTERS[i] === char.toUpperCase()) {
-		// 		idx = i;
-		// 		break;
-		// 	}
-		// }
-		// idx += 1;
-		// if (idx >= SCROLL_DIGIT_CHARACTERS.length) {
-		// 	idx = 0;
-		// }
-		// return SCROLL_DIGIT_CHARACTERS[idx];
 	}
 
 	setCharAt(idx, char, sign) {
@@ -298,8 +284,10 @@ class ScrollDigitDisplay extends HTMLElement {
 		if (fromChar !== null && fromChar !== char) {
 			let yOffset = y + (h / 2); // Original
 			let startOffset = yOffset;
-			console.log(">>> Scrolling From ", fromChar, " to ", char, (sign > 0) ? "up" : "down", ", startYOffset",
-						yOffset, "sign", sign, "height", Math.round(scale * this._font_size));
+			if (scrollDigitVerbose) {
+				console.log(">>> Scrolling From ", fromChar, " to ", char, (sign > 0) ? "up" : "down", ", startYOffset",
+					yOffset, "sign", sign, "height", Math.round(scale * this._font_size));
+			}
 			let fontSize = Math.round(scale * this._font_size);
 			let instance = this;
 			function getYOffset() {
@@ -372,7 +360,9 @@ class ScrollDigitDisplay extends HTMLElement {
 		// From, to "12.34" to "23.45"
 		if (fromValue !== undefined && toValue !== undefined) {
 			// debugger;
-			console.log("Scrolling from", fromValue, "to", toValue);
+			if (scrollDigitVerbose) {
+				console.log("Scrolling from", fromValue, "to", toValue);
+			}
 		}
 		let upperCaseValue = this._paddedValue.toUpperCase().split(''); // Char array
 

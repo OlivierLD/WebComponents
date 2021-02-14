@@ -9,6 +9,7 @@ widgets=(
 	"temperature" "windangle" "worldmap"
 	"boatoverview" "sunpath" "slideshow" "compass.2"
 	"satelliteplotter" "knob" "graph" "moonphase"
+	"scrolldigit"
 )
 #
 HOME=$PWD

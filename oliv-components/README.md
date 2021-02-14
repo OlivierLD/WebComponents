@@ -43,7 +43,7 @@ After starting the `node` server as mentioned above, you can also reach
 - Wind Angle. &#9989; Done
 - Globe and Map (with `import` and `module`). &#9989; Done <!-- &#10140; WIP -->
 - Compass Rose. &#9989; Done
-- Digital Display (like a log). TODO ⏰ (or use the split-flap display below)
+- Digital Scrolling Display (like a log). 🚧 In Progress (or use the split-flap display below)
 - Date (calendar) display. &#9989; Done
 - Watch/Clock (analog). &#9989; Done
 - Marquee. &#9989; Done
@@ -52,15 +52,16 @@ After starting the `node` server as mentioned above, you can also reach
 - Generic Graphs. &#9989; Done
 - Sky Map and Star Finder (along with some `REST` service(s)). &#9989; Done
 - Split-flap Display. &#9989; Done
-- Deviation Curve. => Use the Generic Graph, in its vertical configuration.
+- Deviation Curve. => Use the Generic Graph, in its vertical configuration. &#9989; Done
 - Sun Path Display (fed by some `REST` services). &#9989; Done <!-- &#10140; 🚧 In progress -->
 - Simple Slide Show. &#9989; Done
 - T900 Templates (Dieumegard Bataille). TODO ⏰
 - GPS Satellites Plotter. &#9989; Done
 - Knob and display. &#9989; Done
+- Moon Phase and Tilt. &#9989; Done
 
 #### <img src="./images/cone.png" alt="WIP" width="48" height="48" align="middle"> TODO
-- &#x1F6A7; Replace (or duplicate) canvases with [SVG](https://www.w3.org/TR/SVG11/)s 🚧
+- &#x1F6A7; Replace (or duplicate) canvases with [SVG](https://www.w3.org/TR/SVG11/) s 🚧
 
 #### Screenshots, as they appear from the Demo page
 World Map in its `globe` configuration:

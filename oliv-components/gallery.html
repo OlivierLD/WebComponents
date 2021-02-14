@@ -194,6 +194,14 @@
 
 	<script type="text/javascript">
 
+		function lpad(str, len, pad) {
+			let s = str;
+			while (s.length < len) {
+				s = (pad === undefined ? ' ' : pad) + s;
+			}
+			return s;
+		}
+
 		function showHideSiblingWidget(node) {
 			let status = node.parentNode.parentNode.parentNode.childNodes[2].style.display;
 			console.log('Status:', status);
@@ -994,7 +1002,7 @@
 
 		function setScrollDigitValue(id, value) {
 			let elem = document.getElementById(id);
-			// Character by character, flap-flap-flap
+			// Character by character
 			let original = elem.paddedValue;
 			let newPaddedValue = elem.getPaddedValue(elem.cleanString(value));
 			//	console.log("Old [%s], new [%s]", original, newPaddedValue);
@@ -1023,6 +1031,47 @@
 			}
 //		elem.value = value;
 //		elem.repaint();
+		}
+
+		let isAutoScrolling = false;
+		let scrollValue = 0;
+		function keepScrolling(sign) {
+			scrollValue = parseFloat(document.getElementById("scroll-digit-value").value);
+			scrollValue += (sign * 0.01);
+			if (scrollValue > 99.99) {
+				scrollValue = 0.0;
+			}
+			if (scrollValue < 0) {
+				scrollValue = 99.99;
+			}
+			let strValue = lpad(scrollValue.toFixed(2), 5, '0');
+			document.getElementById("scroll-digit-value").value = strValue;
+			setScrollDigitValue('scroll-digit-display-01', strValue);
+			if (isAutoScrolling) {
+				setTimeout(() => {
+					keepScrolling(sign);
+				}, 500);
+			}
+		}
+
+		function startStopScroll() {
+			if (isAutoScrolling) { // Then stop
+				isAutoScrolling = false;
+				document.getElementById("scroll-digit-value").disabled = false;
+				document.getElementById("start-stop-scroll").innerText = "Start";
+			} else {
+				document.getElementById("scroll-digit-value").disabled = true;
+				document.getElementById("start-stop-scroll").innerText = "Stop";
+				let sign = 0;
+				if (document.querySelector("input[name='direction']:checked").value === "up") {
+					sign = 1;
+				} else {
+					sign = -1;
+				}
+				isAutoScrolling = true;
+				keepScrolling(sign);
+				console.log('Here');
+			}
 		}
 
 	</script>
@@ -3383,7 +3432,13 @@
 											justified="RIGHT"
 											value="12.34"></scroll-digit-display>
 						<br/>
-						Change the value, and tab out... <input type="text" size="6" value="12.34" onblur="setScrollDigitValue('scroll-digit-display-01', this.value);">
+						Change the value, and tab out... <input type="number" id="scroll-digit-value" size="5" value="12.34" step="0.01" onblur="setScrollDigitValue('scroll-digit-display-01', this.value);">
+						<br/>
+						Auto: <input type="radio" id="up-and-down-1" name="direction" value="up" checked>
+						<label for="up-and-down-1">Up</label>
+						<input type="radio" id="up-and-down-2" name="direction" value="down">
+						<label for="up-and-down-2">Down</label>
+						<button id="start-stop-scroll" onclick="startStopScroll();" style="margin-left: 10px;">Start</button>
 					</div>
 				</td>
 			</tr>
