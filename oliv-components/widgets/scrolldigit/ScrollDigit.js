@@ -3,7 +3,7 @@ const SCROLL_DIGIT_TAG_NAME = 'scroll-digit-display';
 
 const SCROLL_DIGIT_CHARACTERS = [
 	"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-	".", " " // Add more here if needed
+	".", " " // Add more here if needed, or remove (for hours for example)
 ];
 
 const scrollDigitDefaultColorConfig = {
