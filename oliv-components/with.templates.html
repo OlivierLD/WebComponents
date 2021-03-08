@@ -20,7 +20,7 @@
 	<link rel="import" id="import-01" href="templates/world.map.template.html">
 	<link rel="import" id="import-02" href="templates/split.flap.template.html">
 
-
+	<some-stuff att1="attribute-1" att2="attribute-2" id="uuid">Duh?</some-stuff>
 
 	<style>
 		html {
@@ -61,8 +61,17 @@
 	<div id="split-flap-placeholder"></div>
 
   <script>
+        // Check <some-stuff att1="attribute-1" att2="attribute-2">Duh?</some-stuff>
+		let a = document.querySelector('some-stuff[att1="attribute-1"][att2="attribute-2"]');
+		// debugger;
+
 //  var link = document.querySelector('link[rel="import"]'); // OK when there is only one...
-		let linkWM = document.querySelector('link[rel="import"][id="import-01"]'); // Simplify this, is [rel="import"] necessary?
+
+		// Simplify this, is [rel="import"] necessary? 
+		// No. It can be 'link[id="import-01"]'
+		// or even just '#import-01', as there is an 'id' attribute.
+		// And document.getElementById('import-01') would do the job too.
+		let linkWM = document.querySelector('link[rel="import"][id="import-01"]'); 
 		let contentWM = linkWM.import;
 
 		let linkSF = document.querySelector('link[rel="import"][id="import-02"]');
