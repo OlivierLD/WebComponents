@@ -6,7 +6,7 @@
  */
 
 function includeHTML() {
-    console.log("Fetching!");
+    // console.log("Fetching!");
     let z, i, elmnt, file, xhttp;
     /* Loop through a collection of all HTML elements: */
     z = document.getElementsByTagName("*");
