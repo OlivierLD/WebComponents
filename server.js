@@ -212,6 +212,7 @@ function htmlEntities(str) {
  * HTTP server
  */
 console.log((new Date()) + ": Starting server on port " + port);
+console.log(`  Try http://localhost:${port}/oliv-components/gallery.html`);
 let server = http.createServer(handler);
 
 process.on('uncaughtException', (err) => {

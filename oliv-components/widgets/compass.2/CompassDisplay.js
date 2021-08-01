@@ -333,7 +333,7 @@ class CompassDisplay extends HTMLElement {
 		context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
 		context.beginPath();
-		if (this.withBorder === true) {
+		if (this.withBorder === true) {  // Draw circle around
 			//context.arc(x, y, radius, startAngle, startAngle + Math.PI, antiClockwise);
 			context.arc(this.canvas.width / 2, radius + 10, radius, 0, 2 * Math.PI, false);
 			context.lineWidth = 5;
