@@ -1,4 +1,4 @@
-const worldMapVerbose = false;
+const worldMapVerbose = true;
 const WORLD_MAP_TAG_NAME = 'world-map';
 
 /**
@@ -403,6 +403,9 @@ class WorldMap extends HTMLElement {
 		this.globeViewForeAftRotation = pos.latitude;
 	}
 
+	getUserPosition() {
+		return this.userPosition;
+	}
 	setUserLatitude(val) {
 		this.globeViewForeAftRotation = val;
 		this.userPosition.latitude = val;
