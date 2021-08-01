@@ -208,10 +208,10 @@
             console.log('Status:', status);
             if (status === 'none') {
                 node.parentNode.parentNode.parentNode.childNodes[2].style.display = 'block';
-                node.parentNode.parentNode.parentNode.childNodes[4].style.display = 'block';
+                // node.parentNode.parentNode.parentNode.childNodes[4].style.display = 'block';
             } else {
                 node.parentNode.parentNode.parentNode.childNodes[2].style.display = 'none';
-                node.parentNode.parentNode.parentNode.childNodes[4].style.display = 'none';
+                // node.parentNode.parentNode.parentNode.childNodes[4].style.display = 'none';
             }
         }
 
@@ -684,19 +684,19 @@
             document.getElementById(wcId).repaint();
         }
 
-        function moveToGCElement(wcComp, gc, i) {
-            console.log("Moving to ", gc[i]);
+        function moveToGCElement(wcComp, gc, i, label) {
+            // console.log("Moving to ", gc[i]);
             wcComp.setUserPosition({latitude: gc[i].pos.lat, longitude: gc[i].pos.lng});
-            wcComp.positionLabel = "";
+            wcComp.positionLabel = (label !== undefined ? `to ${label} - ${i}` : `${i}`);
             wcComp.repaint();
             if (i < gc.length - 1) {
                 window.setTimeout(() => {
-                    moveToGCElement(wcComp, gc, i + 1);
+                    moveToGCElement(wcComp, gc, i + 1, label);
                 }, 50);
             }
         }
 
-        function flyTo(wcId, pos) {
+        function flyTo(wcId, pos, label) {
             let wcComp = document.getElementById(wcId);
             let currentPos = wcComp.getUserPosition(); // SF: {latitude: 37.7489, longitude: -122.507});
             if (currentPos !== undefined && currentPos !== null) {
@@ -704,7 +704,7 @@
                 let gc = wcComp.computeGreatCircle({lat: currentPos.latitude, lng: currentPos.longitude}, pos, 50); // 50 steps
                 // GC is an array of points
                 window.setTimeout(() => {
-                    moveToGCElement(wcComp, gc, 0);
+                    moveToGCElement(wcComp, gc, 0, label);
                 }, 50);
             } else {
                 console.log("No current position yet...")
@@ -3151,7 +3151,7 @@
 &lt;world-map id="world-map-01"
            class="worldmap-display"
            title="World Map"
-           width="700"
+           width="500"
            height="500">&lt;/world-map>
                                         </pre>
                 <button onclick="showHideSiblingWidget(this);">Show/Hide widget</button>
@@ -3163,7 +3163,7 @@
                     <world-map id="world-map-01"
                                class="worldmap-display"
                                title="World Map"
-                               width="700"
+                               width="500"
                                height="500"></world-map>
                 </div>
                 <div class="black-frame centered">
@@ -3177,6 +3177,7 @@
                     <input type="checkbox" onchange="setMoon('world-map-01', this);" checked/>Moon
                     <input type="checkbox" onchange="setSunlight('world-map-01', this);"/>Sunlight
                     <input type="checkbox" onchange="setMoonlight('world-map-01', this);"/>Moonlight
+                    <br/>
                     <input type="checkbox" onchange="setWanderingBodies('world-map-01', this);"/>Wandering bodies
                     <input type="checkbox" onchange="setStars('world-map-01', this);"/>Stars
                     <input type="checkbox" onchange="setTropics('world-map-01', this);"/>Tropics
@@ -3202,7 +3203,7 @@
                     <world-map id="world-map-02"
                                class="worldmap-display-02"
                                title="World Map"
-                               width="700"
+                               width="500"
                                height="500"></world-map>
                 </div>
                 <div class="black-frame centered">
@@ -3216,6 +3217,7 @@
                     <input type="checkbox" onchange="setMoon('world-map-02', this);" checked/>Moon
                     <input type="checkbox" onchange="setSunlight('world-map-02', this);"/>Sunlight
                     <input type="checkbox" onchange="setMoonlight('world-map-02', this);"/>Moonlight
+                    <br/>
                     <input type="checkbox" onchange="setWanderingBodies('world-map-02', this);"/>Wandering bodies
                     <input type="checkbox" onchange="setStars('world-map-02', this);"/>Stars
                     <input type="checkbox" onchange="setTropics('world-map-02', this);"/>Tropics
@@ -3231,14 +3233,12 @@
                            onchange="setProjection('world-map-02', this);">Square
                 </div>
             </td>
-        </tr>
-        <tr style="display: none;">
             <td valign="top">
                 <div class="black-frame centered">
                     <world-map id="world-map-03"
                                class="worldmap-display"
                                title="World Map"
-                               width="700"
+                               width="500"
                                height="500"></world-map>
                 </div>
                 <div class="black-frame centered">
@@ -3252,14 +3252,15 @@
                     <input type="checkbox" onchange="setMoon('world-map-03', this);" checked/>Moon
                     <input type="checkbox" onchange="setSunlight('world-map-03', this);"/>Sunlight
                     <input type="checkbox" onchange="setMoonlight('world-map-03', this);"/>Moonlight
+                    <br/>
                     <input type="checkbox" onchange="setWanderingBodies('world-map-03', this);"/>Wandering bodies
                     <input type="checkbox" onchange="setStars('world-map-03', this);"/>Stars
                     <input type="checkbox" onchange="setTropics('world-map-03', this);"/>Tropics
                     <br/>
                     <hr/>
-                    <button onclick="flyTo('world-map-03', {lat: 37.7489, lng: -122.507});" title="Fly to SF">SF</button>&nbsp;&nbsp;
-                    <button onclick="flyTo('world-map-03', {lat: 49.01500, lng: 2.5423080});" title="Fly to Paris">Paris</button>&nbsp;&nbsp;
-                    <button onclick="flyTo('world-map-03', {lat: 19.7373, lng: -155.0668648});" title="Fly to Hawai'i">Hawai'i</button>
+                    <button onclick="flyTo('world-map-03', {lat: 37.7489, lng: -122.507}, 'SF');" title="Fly to SF">SF</button>&nbsp;&nbsp;
+                    <button onclick="flyTo('world-map-03', {lat: 49.01500, lng: 2.5423080}, 'Paris');" title="Fly to Paris">Paris</button>&nbsp;&nbsp;
+                    <button onclick="flyTo('world-map-03', {lat: 19.7373, lng: -155.0668648}, 'Hawai\'i');" title="Fly to Hawai'i">Hawai'i</button>
                 </div>
             </td>
         </tr>
@@ -3267,8 +3268,8 @@
 </div>
 <hr/>
 <!--
-          SKY MAPS
-         +-->
+    SKY MAPS
+ +-->
 <div style="cursor: pointer;" onclick="showHide('sky-map');" tabindex="0"><b><u>Sky Map</u></b></div>
 <div id="sky-map" class="smooth">
     <table>

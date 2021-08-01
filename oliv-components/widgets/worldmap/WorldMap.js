@@ -1,4 +1,4 @@
-const worldMapVerbose = true;
+const worldMapVerbose = false;
 const WORLD_MAP_TAG_NAME = 'world-map';
 
 /**
