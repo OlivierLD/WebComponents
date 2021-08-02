@@ -448,6 +448,10 @@ class WorldMap extends HTMLElement {
 		if (data.sun !== undefined) {
 			// set .setGlobeViewRightLeftRotation(-(sunD * Math.sin(Math.toRadians(lhaSun))));
 			if (this.userPosition !== {}) {
+				let userLongitude = this.userPosition.longitude;
+				if (userLongitude === undefined) { // TODO Verify that
+					userLongitude = data.from.longitude;
+				}
 				let lhaSun = data.sun.gha + this.userPosition.longitude;
 				while (lhaSun > 360) { lhaSun -= 360; }
 				while (lhaSun < 0) { lhaSun += 360; }
@@ -1697,7 +1701,7 @@ class WorldMap extends HTMLElement {
 		let closeFrame = true;
 		if (closeFrame) {
 			if (from.lat > 0) { // N Decl, night is south
-				if (pt.x < this.width / 2) { // Went right to left, first > 180
+				if (first > 180) { // (pt.x < this.width / 2) { // Went right to left, first > 180
 					context.lineTo(0, this.height);
 					if (DEBUG) {
 						console.log(`CLOSING x:${0}, ${this.height}`);
@@ -1715,7 +1719,7 @@ class WorldMap extends HTMLElement {
 				}
 			} else {            // S Decl, night is north
 				// TODO Look into that
-				if (pt.x < this.width / 2) { // Went right to left 
+				if (first > 180) { // (pt.x < this.width / 2) { // Went right to left
 					context.lineTo(0, 0);
 				}
 				context.lineTo(this.width, 0);
