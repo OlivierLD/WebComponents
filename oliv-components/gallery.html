@@ -736,6 +736,11 @@
             document.getElementById(wcId).repaint();
         }
 
+        function setAntiSunMoon(wcId, cb) {
+			document.getElementById(wcId).withAntiSunMoon = (cb.checked ? 'true' : 'false');
+			document.getElementById(wcId).repaint();
+		}
+
         function setSunlight(wcId, cb) {
             document.getElementById(wcId).withSunlight = (cb.checked ? 'true' : 'false');
             document.getElementById(wcId).repaint();
@@ -3183,6 +3188,7 @@
 					<input type="checkbox" onchange="setSunlight('world-map-01', this);"/>Sunlight
 					<input type="checkbox" onchange="setMoonlight('world-map-01', this);"/>Moonlight
 					<br/>
+					<input type="checkbox" onchange="setAntiSunMoon('world-map-01', this);"/>Anti Sun &amp; Moon
 					<input type="checkbox" onchange="setWanderingBodies('world-map-01', this);"/>Wandering bodies
 					<input type="checkbox" onchange="setStars('world-map-01', this);"/>Stars
 					<input type="checkbox" onchange="setTropics('world-map-01', this);"/>Tropics
@@ -3223,6 +3229,7 @@
 					<input type="checkbox" onchange="setSunlight('world-map-02', this);"/>Sunlight
 					<input type="checkbox" onchange="setMoonlight('world-map-02', this);"/>Moonlight
 					<br/>
+					<input type="checkbox" onchange="setAntiSunMoon('world-map-02', this);"/>Anti Sun &amp; Moon
 					<input type="checkbox" onchange="setWanderingBodies('world-map-02', this);"/>Wandering bodies
 					<input type="checkbox" onchange="setStars('world-map-02', this);"/>Stars
 					<input type="checkbox" onchange="setTropics('world-map-02', this);"/>Tropics
@@ -3258,6 +3265,7 @@
 					<input type="checkbox" onchange="setSunlight('world-map-03', this);"/>Sunlight
 					<input type="checkbox" onchange="setMoonlight('world-map-03', this);"/>Moonlight
 					<br/>
+					<input type="checkbox" onchange="setAntiSunMoon('world-map-03', this);"/>Anti Sun &amp; Moon
 					<input type="checkbox" onchange="setWanderingBodies('world-map-03', this);"/>Wandering bodies
 					<input type="checkbox" onchange="setStars('world-map-03', this);"/>Stars
 					<input type="checkbox" onchange="setTropics('world-map-03', this);"/>Tropics
