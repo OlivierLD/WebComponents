@@ -152,6 +152,8 @@ class WorldMap extends HTMLElement {
 
 		this._position_label        = "";
 
+		this._callback = null;
+
 		this.globeViewRightLeftRotation = -tropicLat; // Tilt
 		this.globeViewForeAftRotation = 0; // Observer's latitude
 		this.globeViewLngOffset = 0;       // Observer's longitude
@@ -338,6 +340,10 @@ class WorldMap extends HTMLElement {
 		this._shadowRoot = val;
 	}
 
+	set wmCallback(cb) {
+		this._callback = cb;
+	}
+
 	get width() {
 		return this._width;
 	}
@@ -396,6 +402,10 @@ class WorldMap extends HTMLElement {
 	get shadowRoot() {
 		return this._shadowRoot;
 	}
+	get wmCallback() {
+		return this._callback;
+	}
+
 
 	/*
 	 * Component methods
@@ -560,11 +570,11 @@ class WorldMap extends HTMLElement {
 			longitude -= 360;
 		}
 		let aries = { lat: Math.toRadians(obl), lng: Math.toRadians(longitude) };
-		let eclCenter = WorldMap.deadReckoningRadians(aries, 90 * 60, 0); // "Center" of the Ecliptic
+		let eclCenter = this.deadReckoningRadians(aries, 90 * 60, 0); // "Center" of the Ecliptic
 
 		context.fillStyle = this.worldmapColorConfig.tropicColor;
 		for (let hdg=0; hdg<360; hdg++) {
-			let pt = WorldMap.deadReckoningRadians(eclCenter, 90 * 60, hdg);
+			let pt = this.deadReckoningRadians(eclCenter, 90 * 60, hdg);
 			let pp = this.getPanelPoint(Math.toDegrees(pt.lat), Math.toDegrees(pt.lng));
 
 			let thisPointIsBehind = this.isBehind(pt.lat, pt.lng - Math.toRadians(this.globeViewLngOffset));
@@ -689,7 +699,7 @@ class WorldMap extends HTMLElement {
 
 		// find first visible point of the night limb
 		for (let i=0; i<360; i++) {
-			let night = WorldMap.deadReckoningRadians(from, NINETY_DEGREES, i);
+			let night = this.deadReckoningRadians(from, NINETY_DEGREES, i);
 			let visible = this.isBehind(night.lat, night.lng - Math.toRadians(this.globeViewLngOffset)) ? INVISIBLE : VISIBLE;
 			if (visible === VISIBLE && visibility === INVISIBLE) { // Just became visible
 				firstVisible = i;
@@ -702,7 +712,7 @@ class WorldMap extends HTMLElement {
 		// Night limb
 		let firstPt, lastPt;
 		for (let dir=firstVisible; dir<firstVisible+360; dir++) {
-			let dr = WorldMap.deadReckoningRadians(from, NINETY_DEGREES, dir);
+			let dr = this.deadReckoningRadians(from, NINETY_DEGREES, dir);
 			let borderPt = this.getPanelPoint(Math.toDegrees(dr.lat), Math.toDegrees(dr.lng));
 			if (dir === firstVisible) {
 				context.moveTo(borderPt.x, borderPt.y);
@@ -753,7 +763,7 @@ class WorldMap extends HTMLElement {
 
 		let userPos = { lat: Math.toRadians(user.latitude), lng: Math.toRadians(user.longitude) };
 		for (let i=firstBoundary; (inc>0 && i<=lastBoundary) || (inc<0 && i>=lastBoundary); i+=inc) {
-			let limb = WorldMap.deadReckoningRadians(userPos, NINETY_DEGREES, i);
+			let limb = this.deadReckoningRadians(userPos, NINETY_DEGREES, i);
 			let limbPt = this.getPanelPoint(Math.toDegrees(limb.lat), Math.toDegrees(limb.lng));
 			context.lineTo(limbPt.x, limbPt.y);
 		}
@@ -762,7 +772,7 @@ class WorldMap extends HTMLElement {
 	}
 
 	/**
-	 * For the Globe projection
+	 * For the GLOBE projection
 	 *
 	 * @param lat in degrees
 	 * @param lng in degrees
@@ -1206,7 +1216,7 @@ class WorldMap extends HTMLElement {
 
 		// Chart
 		context.save();
-		if (fullWorldMap === undefined) {
+		if (fullWorldMap === undefined) { // Chart data point
 			console.log("You must load [WorldMapData.js] to display a chart.");
 		} else {
 			try {
@@ -1301,10 +1311,10 @@ class WorldMap extends HTMLElement {
 							context.stroke();
 							context.closePath();
 							// if (false) {
-							// 	var img = document.getElementById("sun-png"); // 13x13
-							// 	var direction = getDir(deltaX, -deltaY);
-							// 	var imgXOffset = 7 * Math.sin(toRadians(direction));
-							// 	var imgYOffset = 7 * Math.cos(toRadians(direction));
+							// 	let img = document.getElementById("sun-png"); // 13x13
+							// 	let direction = getDir(deltaX, -deltaY);
+							// 	let imgXOffset = 7 * Math.sin(toRadians(direction));
+							// 	let imgYOffset = 7 * Math.cos(toRadians(direction));
 							// 	context.drawImage(img, sun.x + deltaX + Math.ceil(imgXOffset), sun.y + deltaY - Math.ceil(imgYOffset));
 							// } else {
 							WorldMap.fillCircle(context, {x: sun.x + deltaX, y: sun.y + deltaY}, 6, this.worldmapColorConfig.sunColor);
@@ -1399,10 +1409,10 @@ class WorldMap extends HTMLElement {
 							context.stroke();
 							context.closePath();
 							// if (false) {
-							// 	var img = document.getElementById("moon-png");
-							// 	var direction = getDir(deltaX, -deltaY);
-							// 	var imgXOffset = 7 * Math.sin(toRadians(direction));
-							// 	var imgYOffset = 7 * Math.cos(toRadians(direction));
+							// 	let img = document.getElementById("moon-png");
+							// 	let direction = getDir(deltaX, -deltaY);
+							// 	let imgXOffset = 7 * Math.sin(toRadians(direction));
+							// 	let imgYOffset = 7 * Math.cos(toRadians(direction));
 							// 	context.drawImage(img, moon.x + deltaX + Math.ceil(imgXOffset), moon.y + deltaY - Math.ceil(imgYOffset));
 							// } else {
 							WorldMap.fillCircle(context, {x: moon.x + deltaX, y: moon.y + deltaY}, 5, this.worldmapColorConfig.moonColor);
@@ -1544,7 +1554,7 @@ class WorldMap extends HTMLElement {
 	plotPosToCanvas(context, lat, lng, label, color) {
 
 		let pt = this.posToCanvas(lat, lng);
-		this.plotPoint(context, pt, (color !== undefined ? color : this.worldmapColorConfig.defaultPlotPointColor));
+		WorldMap.plot(context, pt, (color !== undefined ? color : this.worldmapColorConfig.defaultPlotPointColor));
 		if (label !== undefined) {
 			try {
 				// BG
@@ -1595,6 +1605,7 @@ class WorldMap extends HTMLElement {
 		let incSouth = 0, incLat = 0;
 
 		switch (this.projection) {
+			default:
 			case undefined:
 			case mapProjections.anaximandre:
 				//	x = (180 + lng) * (canvas.width / 360);
@@ -1614,6 +1625,68 @@ class WorldMap extends HTMLElement {
 		}
 
 		return {"x": x, "y": y};
+	}
+
+	canvasToPos(x, y) { // Anaximandre and Mercator
+		let lat, lng;
+
+		this._east = WorldMap.calculateEastG(this._north, this._south, this._west, this.width, this.height);
+		if (this.wmCallback !== null) {
+			this.wmCallback({ "type": "calculated-east", "method": "canvasToPos", "value": this._east });
+		}
+		this.adjustBoundaries();
+
+		if (this._north !== this._south && this._east !== this._west) {
+            let gAmpl; // = Math.abs(_east - _west);
+            for (gAmpl = this._east - this._west; gAmpl < 0; gAmpl += 360);
+            let lAmpl = 0.0;
+            switch (this.projection) {
+                case mapProjections.anaximandre:
+                    lAmpl = Math.abs(this._north - this._south);
+                    break;
+                case mapProjections.mercator:
+                    lAmpl = Math.abs(WorldMap.getIncLat(this._north) - WorldMap.getIncLat(this._south));
+                    break;
+            }
+			let graph2chartRatio = this.width / gAmpl;
+            switch (this.projection) {
+                default:
+                case mapProjections.anaximandre:
+                case mapProjections.mercator:
+                    lng = x / graph2chartRatio + this._west;
+                    if (lng < -180) {
+                        lng += 360;
+					}
+                    if (lng > 180) {
+                        lng -= 360;
+					}
+                    break;
+            }
+            let incSouth = 0.0;
+            switch (this.projection) {
+                case mapProjections.anaximandre:
+                    incSouth = this._south;
+                    break;
+				case mapProjections.mercator:
+					incSouth = WorldMap.getIncLat(this._south);
+                    break;
+            }
+            let incLat = (this.height - y) / graph2chartRatio + incSouth;
+            lat = 0.0;
+            switch (this.projection) {
+				case mapProjections.anaximandre:
+					incLat = (this.height - y) / (this.height / lAmpl) + incSouth;
+                    lat = incLat;
+                    break;
+                case mapProjections.mercator:
+                    lat = WorldMap.getInvIncLat(incLat);
+                    break;
+				default:
+					// return null
+					break;
+			}
+        }
+		return {"lat": lat, "lng": lng};
 	}
 
 	drawFlatGrid(context) {
@@ -1713,7 +1786,7 @@ class WorldMap extends HTMLElement {
 		let nightRim = [];
 		// Calculate the night rim
 		for (let i=0; i<360; i++) {
-			let night = WorldMap.deadReckoningRadians(from, NINETY_DEGREES, i);
+			let night = this.deadReckoningRadians(from, NINETY_DEGREES, i);
 			nightRim.push(night);
 		}
 
@@ -1925,11 +1998,11 @@ class WorldMap extends HTMLElement {
 						longitude -= 360;
 					}
 					let ariesRad = { lat: Math.toRadians(this.astronomicalData.eclipticObliquity), lng: Math.toRadians(longitude) };
-					let eclCenter = WorldMap.deadReckoningRadians(ariesRad, 90 * 60, 0); // "Center" of the Ecliptic
+					let eclCenter = this.deadReckoningRadians(ariesRad, 90 * 60, 0); // "Center" of the Ecliptic
 
 					context.fillStyle = this.worldmapColorConfig.tropicColor;
 					for (let hdg=0; hdg<360; hdg++) {
-						let pt = WorldMap.deadReckoningRadians(eclCenter, 90 * 60, hdg);
+						let pt = this.deadReckoningRadians(eclCenter, 90 * 60, hdg);
 						let pp = this.posToCanvas(Math.toDegrees(pt.lat), WorldMap.toRealLng(Math.toDegrees(pt.lng)));
 						context.fillRect(pp.x, pp.y, 1, 1);
 					}
@@ -1958,7 +2031,7 @@ class WorldMap extends HTMLElement {
 
 			if (this.astronomicalData.stars !== undefined && this.withStars) {
 				let instance = this;
-				this.astronomicalData.stars.forEach(function(star, idx) {
+				this.astronomicalData.stars.forEach((star, idx) => {
 					instance.plotPosToCanvas(context, star.decl, WorldMap.haToLongitude(star.gha), star.name, instance.worldmapColorConfig.starsColor);
 				});
 			}
@@ -1970,6 +2043,11 @@ class WorldMap extends HTMLElement {
 		let grd = context.createLinearGradient(0, 5, 0, this.height);
 		grd.addColorStop(0, this.worldmapColorConfig.globeGradient.from);
 		grd.addColorStop(1, this.worldmapColorConfig.globeGradient.to);
+
+		// First (callback)
+		if (this.doFirst !== undefined) {
+			this.doFirst(this, context);
+		}
 
 		context.fillStyle = grd; // "rgba(0, 0, 100, 1.0)"; // Dark blue
 		context.fillRect(0, 0, this.width, this.height);
@@ -2034,13 +2112,24 @@ class WorldMap extends HTMLElement {
 		}
 
 		this.drawFlatCelestialOptions(context);
+
+		// After (callback)
+		if (this.doAfter !== undefined) {
+			this.doAfter(this, context);
+		}
 	}
 
 	drawAnaximandreChart(context) {
+
 		// Square projection, Anaximandre.
 		let grd = context.createLinearGradient(0, 5, 0, this.height);
 		grd.addColorStop(0, this.worldmapColorConfig.globeGradient.from);
 		grd.addColorStop(1, this.worldmapColorConfig.globeGradient.to);
+
+		// First (callback)
+		if (this.doFirst !== undefined) {
+			this.doFirst(this, context);
+		}
 
 		context.fillStyle = grd; // "rgba(0, 0, 100, 1.0)"; // Dark blue
 		context.fillRect(0, 0, this.width, this.height);
@@ -2099,6 +2188,11 @@ class WorldMap extends HTMLElement {
 			this.plotPosToCanvas(context, this.userPosition.latitude, this.userPosition.longitude, this.positionLabel, this.worldmapColorConfig.userPosColor);
 		}
 		this.drawFlatCelestialOptions(context);
+
+		// After (callback)
+		if (this.doAfter !== undefined) {
+			this.doAfter(this, context);
+		}
 	};
 
 	drawWorldMap() {
