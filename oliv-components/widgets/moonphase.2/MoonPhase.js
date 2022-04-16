@@ -57,7 +57,16 @@ class MoonPhaseDisplay extends HTMLElement {
 			let imagePath;
 			// imagePath = "./widgets/moonphase.2/full-moon.jpg";
 			imagePath = `${this._componentPath}/full-moon.jpg`;
-			fullMoonImage.onload = () => { this.repaint(); }; // Whahaha!
+			fullMoonImage.onload = () => { 
+				// fullMoonImage.width = this.canvas.width;
+				// fullMoonImage.height = this.canvas.height;
+				this._fullMoonImage = fullMoonImage;
+				if (moonPhaseVerbose) {
+					console.log(`Full Moon image is loaded`);
+				}
+				// Whahaha!
+				this.repaint(); 
+			}; 
 			fullMoonImage.src = imagePath;
 			this._fullMoonImage = fullMoonImage;
 		}
@@ -303,13 +312,13 @@ class MoonPhaseDisplay extends HTMLElement {
 			MoonPhaseDisplay.roundRect(context, 0, 0, this.canvas.width, this.canvas.height, 10, true, false);
 		} else {
 			// TODO Test image status ?
-
-			let xOffset = (this.canvas.width - this._fullMoonImage.width) / 2;
-			let yOffset = (this.canvas.height - this._fullMoonImage.height) / 2;
+			let xOffset = 0; // (this.canvas.width - this._fullMoonImage.width) / 2;
+			let yOffset = 0; // (this.canvas.height - this._fullMoonImage.height) / 2;
 			if (moonPhaseVerbose) {
 				console.log(`Displaying image ${this._fullMoonImage.src}, xOffset: ${xOffset}, yOffset: ${yOffset}`);
 			}
-			context.drawImage(this._fullMoonImage, xOffset, yOffset);
+			// context.drawImage(this._fullMoonImage, xOffset, yOffset, this._fullMoonImage.width, this._fullMoonImage.height);
+			context.drawImage(this._fullMoonImage, xOffset, yOffset, this.canvas.width, this.canvas.height);
 		}
 
 		context.fillStyle = this.moonPhaseColorConfig.displayColor;
@@ -333,13 +342,16 @@ class MoonPhaseDisplay extends HTMLElement {
 		}
 
 		// Draw the moon here
-		let radius = Math.min(this.width, this.height) / 3;
+		let radius = 0 + (Math.min(this.width, this.height) / 2.89);
 		// Hard-coded for now, center adjusted too...
-		radius = 211;
+		// radius = 211;
 		let center = {
-			x: (this.width / 2) + 4,
-			y: (this.height / 2) - 8
+			x: (this.width / 2) * 1.016,
+			y: 0 + ((this.height / 2) * 0.972)
 		};
+		if (moonPhaseVerbose) {
+			console.log(`Radius: ${radius}, Center coordinates= x:${center.x} , y:${center.y}`);
+		}
 
 		context.save();
 		context.translate(center.x, center.y);
@@ -396,7 +408,7 @@ class MoonPhaseDisplay extends HTMLElement {
 			let x = radius * Math.sin(Math.toRadians(i)) * phaseRimOrientation;
 			let y = radius * Math.cos(Math.toRadians(i));
 			context.lineTo(((correctedPhase > 180 ? -1 : 1) * x), - y);
-			if (moonPhaseVerbose && false) {
+			if (moonPhaseVerbose) { // && false) {
 				console.log('Ph: ', correctedPhase,  '=> i=', i, 'X:', x, 'Y:', y);
 			}
 		}

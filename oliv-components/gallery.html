@@ -6569,7 +6569,10 @@ function plotGraphRC(graphId, recenter) {
 <div id="moon-phase" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;moon-phase id="moon-phase-01"
-            title="Moon Phase"/>
+            title="Moon Phase"
+            phase="45"
+            tilt="-10"
+            label="The Moon!"/>
                 </pre>
 
 	<table>
@@ -6624,9 +6627,16 @@ function plotGraphRC(graphId, recenter) {
  +-->
  <div style="cursor: pointer;" onclick="showHide('moon-phase-2');" tabindex="0"><b><u><a name="moon-phase-2" href="#moon-phase-2">Moon Phase - 2</a></u></b></div>
  <div id="moon-phase-2" class="smooth">
+     This one uses an image (<code>full-moon.jpg</code>), located next to the script (<code>MoonPhase.js</code>).
                  <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
- &lt;moon-phase-2 id="moon-phase-01"
-             title="Moon Phase"/>
+ &lt;moon-phase-2 id="moon-phase-2-01"
+               title="Moon Phase"
+               width="400"
+               height="400"
+               title="Moon Phase"
+               phase="45"
+               tilt="-15"
+               label="This is the Moon"/>
                  </pre>
  
      <table>
@@ -6634,11 +6644,11 @@ function plotGraphRC(graphId, recenter) {
              <td valign="top">
                  <div class="black-frame centered">
                      <moon-phase-2 id="moon-phase-2-01"
-                                   width="500"
-                                   height="500"
+                                   width="400"
+                                   height="400"
                                    title="Moon Phase"
                                    phase="45"
-                                   tilt="-10"
+                                   tilt="-15"
                                    label="This is the Moon"
                                    small-label=" - "/>
                  </div>
@@ -6649,7 +6659,7 @@ function plotGraphRC(graphId, recenter) {
                             placeholder="Phase"
                             title="Tilt value"
                             style="width: 50px; text-align: right;"
-                            value="-10"/>
+                            value="-15"/>
                      <button onclick="setTilt('tilt-value-2-01', 'moon-phase-2-01');"
                              title="Set Moon Phase value above"
                              style="margin-top: 3px;">Set
@@ -6673,7 +6683,49 @@ function plotGraphRC(graphId, recenter) {
                      </button>
                  </div>
              </td>
-         </tr>
+             <td valign="top">
+                <div class="black-frame centered">
+                    <moon-phase-2 id="moon-phase-3-01"
+                                  width="200"
+                                  height="200"
+                                  title="Moon Phase"
+                                  phase="135"
+                                  tilt="15"
+                                  label="This is the Moon"
+                                  small-label=" - "/>
+                </div>
+                <div class="black-frame centered">
+                    Tilt:
+                    <input type="number"
+                           id="tilt-value-3-01"
+                           placeholder="Phase"
+                           title="Tilt value"
+                           style="width: 50px; text-align: right;"
+                           value="15"/>
+                    <button onclick="setTilt('tilt-value-3-01', 'moon-phase-3-01');"
+                            title="Set Moon Phase value above"
+                            style="margin-top: 3px;">Set
+                    </button>
+                    <br/>
+                    Phase:
+                    <input type="number"
+                           id="phase-value-3-01"
+                           placeholder="Phase"
+                           title="Phase value"
+                           style="width: 50px; text-align: right;"
+                           value="135"/>
+                    <button onclick="setPhase('phase-value-3-01', 'moon-phase-3-01');"
+                            title="Set Moon Phase value above"
+                            style="margin-top: 3px;">Set
+                    </button>
+                    <br/>
+                    <button onclick="doAnimateMoon('moon-phase-3-01');"
+                            title="Keep turning"
+                            style="margin-top: 3px;">Animate
+                    </button>
+                </div>
+            </td>
+        </tr>
      </table>
  </div>
  <hr/>
