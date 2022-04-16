@@ -1,9 +1,11 @@
 /**
- * MoonPhase
+ * MoonPhase - v2
  */
 
 const moonPhaseVerbose = false;
 const MOON_PHASE_TAG_NAME = 'moon-phase-2';
+
+const WITH_MOON_IMG = true;
 
 const moonPhaseDefaultColorConfig = {
 	bgColor: 'white',
@@ -46,18 +48,19 @@ class MoonPhaseDisplay extends HTMLElement {
 		if (moonPhaseVerbose) {
 			console.log(`In constructor, componentPath: ${this._componentPath}`);
 		}
-		let fullMoonImage = new Image();
-		// this.fullMoonImage.setAttribute("src", "./widgets/moonphase.2/full-moon.jpg");
-		if (moonPhaseVerbose) {
-			console.log(`In constructor, componentPath: ${this._componentPath}`);
+		if (WITH_MOON_IMG) {
+			let fullMoonImage = new Image();
+			// this.fullMoonImage.setAttribute("src", "./widgets/moonphase.2/full-moon.jpg");
+			if (moonPhaseVerbose) {
+				console.log(`In constructor, componentPath: ${this._componentPath}`);
+			}
+			let imagePath;
+			// imagePath = "./widgets/moonphase.2/full-moon.jpg";
+			imagePath = `${this._componentPath}/full-moon.jpg`;
+			fullMoonImage.onload = () => { this.repaint(); }; // Whahaha!
+			fullMoonImage.src = imagePath;
+			this._fullMoonImage = fullMoonImage;
 		}
-		let imagePath;
-		// imagePath = "./widgets/moonphase.2/full-moon.jpg";
-		imagePath = `${this._componentPath}/full-moon.jpg`;
-		fullMoonImage.onload = () => { this.repaint(); }; // Whahaha!
-		fullMoonImage.src = imagePath;
-		this._fullMoonImage = fullMoonImage;
-
 		this._shadowRoot = this.attachShadow({mode: 'open'}); // 'open' means it is accessible from external JavaScript.
 		// create and append a <canvas>
 		this.canvas = document.createElement("canvas");
@@ -294,9 +297,6 @@ class MoonPhaseDisplay extends HTMLElement {
 		grd.addColorStop(0, this.moonPhaseColorConfig.displayBackgroundGradient.from); // 0  Beginning
 		grd.addColorStop(1, this.moonPhaseColorConfig.displayBackgroundGradient.to); // 1  End
 		context.fillStyle = grd;
-
-
-		const WITH_MOON_IMG = true;
 
 		// Background, if no image (below)
 		if (!WITH_MOON_IMG) {
