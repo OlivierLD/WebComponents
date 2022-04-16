@@ -22,6 +22,10 @@ I use nodeJS to run the pages:
  ```bash
  $ node server.js
 ```
+or
+```bash
+$ npm start
+```
 
 Then load the pages in a browser, using for example [http://localhost:8080/oliv-components/index.html](http://localhost:8080/component.01/index.html).
 

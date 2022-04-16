@@ -43,6 +43,8 @@
 	<script type="module" src="widgets/graph/GraphDisplay.js"></script>
 	<script type="module" src="widgets/moonphase/MoonPhase.js"></script>
 
+    <script type="module" src="widgets/moonphase.2/MoonPhase.js"></script>
+
 	<script type="text/javascript" src="utils/NavigationHelper.js"></script>
 
 	<style>
@@ -291,6 +293,7 @@
             if (value.length !== 0) {
                 elem.phase = value;                            // value corresponds to the 'set phase(val) { ...', invokes the setter in the HTMLElement class
             }
+            elem.repaint(); // required to show the BG image...
         }
 
         function setTilt(from, to) {
@@ -307,6 +310,8 @@
                 }
                 elem.title = `${value >= 0 ? "R" : "L"}${Math.abs(value).toFixed(0)}°`;
                 elem.smallLabel = `Tilt: ${value >= 0 ? "R." : "L."}${Math.abs(value).toFixed(0)}°`;
+
+                elem.repaint(); // required to show the BG image...
             }
         }
 
@@ -6614,7 +6619,66 @@ function plotGraphRC(graphId, recenter) {
 </div>
 <hr/>
 
-<!-- The end -->
+<!--
+    MOON PHASE - 2
+ +-->
+ <div style="cursor: pointer;" onclick="showHide('moon-phase-2');" tabindex="0"><b><u><a name="moon-phase-2" href="#moon-phase-2">Moon Phase - 2</a></u></b></div>
+ <div id="moon-phase-2" class="smooth">
+                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+ &lt;moon-phase-2 id="moon-phase-01"
+             title="Moon Phase"/>
+                 </pre>
+ 
+     <table>
+         <tr>
+             <td valign="top">
+                 <div class="black-frame centered">
+                     <moon-phase-2 id="moon-phase-2-01"
+                                   width="500"
+                                   height="500"
+                                   title="Moon Phase"
+                                   phase="45"
+                                   tilt="-10"
+                                   label="This is the Moon"
+                                   small-label=" - "/>
+                 </div>
+                 <div class="black-frame centered">
+                     Tilt:
+                     <input type="number"
+                            id="tilt-value-2-01"
+                            placeholder="Phase"
+                            title="Tilt value"
+                            style="width: 50px; text-align: right;"
+                            value="-10"/>
+                     <button onclick="setTilt('tilt-value-2-01', 'moon-phase-2-01');"
+                             title="Set Moon Phase value above"
+                             style="margin-top: 3px;">Set
+                     </button>
+                     <br/>
+                     Phase:
+                     <input type="number"
+                            id="phase-value-2-01"
+                            placeholder="Phase"
+                            title="Phase value"
+                            style="width: 50px; text-align: right;"
+                            value="45"/>
+                     <button onclick="setPhase('phase-value-2-01', 'moon-phase-2-01');"
+                             title="Set Moon Phase value above"
+                             style="margin-top: 3px;">Set
+                     </button>
+                     <br/>
+                     <button onclick="doAnimateMoon('moon-phase-2-01');"
+                             title="Keep turning"
+                             style="margin-top: 3px;">Animate
+                     </button>
+                 </div>
+             </td>
+         </tr>
+     </table>
+ </div>
+ <hr/>
+ 
+ <!-- The end -->
 <table width="100%">
 	<tr>
 		<td><span style="font-style: italic;" title="C'est MOI qui l'ai fait.">Oliv did it</span></td>
