@@ -42,13 +42,13 @@
 	<script type="module" src="widgets/knob/KnobAndDisplay.js"></script>
 	<script type="module" src="widgets/graph/GraphDisplay.js"></script>
 	<script type="module" src="widgets/moonphase/MoonPhase.js"></script>
-
-    <script type="module" src="widgets/moonphase.2/MoonPhase.js"></script>
+	<script type="module" src="widgets/moonphase.2/MoonPhase.js"></script>
 
 	<script type="text/javascript" src="utils/NavigationHelper.js"></script>
 
 	<style>
         :root {
+            --padding: 50px;
             --perspective: 100em;
             --rotateX: -15deg;
             --scaleY: 1;
@@ -68,6 +68,10 @@
             background: radial-gradient(at top, DarkGrey -8%, black 55%);
             background-repeat: no-repeat;
             background-size: 100% 100%;
+        }
+
+        hr {
+            width: 100%;
         }
 
         a, a:visited, a:active, a:any-link {
@@ -93,6 +97,7 @@
             height: 0;
             max-height: 0;
             margin: auto;
+            margin-left: 0;
             /*transition: transform 0.5s, max-height 1s, height 1s;*/
             transition: all 0.5s ease;
             opacity: 0;
@@ -202,6 +207,62 @@
 
 	<script type="text/javascript">
 
+        function expandAll() {
+            let expandableNodes = document.querySelectorAll("div[onclick][tabindex]");
+            expandableNodes.forEach(node => {
+                let nodeId = node.onclick;
+                let fullCall = nodeId.toString();
+                // Find the id of the div to expand (prm of the showHide function).
+                let functionCallIndex = fullCall.indexOf('showHide');
+                if (functionCallIndex !== -1) {
+                    let actualCall = fullCall.substring(functionCallIndex);
+                    actualCall = actualCall.substring(0, actualCall.indexOf(';'));
+                    // let regExp = new RegExp("^showHide\((['a-zA-Z]*)\).*", "");
+                    let regExp = /^showHide\('([a-zA-Z\-\d]*)'\).*/ 
+                    let matches = regExp.exec(actualCall);
+                    if (matches && matches[1]) {
+                        let theId = matches[1];
+                        // console.log(`Managing div ${theId}`);
+                        let theDiv = document.getElementById(theId);
+                        let classList = theDiv.classList;
+                        console.log(`expandAll, managing div ${theId}: classList: ${classList}`);
+                        // add visible-div if not there yet
+                        if (!classList.contains('visible-div')) {
+                            theDiv.classList.add('visible-div');
+                        }
+                    }
+                }
+            })
+        }
+
+        function collapseAll() {
+            let expandableNodes = document.querySelectorAll("div[onclick][tabindex]");
+            expandableNodes.forEach(node => {
+                let nodeId = node.onclick;
+                let fullCall = nodeId.toString();
+                // Find the id of the div to expand (prm of the showHide function).
+                let functionCallIndex = fullCall.indexOf('showHide');
+                if (functionCallIndex !== -1) {
+                    let actualCall = fullCall.substring(functionCallIndex);
+                    actualCall = actualCall.substring(0, actualCall.indexOf(';'));
+                    // let regExp = new RegExp("^showHide\((['a-zA-Z]*)\).*", "");
+                    let regExp = /^showHide\('([a-zA-Z\-\d]*)'\).*/ 
+                    let matches = regExp.exec(actualCall);
+                    if (matches && matches[1]) {
+                        let theId = matches[1];
+                        // console.log(`Managing div ${theId}`);
+                        let theDiv = document.getElementById(theId);
+                        let classList = theDiv.classList;
+                        console.log(`collapseAll, managing div ${theId}: classList: ${classList}`);
+                        // remove visible-div if here
+                        if (classList.contains('visible-div')) {
+                            theDiv.classList.remove('visible-div');
+                        }
+                    }
+                }
+            })
+        }
+
         function lpad(str, len, pad) {
             let s = str;
             while (s.length < len) {
@@ -233,9 +294,27 @@
             if (value === 'LIGHT') {
                 bodyStyle.background = 'radial-gradient(at top, white -8%, lightgrey 55%)';
                 htmlStyle.backgroundColor = 'lightgrey';
+                bodyStyle.color = 'black';
+                let anchors = document.querySelectorAll("a");
+                anchors.forEach(anchor => {
+                    anchor.style.color = 'navy';
+                });
+                let pres = document.querySelectorAll("pre");
+                pres.forEach(pre => {
+                    pre.style.color = 'gray';
+                });
             } else {
                 bodyStyle.background = 'radial-gradient(at top, DarkGrey -8%, black 55%)';
                 htmlStyle.backgroundColor = 'black';
+                bodyStyle.color = 'gray';
+                let anchors = document.querySelectorAll("a");
+                anchors.forEach(anchor => {
+                    anchor.style.color = 'orange';
+                });
+                let pres = document.querySelectorAll("pre");
+                pres.forEach(pre => {
+                    pre.style.color = 'white';
+                });
             }
         }
 
@@ -266,7 +345,7 @@
                 cmdElem.innerText = "+ Head up";
             } else {
                 slidersElem.style.display = 'block';
-                buttonZone.style.display = 'inline';
+                buttonZone.style.display = 'block';
                 cmdElem.innerText = "- Head up";
             }
             headUpExpanded = !headUpExpanded;
@@ -293,7 +372,6 @@
             if (value.length !== 0) {
                 elem.phase = value;                            // value corresponds to the 'set phase(val) { ...', invokes the setter in the HTMLElement class
             }
-            elem.repaint(); // required to show the BG image...
         }
 
         function setTilt(from, to) {
@@ -310,8 +388,6 @@
                 }
                 elem.title = `${value >= 0 ? "R" : "L"}${Math.abs(value).toFixed(0)}°`;
                 elem.smallLabel = `Tilt: ${value >= 0 ? "R." : "L."}${Math.abs(value).toFixed(0)}°`;
-
-                elem.repaint(); // required to show the BG image...
             }
         }
 
@@ -483,20 +559,22 @@
 
             // let status = elmt.style.display;
             // elmt.style.display = (status === 'none' ? 'inline' : 'none');
-            let h = elmt.style.height;
-            let newH = '', newV = '', newO = '';
-            if (h === '' || h === '0' || h === '0px') {
-                newH = '100%';
-                newV = 'visible';
-                newO = '1';
-            } else {
-                newH = '0';
-                newV = 'hidden';
-                newO = '0';
+            if (false) {
+                let h = elmt.style.height;
+                let newH = '', newV = '', newO = '';
+                if (h === '' || h === '0' || h === '0px') {
+                    newH = '100%';
+                    newV = 'visible';
+                    newO = '1';
+                } else {
+                    newH = '0';
+                    newV = 'hidden';
+                    newO = '0';
+                }
+                elmt.style.height = newH;
+                elmt.style.visibility = newV;
+                elmt.style.opacity = newO;
             }
-            elmt.style.height = newH;
-            elmt.style.visibility = newV;
-            elmt.style.opacity = newO;
         }
 
         let directionAnimationInterval;
@@ -905,7 +983,7 @@
 
             let lastPointToPlot = null;
             for (let i = 0; i < gc.length; i++) {
-                let panelPoint;
+                let panelPoint; 
                 if (worldMap.projection.type === 'GLOBE') {
                     panelPoint = worldMap.getPanelPoint(gc[i].pos.lat, gc[i].pos.lng);
                 } else {
@@ -1004,8 +1082,8 @@
                         userPos = worldMap.posToCanvas(worldMap.userPosition.latitude, worldMap.userPosition.longitude);
                     }
                     /*
-                                         * Display 4 geostationary satellites. Data provided by the user, below.
-                                         */
+                     * Display 4 geostationary satellites. Data provided by the user, below.
+                     */
                     const sats = [
                         {name: "I-4 F1 Asia-Pacific", lng: 143.5},
                         {name: "I-4 F2 EMEA", lng: 63.0},
@@ -1181,6 +1259,11 @@
             document.body.classList.toggle('mirror-upside-down');
         }
 
+        function setPadding(e) {
+            let v = this.value;
+            document.body.style.setProperty("--padding", v + "px");
+        }
+
         function setPerspective(e) {
             let v = this.value;
             document.body.style.setProperty("--perspective", v + "em");
@@ -1326,8 +1409,14 @@
 
 <table width="100%">
 	<tr>
-		<td><h2>Web Components Samples. It's a big file...</h2></td>
-		<td><h2 class="mirror">Web Components Samples. It's a big file...</h2></td>
+		<td>
+            <h2>Web Components Samples. It's a very biiiiiiig file...</h2>
+            <span>Small machines may not like it...</span>
+        </td>
+		<td>
+            <h2 class="mirror">Web Components Samples. It's a very biiiiiiig file...</h2>
+            <span class="mirror">Small machines may not like it...</span>
+        </td>
 	</tr>
 	<tr>
 		<td>Requires <i>absolutely NO</i> external library</td>
@@ -1338,25 +1427,33 @@
 
 <!-- Perspective sliders -->
 <span id="head-up-command" onclick="collapseExpandHeadsup();" style="cursor: pointer;" tabindex="0"
-	  title="Show/Hide HeadUp Controls">+ Head up</span> <span id="button-span-zone" style="display: none;"><button
-		onclick="toggleHeadsUp();" style="border-radius: 5px; margin: 5px;"
-		title="Click this for HeadUp display, is a wind shield for example...">Head Up</button></span>
+	  title="Show/Hide HeadUp Controls">+ Head up</span> 
+<div id="button-span-zone" style="display: none; text-align: center;">
+    <button onclick="toggleHeadsUp();" style="border-radius: 5px; margin: 5px;"
+		    title="Click this for HeadUp display, is a wind shield for example...">Head Up</button>
+</div>
 <div id="heads-up-sliders" style="display: none;">
 	<table width="100%">
 		<tr>
-			<td width="33%">
+			<td width="25%">    
+				<h5 style="color: cyan;">Padding</h5>
+				<input type="range" value="50" min="0" max="200" style="width: 90%;"
+					   oninput="setPadding.call(this, event); padding01.value = this.value;"/>
+				<output name="padding" id="padding01" style="color: cyan;"></output>
+			</td>
+			<td width="25%">
 				<h5 style="color: cyan;">Perspective</h5>
 				<input type="range" value="100" min="0" max="100" style="width: 90%;"
 					   oninput="setPerspective.call(this, event); perspective01.value = this.value;"/>
 				<output name="perspective" id="perspective01" style="color: cyan;"></output>
 			</td>
-			<td width="33%">
+			<td width="25%">
 				<h5 style="color: cyan;">Rotate X</h5>
 				<input type="range" value="-15" min="-100" max="100" style="width: 90%;"
 					   oninput="setRotateX.call(this, event); perspective02.value = this.value;"/>
 				<output name="perspective" id="perspective02" style="color: cyan;"></output>
 			</td>
-			<td width="33%">
+			<td width="25%">
 				<h5 style="color: cyan;">Scale Y</h5>
 				<input type="range" value="1" min="0" max="5" step="0.1" style="width: 90%;"
 					   oninput="setScaleY.call(this, event); scaleY02.value = this.value;"/>
@@ -1379,13 +1476,13 @@
                 </script>
 			</h5>
 		</td>
-		<td align="right">
+		<td style="text-align: right;">
 			<!-- Page BG -->
 			<!--
-                                Page Background
-                                <input type="radio" name="page-bg" value="DARK" checked onchange="changeBG(this.value);">Dark
-                                <input type="radio" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
-                                -->
+            Page Background
+            <input type="radio" name="page-bg" value="DARK" checked onchange="changeBG(this.value);">Dark
+            <input type="radio" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
+            -->
 			<div class="switch-container">
                 <span class="switch-element"
 					  style="font-size: 24px; font-weight: bold; padding-bottom: 0px;">&#9790</span>
@@ -1424,10 +1521,23 @@
 </p>
 
 <hr/>
+
+<div style="margin: 10px; padding: 10px;">
+    <a href="#" style="padding: 5px; border: 1px solid orange; border-radius: 5px;" onclick="expandAll()">Expand All</a> 
+    <a href="#" style="padding: 5px; border: 1px solid orange; border-radius: 5px;" onclick="collapseAll()">Collapse All</a>
+</div>
+
+<div id="overall-container"
+     style="display: grid; grid-template-columns: var(--padding) auto var(--padding); padding: 0px 10px 10px 10px;">
+
+<div id="inner-container"
+     style="display: grid; grid-column-start: 2; grid-template-columns: auto; padding-left: 10px; max-width: inherit; text-align: left;">
+
+
 <!--
     SKELETON
  +-->
-<div style="cursor: pointer;" onclick="showHide('skeleton');" tabindex="0"><b><u><a name="skeleton" href="#skeleton">Web Comp Skeleton</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('skeleton');" tabindex="0"><b><u><a id="a-skeleton" href="#a-skeleton">Web Comp Skeleton</a></u></b></div>
 <div id="skeleton" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;web-component-skeleton id="skeleton-01"
@@ -1463,9 +1573,9 @@
 <!--
     PLUVIOMETER
  +-->
-<div style="cursor: pointer;" onclick="showHide('pluviometer');" tabindex="0"><b><u><a name="pluviometer" href="#pluviometer">Pluviometer</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('pluviometer');" tabindex="0"><b><u><a id="a-pluviometer" href="#a-pluviometer">Pluviometer</a></u></b></div>
 <div id="pluviometer" class="smooth">
-                <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+    <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;pluvio-meter id="pluviometer-01"
               class="pluviometer-day"
               title="m/m per hour"
@@ -1476,7 +1586,7 @@
               value="2.3"
               width="80"
               height="220">&lt;/pluvio-meter>
-                </pre>
+    </pre>
 
 	<table>
 		<tr>
@@ -1634,7 +1744,7 @@
 <!--
     THERMOMETER
  +-->
-<div style="cursor: pointer;" onclick="showHide('thermometer');" tabindex="0"><b><u><a name="thremometer" href="#thermometer">Thermometer</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('thermometer');" tabindex="0"><b><u><a id="a-thremometer" href="#a-thermometer">Thermometer</a></u></b></div>
 <div id="thermometer" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;thermo-meter id="thermometer-01"
@@ -1804,7 +1914,7 @@
 <!--
     DIRECTION
  +-->
-<div style="cursor: pointer;" onclick="showHide('direction');" tabindex="0"><b><u><a name="direction" href="#direction">Direction</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('direction');" tabindex="0"><b><u><a id="a-direction" href="#a-direction">Direction</a></u></b></div>
 <div id="direction" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;direction-display class="analogdisplay-day"
@@ -2021,7 +2131,7 @@
 <!--
     ANALOG DISPLAY
  +-->
-<div style="cursor: pointer;" onclick="showHide('analog');" tabindex="0"><b><u><a name="analog" href="#analog">Analog Displays</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('analog');" tabindex="0"><b><u><a id="a-analog" href="#a-analog">Analog Displays</a></u></b></div>
 <div id="analog" class="smooth">
 	<table cellpadding="10">
 		<tr>
@@ -2627,7 +2737,7 @@
 <!--
     WIND ANGLE DISPLAY
  +-->
-<div style="cursor: pointer;" onclick="showHide('apparent-wind');" tabindex="0"><b><u><a name="wind-angle" href="#wind-angle">Wind Angle Displays</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('apparent-wind');" tabindex="0"><b><u><a id="a-wind-angle" href="#a-wind-angle">Wind Angle Displays</a></u></b></div>
 <div id="apparent-wind" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;wind-angle-display class="analogdisplay-day"
@@ -2785,7 +2895,7 @@
 <!--
     JUMBOS
  +-->
-<div style="cursor: pointer;" onclick="showHide('jumbo');" tabindex="0"><b><u><a name="jumbos" href="#jumbos">Jumbos</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('jumbo');" tabindex="0"><b><u><a id="a-jumbos" href="#a-jumbos">Jumbos</a></u></b></div>
 <div id="jumbo" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;jumbo-display id="jumbo-02"
@@ -2924,7 +3034,7 @@
 <!--
     COMPASS ROSE. CONCAVE.
  +-->
-<div style="cursor: pointer;" onclick="showHide('compass-rose');" tabindex="0"><b><u><a name="compass" href="#compass">Compass (concave) Rose</a></u></b>
+<div style="cursor: pointer;" onclick="showHide('compass-rose');" tabindex="0"><b><u><a id="a-compass" href="#a-compass">Compass (concave) Rose</a></u></b>
 </div>
 <div id="compass-rose" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
@@ -3098,7 +3208,7 @@
 <!--
     COMPASS DISPLAY. FLAT.
  +-->
-<div style="cursor: pointer;" onclick="showHide('compass-display');" tabindex="0"><b><u><a name="compass-2" href="#compass-2">Compass Rose (flat)</a></u></b>
+<div style="cursor: pointer;" onclick="showHide('compass-display');" tabindex="0"><b><u><a id="a-compass-2" href="#a-compass-2">Compass Rose (flat)</a></u></b>
 </div>
 <div id="compass-display" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
@@ -3184,7 +3294,7 @@
 <!--
     WORLD MAP
  +-->
-<div style="cursor: pointer;" onclick="showHide('world-map');" tabindex="0"><b><u><a name="world-map" href="#world-map">World Map</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('world-map');" tabindex="0"><b><u><a id="a-world-map" href="#a-world-map">World Map</a></u></b></div>
 <div id="world-map" class="smooth">
 	<table>
 		<tr>
@@ -3325,7 +3435,7 @@
 							   height="600"></world-map>
                 </div>
                 <div>
-                    <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 4px;">
+                    <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 4px;">    
   &lt;world-map id="world-map-04"
              class="worldmap-display"
              title="World Map - Mercator"
@@ -3342,7 +3452,7 @@
 							style="margin-top: 3px;">Pos to SF
 					</button>
                     <button onclick="callAfter('world-map-04')" title="Satellites and Great Circle (Paris-Hawaii)">After</button>
-                </div>
+                </div> 
             </div>
             Move the mouse on the map, and see its coordinates below.
             <div class="black-frame">
@@ -3352,7 +3462,7 @@
             </div>
 
             <script type="text/javascript">
-let map = document.getElementById('world-map-04');
+let map = document.getElementById('world-map-04'); 
 
 map.wmCallback = prm => {
     // console.log(`Callback invoked with:${JSON.stringify(prm)}`);
@@ -3375,7 +3485,7 @@ map.addEventListener('mousemove', evt => {
     // console.log(`Mouse X:${x}, Y:${y}`);
     // // let y = evt.offsetY + rect.height;  // y position within the element.
 
-    let pos = map.canvasToPos(x, y - 6); // Cheated!!!
+    let pos = map.canvasToPos(x, y - 6); // Cheated!!! 
     // console.log(` --> ${JSON.stringify(pos)}`);
     // if (x === 0) {
     //     debugger;
@@ -3388,8 +3498,8 @@ map.addEventListener('mousemove', evt => {
 
     map.title = `${strLat}\n${strLng}`;
 });
-
-               </script>
+                    
+               </script>           
 			</td>
 		</tr>
 	</table>
@@ -3398,7 +3508,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     SKY MAPS
  +-->
-<div style="cursor: pointer;" onclick="showHide('sky-map');" tabindex="0"><b><u><a name="sky-map" href="#sky-map">Sky Map</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('sky-map');" tabindex="0"><b><u><a id="a-sky-map" href="#a-sky-map">Sky Map</a></u></b></div>
 <div id="sky-map" class="smooth">
 	<table>
 		<tr>
@@ -3461,7 +3571,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     LED PANEL
  +-->
-<div style="cursor: pointer;" onclick="showHide('led-panel');" tabindex="0"><b><u><a name="led-panel" href="#led-panel">Led Panel</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('led-panel');" tabindex="0"><b><u><a id="a-led-panel" href="#a-led-panel">Led Panel</a></u></b></div>
 <div id="led-panel" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;led-panel id="led-panel-01"
@@ -3495,7 +3605,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     MARQUEE PANEL
  +-->
-<div style="cursor: pointer;" onclick="showHide('marquee-panel');" tabindex="0"><b><u><a name="marquee" href="#marquee">Marquee Panel</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('marquee-panel');" tabindex="0"><b><u><a id="a-marquee" href="#a-marquee">Marquee Panel</a></u></b></div>
 <div id="marquee-panel" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;marquee-panel id="marquee-panel-01"
@@ -3596,7 +3706,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     ANALOG WATCH
  +-->
-<div style="cursor: pointer;" onclick="showHide('analog-watch');" tabindex="0"><b><u><a name="watch" href="#watch">Analog Watch</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('analog-watch');" tabindex="0"><b><u><a id="a-watch" href="#a-watch">Analog Watch</a></u></b></div>
 <div id="analog-watch" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;analog-watch id="analog-watch-01"
@@ -3714,7 +3824,7 @@ map.addEventListener('mousemove', evt => {
 			</td>
 		</tr>
 		<tr>
-			<td align="center" colspan="2" class="black-frame centered">
+			<td style="text-align: center;" colspan="2" class="black-frame centered">
 				<button onclick="doAnimateWatch()"
 						title="Time machine!"
 						style="margin-top: 3px;">Animate
@@ -3727,7 +3837,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     DIR-16-POINTS
  +-->
-<div style="cursor: pointer;" onclick="showHide('dir-16-points');" tabindex="0"><b><u><a name="dir-16" href="#dir-16">Direction, 16 points</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('dir-16-points');" tabindex="0"><b><u><a id="a-dir-16" href="#a-dir-16">Direction, 16 points</a></u></b></div>
 <div id="dir-16-points" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;dir-16-points id="dir-16-01"
@@ -3775,7 +3885,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     CALENDAR
  +-->
-<div style="cursor: pointer;" onclick="showHide('calendar');" tabindex="0"><b><u><a name="calendar" href="#calendar">Calendar</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('calendar');" tabindex="0"><b><u><a id="a-calendar" href="#a-calendar">Calendar</a></u></b></div>
 <div id="calendar" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;calendar-display id="calendar-01"
@@ -3900,7 +4010,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     SPLIT-FLAP
  +-->
-<div style="cursor: pointer;" onclick="showHide('split-flap');" tabindex="0"><b><u><a name="split-flap" href="#split-flap">Split-Flap Display</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('split-flap');" tabindex="0"><b><u><a id="a-split-flap" href="#a-split-flap">Split-Flap Display</a></u></b></div>
 <div id="split-flap" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;split-flap-display id="split-flap-display-01"
@@ -3940,7 +4050,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     SCROLL-DIGIT
  +-->
-<div style="cursor: pointer;" onclick="showHide('scroll-digit');" tabindex="0"><b><u><a name="scroll-digit" href="#scroll-digit">Scroll Digit Display</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('scroll-digit');" tabindex="0"><b><u><a id="a-scroll-digit" href="#a-scroll-digit">Scroll Digit Display</a></u></b></div>
 <div id="scroll-digit" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;scroll-digit-display id="split-flap-display-01"
@@ -3981,7 +4091,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     BOAT-OVERVIEW
  +-->
-<div style="cursor: pointer;" onclick="showHide('boat-overview');" tabindex="0"><b><u><a name="boat-overview" href="#boat-overview">Boat Overview</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('boat-overview');" tabindex="0"><b><u><a id="a-boat-overview" href="#a-boat-overview">Boat Overview</a></u></b></div>
 <div id="boat-overview" class="smooth">
 	<script type="text/javascript">
         function updateBoatShape(id, shape) {
@@ -4347,7 +4457,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     SUN-PATH
  +-->
-<div style="cursor: pointer;" onclick="showHide('sun-path');" tabindex="0"><b><u><a name="sun-path" href="#sun-path">Sun-Path Display</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('sun-path');" tabindex="0"><b><u><a id="a-sun-path" href="#a-sun-path">Sun-Path Display</a></u></b></div>
 <div id="sun-path" class="smooth">
 	<script type="text/javascript">
         const sunPath1 = [
@@ -5319,7 +5429,7 @@ map.addEventListener('mousemove', evt => {
 							  tilt="-10"></sun-path>
 				</div>
 			</td>
-			<td align="left">
+			<td style="text-align: left;">
 				<input type="range"
 					   style="-webkit-appearance: slider-vertical; width: 8px; height: 400px; margin-left: 0;" min="-90"
 					   max="90" value="-10" onchange="setNewTilt(this, 'sun-path-01');">
@@ -5334,7 +5444,7 @@ map.addEventListener('mousemove', evt => {
 							  tilt="-10"></sun-path>
 				</div>
 			</td>
-			<td align="left">
+			<td style="text-align: left;">
 				<input type="range"
 					   style="-webkit-appearance: slider-vertical; width: 8px; height: 400px; margin-left: 0;" min="-90"
 					   max="90" value="-10" onchange="setNewTilt(this, 'sun-path-02');">
@@ -5349,7 +5459,7 @@ map.addEventListener('mousemove', evt => {
 							  tilt="-10"></sun-path>
 				</div>
 			</td>
-			<td align="left">
+			<td style="text-align: left;">
 				<input type="range"
 					   style="-webkit-appearance: slider-vertical; width: 8px; height: 400px; margin-left: 0;" min="-90"
 					   max="90" value="-10" onchange="setNewTilt(this, 'sun-path-03');">
@@ -5382,7 +5492,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     SLIDE-SHOW
  +-->
-<div style="cursor: pointer;" onclick="showHide('slide-show');" tabindex="0"><b><u><a name="slide-show" href="#slide-show">Slide Show</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('slide-show');" tabindex="0"><b><u><a id="a-slide-show" href="#a-slide-show">Slide Show</a></u></b></div>
 <span style="margin: 10px;">Shows how to use nested custom components...</span>
 <div id="slide-show" class="smooth">
 	<script type="text/javascript">
@@ -5469,7 +5579,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     SATELLITE PLOTTER
  +-->
-<div style="cursor: pointer;" onclick="showHide('sat-plot');" tabindex="0"><b><u><a name="satellites" href="#satellites">GPS Satellites Plotter</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('sat-plot');" tabindex="0"><b><u><a id="a-satellites" href="#a-satellites">GPS Satellites Plotter</a></u></b></div>
 <div id="sat-plot" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;satellite-plotter class="sat-plot-01"
@@ -5554,7 +5664,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     KNOB and DISPLAY
  +-->
-<div style="cursor: pointer;" onclick="showHide('knob');" tabindex="0"><b><u><a name="knob" href="#knob">Knob and Display</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('knob');" tabindex="0"><b><u><a id="a-knob" href="#a-knob">Knob and Display</a></u></b></div>
 <div id="knob" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;knob-and-display id="knob-01"
@@ -5704,7 +5814,7 @@ map.addEventListener('mousemove', evt => {
 <!--
     GRAPH DISPLAY
  +-->
-<div style="cursor: pointer;" onclick="showHide('graph');" tabindex="0"><b><u><a name="graph" href="#graph">Graph Display</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('graph');" tabindex="0"><b><u><a id="a-graph" href="#a-graph">Graph Display</a></u></b></div>
 <script type="text/javascript">
     let graphData = {
         withGrid: true,
@@ -6565,14 +6675,11 @@ function plotGraphRC(graphId, recenter) {
 <!--
     MOON PHASE
  +-->
-<div style="cursor: pointer;" onclick="showHide('moon-phase');" tabindex="0"><b><u><a name="moon-phase" href="#moon-phase">Moon Phase</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('moon-phase');" tabindex="0"><b><u><a id="a-moon-phase" href="#a-moon-phase">Moon Phase</a></u></b></div>
 <div id="moon-phase" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
 &lt;moon-phase id="moon-phase-01"
-            title="Moon Phase"
-            phase="45"
-            tilt="-10"
-            label="The Moon!"/>
+            title="Moon Phase"/>
                 </pre>
 
 	<table>
@@ -6625,7 +6732,7 @@ function plotGraphRC(graphId, recenter) {
 <!--
     MOON PHASE - 2
  +-->
- <div style="cursor: pointer;" onclick="showHide('moon-phase-2');" tabindex="0"><b><u><a name="moon-phase-2" href="#moon-phase-2">Moon Phase - 2</a></u></b></div>
+ <div style="cursor: pointer;" onclick="showHide('moon-phase-2');" tabindex="0"><b><u><a id="a-moon-phase-2" href="#a-moon-phase-2">Moon Phase - 2</a></u></b></div>
  <div id="moon-phase-2" class="smooth">
      This one uses an image (<code>full-moon.jpg</code>), located next to the script (<code>MoonPhase.js</code>).
                  <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
@@ -6730,7 +6837,10 @@ function plotGraphRC(graphId, recenter) {
  </div>
  <hr/>
  
- <!-- The end -->
+</div> <!-- Inner Container -->
+</div> <!-- Outer Container -->
+  
+<!-- The end -->
 <table width="100%">
 	<tr>
 		<td><span style="font-style: italic;" title="C'est MOI qui l'ai fait.">Oliv did it</span></td>
