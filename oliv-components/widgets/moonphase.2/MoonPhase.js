@@ -52,7 +52,7 @@ class MoonPhaseDisplay extends HTMLElement {
 		} else { // Firefox?
 			scriptPath = stack[stack.length - 2].trim();
 			if (scriptPath.startsWith("@")) { // Should not happen, see split above.
-				scriptPath = scriptPath.substring(1);
+				scriptPath = scriptPath.substring(1); 
 			}
 		}
 		// The component will share the path up to the last slash
