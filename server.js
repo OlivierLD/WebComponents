@@ -216,7 +216,7 @@ function htmlEntities(str) {
  * HTTP server
  */
 console.log((new Date()) + ": Starting server on port " + port);
-console.log(`  Try http://;ocalhost:${port}/oliv-components/index.html`);
+console.log(`  Try http://localhost:${port}/oliv-components/index.html`);
 console.log(`  Try http://localhost:${port}/oliv-components/gallery.html`);
 let server = http.createServer(handler);
 
