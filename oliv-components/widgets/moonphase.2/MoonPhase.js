@@ -40,8 +40,8 @@ class MoonPhaseDisplay extends HTMLElement {
 		// Find current module's path, for co-located resources.
 		const errorStack = new Error().stack;
 		let stack;
-		if (errorStack.indexOf('at') !== -1) {
-			stack = errorStack.split('at');  // Chrome
+		if (errorStack.indexOf('at ') !== -1) {
+			stack = errorStack.split('at ');  // Chrome
 		} else { 
 		 	stack = errorStack.split('@');   // Firefox
 		}							   
