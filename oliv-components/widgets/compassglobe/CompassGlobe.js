@@ -1,5 +1,5 @@
 /**
- * COmpass Globe Web Component (like Plastimo).
+ * Compass Globe Web Component (like Plastimo).
  * It has several attributes: width, height, value, and label, driving a canvas.
  * They have default values, respectively: 250, 100, 0, 'VAL'
  * Attributes are exposed and can be modified externally (from JavaScript)
@@ -11,7 +11,7 @@ const compassGlobeVerbose = false;
 const COMPASS_GLOBE_TAG_NAME = 'compass-globe';
 
 const compassGlobeDefaultColorConfig = {
-	bgColor: null,
+	bgColor: 'transparent',
 	displayBackgroundGradient: {
 		from: 'black',
 		to: 'gray'
