@@ -454,7 +454,7 @@
             let targetVal = parseInt(valueEl.value);
             
             let origin = element.value;
-            console.log(`Ah! ${origin}, to ${targetVal}`);
+            // console.log(`Ah! ${origin}, to ${targetVal}`);
             let inc = (origin > targetVal) ? - 1 : 1;
             let currentValue = origin;
 
@@ -7107,15 +7107,36 @@ function plotGraphRC(graphId, recenter, lineColor='lime', graphLabel='Reworking 
                      </button>
                  </div>
              </td>
-             <!--td valign="top">
+             <td valign="top">
                 <div class="black-frame centered">
-
+                    <compass-globe id="compass-globe-02"
+                                   class="globe-compass-02"
+                                   width="300"
+                                   height="300"
+                                   value="180"
+                                   label="HDG"
+                                   title="Compass"/>
                 </div>
                 <div class="black-frame centered">
-
+                    Heading:
+                    <input type="number"
+                           id="compass-globe-value-02"
+                           placeholder="Heading"
+                           title="Heading value"
+                           style="width: 50px; text-align: right;"
+                           value="180"/>
+                    <button onclick="setCompassGlobeValue('compass-globe-02', 'compass-globe-value-02');"
+                            title="Set HDG value above"
+                            style="margin-top: 3px;">Set
+                    </button>
+                    <!-- br/ -->
+                    <button onclick="doAnimateGlobe('compass-globe-02', 'compass-globe-value-02');"
+                            title="Smooth move"
+                            style="margin-top: 3px;">Animate
+                    </button>
                 </div>
-            </td-->
-        </tr>
+            </td>
+       </tr>
      </table>
  </div>
  <hr/>

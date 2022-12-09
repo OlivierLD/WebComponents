@@ -4,19 +4,28 @@
  * They have default values, respectively: 250, 100, 0, 'VAL'
  * Attributes are exposed and can be modified externally (from JavaScript)
  * In addition, there is a CSS colors management as well.
+ * Colors: See https://htmlcolorcodes.com/color-names/
  */
 
 const compassGlobeVerbose = false;
 const COMPASS_GLOBE_TAG_NAME = 'compass-globe';
 
 const compassGlobeDefaultColorConfig = {
-	bgColor: 'white',
+	bgColor: null,
 	displayBackgroundGradient: {
 		from: 'black',
 		to: 'gray'
 	},
-	gridColor: 'rgba(255, 255, 255, 0.7)',
-	displayColor: 'cyan',
+	displayGlobeGradient: {
+		from: 'black',
+		to: 'rgb(47, 79, 79)'
+	},
+	displayCylinderGradient: {
+		from: 'black',
+		to: 'darkgray'
+	},
+	indexColor: 'red',
+	displayColor: 'rgb(220, 220, 220)',  // 'silver'
 	valueNbDecimal: 0,
 	labelFont: 'Courier New',
 	valueFont: 'Verdana'
@@ -30,7 +39,7 @@ class CompassGlobeDisplay extends HTMLElement {
 			"width",  // Integer. Canvas width
 			"height", // Integer. Canvas height
 			"value",  // Float. Numeric value to display
-			"label"   // String, like TWS, AWS, etc
+			"label"   // String, like HDG, HDM, etc
 		];
 	}
 
@@ -48,7 +57,7 @@ class CompassGlobeDisplay extends HTMLElement {
 		// Default values
 		this._value = 0;
 		this._width = 250;
-		this._height = 100;
+		this._height = 250;
 		this._label = "VAL";
 
 		this._previousClassName = "";
@@ -181,8 +190,20 @@ class CompassGlobeDisplay extends HTMLElement {
 										case '--display-background-gradient-to':
 											colorConfig.displayBackgroundGradient.to = value;
 											break;
-										case '--grid-color':
-											colorConfig.gridColor = value;
+										case '--display-globe-gradient-from':
+											colorConfig.displayGlobeGradient.from = value;
+											break;
+										case '--display-globe-gradient-to':
+											colorConfig.displayGlobeGradient.to = value;
+											break;
+										case '--display-cylinder-gradient-from':
+											colorConfig.displayCylinderGradient.from = value;
+											break;
+										case '--display-cylinder-gradient-to':
+											colorConfig.displayCylinderGradient.to = value;
+											break;
+										case '--index-color':
+											colorConfig.indexColor = value;
 											break;
 										case '--display-color':
 											colorConfig.displayColor = value;
@@ -241,12 +262,23 @@ class CompassGlobeDisplay extends HTMLElement {
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;
 
-		let grd = context.createLinearGradient(0, 5, 0, this.height);
-		grd.addColorStop(0, this.compassGlobeColorConfig.displayBackgroundGradient.from); // 0  Beginning
-		grd.addColorStop(1, this.compassGlobeColorConfig.displayBackgroundGradient.to); // 1  End
-		context.fillStyle = grd;
+		// set the sale
+		scale = Math.min(this.width, this.height) / 400;
+		if (true || compassGlobeVerbose) {
+			console.log(`Scale is now ${scale}`);
+		}
 
 		// Background
+		if (this.compassGlobeColorConfig.displayBackgroundGradient.from !== 'none' &&
+			this.compassGlobeColorConfig.displayBackgroundGradient.to !== 'none') {
+			let grd = context.createLinearGradient(0, 5, 0, this.height);
+			// console.log(`BG Gradient from ${this.compassGlobeColorConfig.displayBackgroundGradient.from}, to ${this.compassGlobeColorConfig.displayBackgroundGradient.to}`);
+			grd.addColorStop(0, this.compassGlobeColorConfig.displayBackgroundGradient.from); // 0  Beginning
+			grd.addColorStop(1, this.compassGlobeColorConfig.displayBackgroundGradient.to);   // 1  End
+			context.fillStyle = grd;
+		} else {
+			context.fillStyle = this.compassGlobeColorConfig.bgColor;
+		}
 		CompassGlobeDisplay.roundRect(context, 0, 0, this.canvas.width, this.canvas.height, 10, true, false);
 
 		context.fillStyle = this.compassGlobeColorConfig.displayColor;
@@ -258,64 +290,126 @@ class CompassGlobeDisplay extends HTMLElement {
 		// Colors: See https://htmlcolorcodes.com/color-names/
 		// 1 - Background
 		let radius = Math.min(this.canvas.height, this.canvas.width) / 2;
-		let globeGrd = context.createLinearGradient(0, 5, 0, radius);
-		globeGrd.addColorStop(0, 'black');     // 0  Beginning
-		globeGrd.addColorStop(1, 'rgb(47, 79, 79)');  // 1  End
+		let globeGrd = context.createRadialGradient(
+			this.canvas.width / 4, this.canvas.height / 4, 5, 
+			this.canvas.width / 4, this.canvas.height / 4, radius);
+		globeGrd.addColorStop(0, this.compassGlobeColorConfig.displayGlobeGradient.from);  // 0  Beginning
+		globeGrd.addColorStop(1, this.compassGlobeColorConfig.displayGlobeGradient.to);    // 1  End
 		context.fillStyle = globeGrd;
 		context.beginPath();
 		context.arc(this.canvas.width / 2, this.canvas.height / 2, radius, 0, 2 * Math.PI, false);
 		context.closePath();
 		context.fill();
 		// 2 - The reflection on top
-		globeGrd = context.createLinearGradient(0, 5, 0, radius);
-		globeGrd.addColorStop(0, 'rgba(211, 211, 211, 0.25)');  // 0  Beginning
-		globeGrd.addColorStop(1, 'rgba(255, 255, 255, 0.25)');  // 1  End
+		if (false) {
+			globeGrd = context.createRadialGradient(
+				this.canvas.width / 4, this.canvas.height / 4, 5, 
+				this.canvas.width / 4, this.canvas.height / 4, radius);
+			globeGrd.addColorStop(0, 'rgba(211, 211, 211, 0.25)');  // 0  Beginning
+			globeGrd.addColorStop(1, 'rgba(255, 255, 255, 0.25)');  // 1  End
+			context.fillStyle = globeGrd;
+			context.beginPath();
+			context.ellipse(this.canvas.width / 2, this.canvas.height / 4, radius * 0.5, radius * 0.25, 0, 2 * Math.PI, false);
+			context.closePath();
+			context.fill();
+		}
+
+		let fontSize = Math.round(scale * 30);
+		context.font = "bold " + fontSize + "px " + this.compassGlobeColorConfig.valueFont;
+
+		// The rose, oriented. 
+
+		// A - The cylinder
+		globeGrd = context.createLinearGradient(
+			this.canvas.width / 2, (this.canvas.height / 2) - Math.round(scale * 30), 
+			this.canvas.width / 2, (this.canvas.height / 2) + Math.round(scale * 90));
+		globeGrd.addColorStop(0, this.compassGlobeColorConfig.displayCylinderGradient.from);  // 0  Beginning
+		globeGrd.addColorStop(1, this.compassGlobeColorConfig.displayCylinderGradient.to);    // 1  End
 		context.fillStyle = globeGrd;
 		context.beginPath();
-		context.ellipse(this.canvas.width / 2, this.canvas.height / 4, radius * 0.5, radius * 0.25, 0, 2 * Math.PI, false);
+		context.fillRect(0, (this.canvas.height / 2) - Math.round(scale * 30), this.canvas.width, Math.round(scale * 120));
 		context.closePath();
 		context.fill();
 
-		// The rose, oriented
+		// B - Notches and graduations
 		context.fillStyle = this.compassGlobeColorConfig.displayColor;
-		// The notches - TODO Tweak that
 		context.strokeStyle = this.compassGlobeColorConfig.displayColor;
-		// context.beginPath();
-
 		for (let i = 0; i < 360; i++) {
 			let notch = this._value - i;
-
 			// console.log(`i: ${i}, notch=${notch}, cos(notch): ${Math.cos(Math.toRadians(notch))}`);
-
 			context.lineWidth = 1;
 			if (Math.cos(Math.toRadians(i)) >= 0) {
 				if (notch % 5 === 0) {
-
 					let xOffset = radius * Math.sin(Math.toRadians(i));
-
-					console.log(`i: ${i}, notch=${notch}, cos(notch): ${Math.cos(Math.toRadians(notch))}, offset: ${xOffset}`);
-
+					// console.log(`i: ${i}, notch=${notch}, cos(notch): ${Math.cos(Math.toRadians(notch))}, offset: ${xOffset}`);
 					context.beginPath();
-					context.moveTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) + 20);
+					context.moveTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) + Math.round(scale * 20));
 					if (notch % 45 === 0) {
+						// TODO Labels ? (need to spin the string...)
 						context.lineWidth = 5;
+						let str = notch.toFixed(0);
+						switch (notch) {
+							case 0:
+								str = "N";
+								break;
+							case 45:
+							case -315:
+								str = "NE";
+								break;
+							case -45:
+							case 315:
+								str = "NW";
+								break;
+							case 90:
+							case -270:
+								str = "E";
+								break;
+							case 270:
+							case -90:
+								str = "W";
+								break;
+							case 135:
+							case -225:
+								str = "SE";
+								break;
+							case -135:
+							case 225:
+								str = "SW";
+								break;
+							case 180:
+							case -180:
+								str = "S";
+								break;
+							default:
+								break;
+
+						}
+						if (compassGlobeVerbose) {
+							console.log(`>> Notch is ${notch} => ${str}`);
+						}
+						let strVal = this._value.toFixed(this.compassGlobeColorConfig.valueNbDecimal);
+						let metrics = context.measureText(str);
+						let len = metrics.width;
+				
+						context.fillText(str, 
+							(this.canvas.width / 2) + xOffset - (len / 2), 
+							(this.canvas.height / 2) + Math.round(scale * 60) + (fontSize / 2));
+				
 					}
-					if (notch % 15 === 0) { // Major / Minor
-						context.lineTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) + 45);
+					if (notch % 15 === 0) { // ticks: Major / Minor
+						context.lineTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) + Math.round(scale * 45));
 					} else {
-						context.lineTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) + 30);
+						context.lineTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) + Math.round(scale * 30));
 					}
 					context.closePath();
 					context.stroke();
 				}
 			}
 		}
-		// context.closePath();
-		// context.stroke();
 
-		// Value
-		let fontSize = Math.round(scale * 30);
-		context.font = "bold " + fontSize + "px " + this.compassGlobeColorConfig.valueFont;
+		// C - Value
+		// let fontSize = Math.round(scale * 30);
+		// context.font = "bold " + fontSize + "px " + this.compassGlobeColorConfig.valueFont;
 		let strVal = this._value.toFixed(this.compassGlobeColorConfig.valueNbDecimal);
 		let metrics = context.measureText(strVal);
 		let len = metrics.width;
@@ -324,7 +418,7 @@ class CompassGlobeDisplay extends HTMLElement {
 
 		// 'red' Axis
 		context.lineWidth = 1;
-		context.strokeStyle = 'red'; // this.compassGlobeColorConfig.displayColor;
+		context.strokeStyle = this.compassGlobeColorConfig.indexColor;
 		context.beginPath();
 		context.moveTo((this.canvas.width / 2), 0);
 		context.lineTo((this.canvas.width / 2), this.canvas.height);
