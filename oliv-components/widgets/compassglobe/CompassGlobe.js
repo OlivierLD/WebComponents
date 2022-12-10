@@ -28,8 +28,14 @@ const compassGlobeDefaultColorConfig = {
 	displayColor: 'rgb(220, 220, 220)',  // 'silver'
 	valueNbDecimal: 0,
 	labelFont: 'Courier New',
-	valueFont: 'Verdana'
+	valueFont: 'Verdana',
+	valueColor: 'cyan'
 };
+
+const MAJOR_TICK_SIZE = 20;    
+const MINOR_TICK_SIZE = 10;    
+const BASE_FONT_SIZE = 30;
+const CYLINDER_HALF_SIZE = 60; 
 
 /* global HTMLElement */
 class CompassGlobeDisplay extends HTMLElement {
@@ -217,6 +223,9 @@ class CompassGlobeDisplay extends HTMLElement {
 										case '--value-font':
 											colorConfig.valueFont = value;
 											break;
+										case '--value-color':
+											colorConfig.valueColor = value;
+											break;
 										default:
 											break;
 									}
@@ -268,7 +277,7 @@ class CompassGlobeDisplay extends HTMLElement {
 			console.log(`Scale is now ${scale}`);
 		}
 
-		// Background
+		// Background, behind the sphere.
 		if (this.compassGlobeColorConfig.displayBackgroundGradient.from !== 'none' &&
 			this.compassGlobeColorConfig.displayBackgroundGradient.to !== 'none') {
 			let grd = context.createLinearGradient(0, 5, 0, this.height);
@@ -288,7 +297,7 @@ class CompassGlobeDisplay extends HTMLElement {
 
 		// The globe
 		// Colors: See https://htmlcolorcodes.com/color-names/
-		// 1 - Background
+		// 1 - Background, the sphere.
 		let radius = Math.min(this.canvas.height, this.canvas.width) / 2;
 		let globeGrd = context.createRadialGradient(
 			this.canvas.width / 4, this.canvas.height / 4, 5, 
@@ -314,20 +323,23 @@ class CompassGlobeDisplay extends HTMLElement {
 			context.fill();
 		}
 
-		let fontSize = Math.round(scale * 30);
+		let fontSize = Math.round(scale * BASE_FONT_SIZE);
 		context.font = "bold " + fontSize + "px " + this.compassGlobeColorConfig.valueFont;
 
 		// The rose, oriented. 
-
 		// A - The cylinder
 		globeGrd = context.createLinearGradient(
-			this.canvas.width / 2, (this.canvas.height / 2) - Math.round(scale * 30), 
-			this.canvas.width / 2, (this.canvas.height / 2) + Math.round(scale * 90));
+			this.canvas.width / 2, (this.canvas.height / 2) - Math.round(scale * CYLINDER_HALF_SIZE), 
+			this.canvas.width / 2, (this.canvas.height / 2) + Math.round(scale * CYLINDER_HALF_SIZE));
 		globeGrd.addColorStop(0, this.compassGlobeColorConfig.displayCylinderGradient.from);  // 0  Beginning
 		globeGrd.addColorStop(1, this.compassGlobeColorConfig.displayCylinderGradient.to);    // 1  End
 		context.fillStyle = globeGrd;
+
 		context.beginPath();
-		context.fillRect(0, (this.canvas.height / 2) - Math.round(scale * 30), this.canvas.width, Math.round(scale * 120));
+		context.fillRect(0, 
+			             (this.canvas.height / 2) - Math.round(scale * CYLINDER_HALF_SIZE), 
+		                 this.canvas.width, 
+						 Math.round(scale * (2 * CYLINDER_HALF_SIZE)));
 		context.closePath();
 		context.fill();
 
@@ -342,10 +354,8 @@ class CompassGlobeDisplay extends HTMLElement {
 				if (notch % 5 === 0) {
 					let xOffset = radius * Math.sin(Math.toRadians(i));
 					// console.log(`i: ${i}, notch=${notch}, cos(notch): ${Math.cos(Math.toRadians(notch))}, offset: ${xOffset}`);
-					context.beginPath();
-					context.moveTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) + Math.round(scale * 20));
 					if (notch % 45 === 0) {
-						// TODO Labels ? (need to spin the string...)
+						// Labels ? (TODO need to spin the string...)
 						context.lineWidth = 5;
 						let str = notch.toFixed(0);
 						switch (notch) {
@@ -384,22 +394,25 @@ class CompassGlobeDisplay extends HTMLElement {
 								break;
 
 						}
-						if (compassGlobeVerbose) {
-							console.log(`>> Notch is ${notch} => ${str}`);
+						if (true || compassGlobeVerbose) {
+							console.log(`>> Notch is ${notch} => ${str} (i: ${i})`);
 						}
-						let strVal = this._value.toFixed(this.compassGlobeColorConfig.valueNbDecimal);
-						let metrics = context.measureText(str);
-						let len = metrics.width;
-				
-						context.fillText(str, 
-							(this.canvas.width / 2) + xOffset - (len / 2), 
-							(this.canvas.height / 2) + Math.round(scale * 60) + (fontSize / 2));
-				
+						if (i > 290 || i < 70) { // 20 degs on each side.
+							let metrics = context.measureText(str);
+							let len = metrics.width;
+					
+							context.fillText(str, 
+								(this.canvas.width / 2) + xOffset - (len / 2), 
+								(this.canvas.height / 2) + Math.round(scale * MAJOR_TICK_SIZE) + (fontSize / 1));
+						}				
 					}
+					context.beginPath();
 					if (notch % 15 === 0) { // ticks: Major / Minor
-						context.lineTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) + Math.round(scale * 45));
+						context.moveTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) - Math.round(scale * MAJOR_TICK_SIZE));
+						context.lineTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) + Math.round(scale * MAJOR_TICK_SIZE));
 					} else {
-						context.lineTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) + Math.round(scale * 30));
+						context.moveTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) - Math.round(scale * MINOR_TICK_SIZE));
+						context.lineTo((this.canvas.width / 2) + xOffset, (this.canvas.height / 2) + Math.round(scale * MINOR_TICK_SIZE));
 					}
 					context.closePath();
 					context.stroke();
@@ -408,13 +421,12 @@ class CompassGlobeDisplay extends HTMLElement {
 		}
 
 		// C - Value
-		// let fontSize = Math.round(scale * 30);
-		// context.font = "bold " + fontSize + "px " + this.compassGlobeColorConfig.valueFont;
 		let strVal = this._value.toFixed(this.compassGlobeColorConfig.valueNbDecimal);
 		let metrics = context.measureText(strVal);
 		let len = metrics.width;
 
-		context.fillText(strVal, (this.canvas.width / 2) - (len / 2), (this.canvas.height / 2) + (fontSize / 2));
+		context.fillStyle = this.compassGlobeColorConfig.valueColor;
+		context.fillText(strVal, (this.canvas.width / 2) - (len / 2), (this.canvas.height / 2) - Math.round(scale * MAJOR_TICK_SIZE) - 2); // (0 * fontSize / 2));
 
 		// 'red' Axis
 		context.lineWidth = 1;
