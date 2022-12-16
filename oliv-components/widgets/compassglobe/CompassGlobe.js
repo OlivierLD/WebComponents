@@ -4,6 +4,7 @@
  * They have default values, respectively: 250, 100, 0, 'VAL'
  * Attributes are exposed and can be modified externally (from JavaScript)
  * In addition, there is a CSS colors management as well.
+ * 
  * Colors: See https://htmlcolorcodes.com/color-names/
  */
 
@@ -273,7 +274,7 @@ class CompassGlobeDisplay extends HTMLElement {
 
 		// set the sale
 		scale = Math.min(this.width, this.height) / 400;
-		if (true || compassGlobeVerbose) {
+		if (compassGlobeVerbose) {
 			console.log(`Scale is now ${scale}`);
 		}
 
@@ -354,7 +355,7 @@ class CompassGlobeDisplay extends HTMLElement {
 			let notch = this._value - i;
 			// console.log(`i: ${i}, notch=${notch}, cos(notch): ${Math.cos(Math.toRadians(notch))}`);
 			context.lineWidth = 1;
-			if (Math.cos(Math.toRadians(i)) >= 0) {
+			if (Math.cos(Math.toRadians(i)) >= 0) {  // Visible side of the rose
 				if (notch % 5 === 0) {
 					let xOffset = radius * Math.sin(Math.toRadians(i));
 					// console.log(`i: ${i}, notch=${notch}, cos(notch): ${Math.cos(Math.toRadians(notch))}, offset: ${xOffset}`);
@@ -398,16 +399,25 @@ class CompassGlobeDisplay extends HTMLElement {
 								break;
 
 						}
-						if (true || compassGlobeVerbose) {
+						if (compassGlobeVerbose) {
 							console.log(`>> Notch is ${notch} => ${str} (i: ${i})`);
 						}
+
 						if (i > 290 || i < 70) { // 20 degs on each side.
+							// Set fontSize, smaller on the sides, bigger in the middle
+							let _fontSize = Math.round(scale * BASE_FONT_SIZE * Math.cos(Math.toRadians(i)));
+							context.font = "bold " + _fontSize + "px " + this.compassGlobeColorConfig.valueFont;
 							let metrics = context.measureText(str);
 							let len = metrics.width;
 					
-							context.fillText(str, 
-								(this.canvas.width / 2) + xOffset - (len / 2), 
-								(this.canvas.height / 2) + Math.round(scale * MAJOR_TICK_SIZE) + (fontSize / 1));
+							context.save();
+							let newX = (this.canvas.width / 2) + xOffset - (len / 2);
+							let newY = (this.canvas.height / 2) + Math.round(scale * MAJOR_TICK_SIZE) + (_fontSize / 1);
+							context.translate(newX, newY);
+							let rot = (i > 270) ? i - 360 : i;
+ 							context.rotate(-Math.sin(Math.toRadians(rot / 9)));  // horizontal rotation: 10 degrees max (9 = 90 / 10)
+							context.fillText(str, 0, 0,); // newX, newY);
+							context.restore();
 						}				
 					}
 					context.beginPath();
@@ -423,6 +433,7 @@ class CompassGlobeDisplay extends HTMLElement {
 				}
 			}
 		}
+		context.font = "bold " + fontSize + "px " + this.compassGlobeColorConfig.valueFont;
 
 		// C - Value
 		let strVal = this._value.toFixed(this.compassGlobeColorConfig.valueNbDecimal);

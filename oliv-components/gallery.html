@@ -455,7 +455,11 @@
             
             let origin = element.value;
             // console.log(`Ah! ${origin}, to ${targetVal}`);
+            let delta = Math.abs(origin - targetVal);
             let inc = (origin > targetVal) ? - 1 : 1;
+            if  (delta > 180) {
+                inc *= -1;
+            }
             let currentValue = origin;
 
             function doIt() {
@@ -468,6 +472,12 @@
                     }, 50);
                 }
                 currentValue += inc;
+                if (currentValue > 359) {
+                    currentValue = 0;
+                }
+                if (currentValue < 0) {
+                    currentValue = 359;
+                }
             };
             // Start it.
             window.setTimeout(() => {
@@ -1535,6 +1545,7 @@
 		<td>
 			<h5>
 				<script type="text/javascript">
+                    // TODO Replace document,write with appendChild and Co.
                     if (document.documentElement.lang === 'fr' || document.documentElement.lang === 'FR') { // Navigator.lang could be tested as well...
                         document.write('Pluviomètres, Thermomètres, Cadrans et autres merveilles...');
                     } else {
