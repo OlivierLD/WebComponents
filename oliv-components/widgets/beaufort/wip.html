@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<!--
+ | Use it to see the colors of the Beaufort scale
+ +-->
+<html>
+<head>
+    <style>
+        html {
+            font-family: "Courier New";
+        }
+    </style>    
+</head>
+<body>
+    <h2>Beaufort Scale</h2>
+    <div id="scale"></div>
+</body>
+
+<script>
+
+const SCALE_COLORS = [
+	{ force:  0, color: 'rgb(232, 246, 243)' },
+	{ force:  1, color: 'rgb(212, 230, 241)' },
+	{ force:  2, color: 'rgb(133, 193, 233)' },
+	{ force:  3, color: 'rgb( 93, 173, 226)' },
+	{ force:  4, color: 'rgb( 26, 188, 156)' },
+	{ force:  5, color: 'rgb( 29, 131,  72)' },
+	{ force:  6, color: 'rgb(241, 196,  15)' },
+	{ force:  7, color: 'rgb(231,  76,  69)' },
+	{ force:  8, color: 'rgb(192,  57,  43)' },
+	{ force:  9, color: 'rgb(123,  36,  28)' },
+	{ force: 10, color: 'rgb(118,  68, 138)' },
+	{ force: 11, color: 'rgb( 91,  44, 111)' },
+	{ force: 12, color: 'rgb( 33,  47,  61)' }
+];
+
+window.onload = () => {
+    let doc = document.getElementById('scale');
+    let table = document.createElement("table");
+    let tr = document.createElement("tr");
+    table.append(tr);
+    doc.append(table);
+    
+    SCALE_COLORS.forEach(x => {
+        let td = document.createElement("td");
+        td.setAttribute("width", "20");
+        td.setAttribute("height", "50");
+        td.style.background = x.color;
+        td.style.textAlign = 'center';
+        td.style.borderRadius = '10px' ; // '15%';
+        td.style.fontFamily = 'Courier New';
+        td.style.color = 'white';
+        td.style.textShadow = '1px 1px 2px black, 0 0 25px white, 0 0 5px silver';
+        td.innerText = x.force;
+        tr.append(td);
+    });
+
+};
+
+
+</script>
+</html>
