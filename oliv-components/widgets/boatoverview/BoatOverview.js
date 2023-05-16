@@ -1266,7 +1266,6 @@ class BoatOverview extends HTMLElement {
 			y.push((-1 * boatLength) / 7);
 			y.push((-4 * boatLength) / 7);
 			y.push((-1 * boatLength) / 7);
-
 		} else if (this._boatShape === 'TRI') {
 			// Width
 			x.push(this.WL_RATIO_COEFF * 0); // Bow, center hull
