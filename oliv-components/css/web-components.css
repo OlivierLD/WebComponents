@@ -774,3 +774,10 @@ compass-display .green {
 	--value-nb-decimal: 1;
 	--font: Arial;
 }
+
+.chartless-map-01 {
+	--bg-color: lightGray;
+	--grid-color: silver;
+	--fg-color: blue;
+	--value-font: Verdana;
+}

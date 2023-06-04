@@ -47,6 +47,7 @@
 	<script type="module" src="widgets/compassglobe/CompassGlobe.js"></script>
 	<script type="module" src="widgets/scale/ColoredScale.js"></script>
 	<script type="module" src="widgets/beaufort/Beaufort.js"></script>
+	<script type="module" src="widgets/chartlessmap/ChartlessMap.js"></script>
 
 	<script type="text/javascript" src="utils/NavigationHelper.js"></script>
 
@@ -7586,6 +7587,37 @@ function plotGraphRC(graphId, recenter, lineColor='lime', graphLabel='Reworking 
        </tr>
     </table>
 </div>
+<hr/>
+<!--
+    CHARTLESS MAP
+ +-->
+ <div style="cursor: pointer;" onclick="showHide('chartless-map');" tabindex="0"><b><u><a id="a-chartless" href="#a-chartless">Chartless Map</a></u></b></div>
+ <div id="chartless-map" class="smooth">
+    <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+ &lt;chartless-map id="chartless-map-01"
+                class="chartless-map-01"
+                center-lat="47.677667"
+                center-lng="-3.135667"
+                chart-width="5.0"
+                width="800"
+                height="600">&lt;/chartless-map>
+    </pre>
+     <table>
+         <tr>
+             <td valign="top">
+                 <div class="black-frame centered">
+                     <chartless-map id="chartless-map-01"
+                                    class="chartless-map-01"
+                                    center-lat="47.677667"
+                                    center-lng="-3.135667"
+                                    chart-width="5.0"
+                                    width="800"
+                                    height="600"></chartless-map>
+                 </div>
+            </td>
+        </tr>
+    </table>
+</div>        
 <hr/>     
  
 <!-- End of Demo Components -->
