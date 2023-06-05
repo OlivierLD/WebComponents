@@ -72,6 +72,7 @@ class ChartlessMap extends HTMLElement {
 				instance._mouseMoveFeedback({ x: Math.round(x), y: Math.round(y), pos: pos });
 			} else {
 				console.log(`Mouse Move: ${Math.round(x)} / ${Math.round(y)}: ${JSON.stringify(pos)} => ${ChartlessMap.decToSex(pos.lat, "NS")} / ${ChartlessMap.decToSex(pos.lng, "EW")}`);
+				instance.title = `${chart.decToSex(pos.lat, "NS")} / ${chart.decToSex(pos.lng, "EW")}`;
 			}
 		});
 

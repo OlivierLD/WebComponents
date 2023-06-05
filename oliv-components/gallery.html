@@ -7734,6 +7734,7 @@ function onSlider(event) {
 function chartMouseMoveFeedback(moveData) {
     // console.log(`Move Data: ${JSON.stringify(moveData)}`);
     let chart = document.getElementById('chartless-map-01');
+    chart.title = `${chart.decToSex(moveData.pos.lat, "NS")} / ${chart.decToSex(moveData.pos.lng, "EW")}`;
     document.getElementById('cursor-X').innerText = moveData.x;
     document.getElementById('cursor-Y').innerText = moveData.y;
     document.getElementById('cursor-POS').innerText = `${chart.decToSex(moveData.pos.lat, "NS")} / ${chart.decToSex(moveData.pos.lng, "EW")}`;
