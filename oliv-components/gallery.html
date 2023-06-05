@@ -7726,17 +7726,41 @@ function animateTrack(id) {
     loadPathData();
 }
 
+function onSlider(event) {
+    let chart = document.getElementById('chartless-map-01');
+    chart.chartWidth = this.value;
+}
+
+function chartMouseMoveFeedback(moveData) {
+    // console.log(`Move Data: ${JSON.stringify(moveData)}`);
+    let chart = document.getElementById('chartless-map-01');
+    document.getElementById('cursor-X').innerText = moveData.x;
+    document.getElementById('cursor-Y').innerText = moveData.y;
+    document.getElementById('cursor-POS').innerText = `${chart.decToSex(moveData.pos.lat, "NS")} / ${chart.decToSex(moveData.pos.lng, "EW")}`;
+}
+
     </script>
     <div id="chartless-map" class="smooth">
-    <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
- &lt;chartless-map id="chartless-map-01"
+    <table>
+        <tr>
+            <td valign="top">
+                <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;chartless-map id="chartless-map-01"
                 class="chartless-map-01"
                 center-lat="47.677667"
                 center-lng="-3.135667"
                 chart-width="5.0"
                 width="800"
                 height="600">&lt;/chartless-map>
-    </pre>
+                </pre>
+            </td>
+            <td valign="top">
+                See how to use the <code>doAfter</code> callback.<br/>
+                See how to use the <code>_mouseMoveFeedback</code> callback.<br/>
+                Use the slider at the bottom to change the chart's scale.
+            </td>
+        </tr>
+    </table>
     <table>
         <tr>
             <td valign="top">
@@ -7750,15 +7774,37 @@ function animateTrack(id) {
                                    height="600"></chartless-map>
                 </div>
             </td>
+            <td valign="top">
+                Cursor: <br/>
+                X <span id="cursor-X"></span><br/>
+                Y <span id="cursor-Y"></span><br/>
+                Pos: <span id="cursor-POS"></span>
+            </td>
         </tr>
         <tr>
+            <td>
+                <!-- A slider for the chart scale -->
+                <div id="div-slider">
+                    <input type="range" id="scale-slider" value="5.0" min="0.0625" max="10.0" step="0.1" style="width: 90%;" title="Chart's width in degrees"
+                           oninput="onSlider.call(this, event); sliderValue01.value = this.value;"/>
+                    <output name="padding" id="sliderValue01" style="color: cyan;"></output>
+                </div>
+                
+            </td>
+        </tr>
+        <tr> 
             <td>
                 <button onclick="doAfterChartlessMap('chartless-map-01');">Set Call After</button>
                 <button onclick="animateTrack('chartless-map-01');">Read track data</button>
             </td>
         </tr>
     </table>
-</div>        
+</div>  
+<script type="text/javascript">
+    window.onload = () => {
+        document.getElementById('chartless-map-01').setMouseMoveFeedback(chartMouseMoveFeedback);
+    };
+</script>      
 <hr/>     
  
 <!-- End of Demo Components -->

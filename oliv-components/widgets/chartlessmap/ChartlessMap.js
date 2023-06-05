@@ -52,16 +52,27 @@ class ChartlessMap extends HTMLElement {
 
 		this._doBefore = function(graphDisplay, context) {}; // Do-nothing by default
 		this._doAfter = function(graphDisplay, context) {};  // Do-nothing by default
+		this._mouseMoveFeedback = null;
 
 		this._previousClassName = "";
 		this.chartlessMapColorConfig = chartlessMapDefaultColorConfig;
 
+		let instance = this;
+
 		// Attach a mousemovelistener to the canvas
 		this.canvas.addEventListener('mousemove', function(evt) {
-			// TODO Fix that.
-			var x = evt.pageX - evt.currentTarget.offsetLeft;
-      		var y = evt.pageY - evt.currentTarget.offsetTop;
-			// console.log(`Mouse Move: ${x} ${y}`);
+
+			let rect = evt.currentTarget.getBoundingClientRect();
+			let x = evt.clientX - rect.left;
+			let y = evt.clientY - rect.top;
+
+			let pos = instance.canvasToPos(x, y);
+				
+			if (instance._mouseMoveFeedback !== null) {
+				instance._mouseMoveFeedback({ x: Math.round(x), y: Math.round(y), pos: pos });
+			} else {
+				console.log(`Mouse Move: ${Math.round(x)} / ${Math.round(y)}: ${JSON.stringify(pos)} => ${ChartlessMap.decToSex(pos.lat, "NS")} / ${ChartlessMap.decToSex(pos.lng, "EW")}`);
+			}
 		});
 
 		if (chartlessMapVerbose) {
@@ -236,6 +247,9 @@ class ChartlessMap extends HTMLElement {
 	}
 	setDoAfter(func) {
 		this._doAfter = func;
+	}
+	setMouseMoveFeedback(func) {
+		this._mouseMoveFeedback = func;
 	}
 
 	repaint() {
@@ -430,6 +444,10 @@ class ChartlessMap extends HTMLElement {
 		return s;
 	}
 
+	decToSex(val, ns_ew) {
+		return ChartlessMap.decToSex(val, ns_ew);
+	}
+
 	static getIncLat(lat) {
 		let il = Math.log(Math.tan((Math.PI / 4) + (Math.toRadians(lat) / 2)));
 		return Math.toDegrees(il);
@@ -492,7 +510,44 @@ class ChartlessMap extends HTMLElement {
 										this._centerLng, 
 										this._chartWidth,
 										this._width,
-										this.height);
+										this._height);
+	}
+
+	static canvasToPos(x, 
+					   y, 
+					   projection, 
+					   centerLat, 
+					   centerLng, 
+					   chartWidth,
+					   canvasWidth,
+					   canvasHeight) {
+		if (projection !== "MERCATOR") {
+			console.error(`${projection} not supported yet.`);
+			return;
+		}
+		// How far from the center
+		let deltaX = x - (canvasWidth / 2);
+		let deltaY = (canvasHeight / 2) - y; // Inverted, y=0 is the top.
+
+		let deltaLng = deltaX * (chartWidth / canvasWidth);
+		let g = centerLng + deltaLng;
+
+		let deltaLat = deltaY * (chartWidth / canvasWidth); // Yes, chartWidth
+		let centerIncLat = ChartlessMap.getIncLat(centerLat);
+		let newIncLat = centerIncLat + deltaLat;
+		let l = ChartlessMap.getInvIncLat(newIncLat);
+
+		return { lat: l, lng: g };
+	}
+
+	canvasToPos(x, y) {
+		return ChartlessMap.canvasToPos(x, y, 
+										this._projection, 
+										this._centerLat, 
+										this._centerLng, 
+										this._chartWidth,
+										this._width,
+										this._height);
 	}
 }
 
