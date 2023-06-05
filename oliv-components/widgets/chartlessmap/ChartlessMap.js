@@ -50,8 +50,8 @@ class ChartlessMap extends HTMLElement {
 		this._chartWidth = 10.0;
 		this._projection = "MERCATOR";
 
-		this._doBefore = function(graphDisplay, context) {};
-		this._doAfter = function(graphDisplay, context) {};
+		this._doBefore = function(graphDisplay, context) {}; // Do-nothing by default
+		this._doAfter = function(graphDisplay, context) {};  // Do-nothing by default
 
 		this._previousClassName = "";
 		this.chartlessMapColorConfig = chartlessMapDefaultColorConfig;
@@ -303,9 +303,9 @@ class ChartlessMap extends HTMLElement {
 		let lngDegreesToPixels = this._width / this._chartWidth;
 		let firstWestMeridian = parseFloat((lngLeft - gridStep).toFixed(0));
 		for (let g=firstWestMeridian; g<lngRight; g+=gridStep) {
-			console.log(`Between ${ChartlessMap.decToSex(lngLeft, "EW")} (${lngLeft}) and ${ChartlessMap.decToSex(lngRight, "EW")} (${lngRight}), drawing meridian at ${ChartlessMap.decToSex(g, "EW")}`);
+			// console.log(`Between ${ChartlessMap.decToSex(lngLeft, "EW")} (${lngLeft}) and ${ChartlessMap.decToSex(lngRight, "EW")} (${lngRight}), drawing meridian at ${ChartlessMap.decToSex(g, "EW")}`);
 			let x = (g - lngLeft) * lngDegreesToPixels;
-			console.log(` ${ChartlessMap.decToSex(g, "EW")} => x: ${x}`);
+			// console.log(` ${ChartlessMap.decToSex(g, "EW")} => x: ${x}`);
 
 			context.beginPath();
 			context.moveTo(x, 0);
@@ -323,11 +323,11 @@ class ChartlessMap extends HTMLElement {
 
 		let latDegreesToPixel = this._height / chartHeight;
 		let firstSouthParallel = parseFloat((latBottom - gridStep).toFixed(0));
-		console.log(`Between ${ChartlessMap.decToSex(latBottom, "NS")} (${latBottom}) and ${ChartlessMap.decToSex(latTop, "NS")} (${latTop}), starting parallels at ${ChartlessMap.decToSex(firstSouthParallel, "NS")}`);
+		// console.log(`Between ${ChartlessMap.decToSex(latBottom, "NS")} (${latBottom}) and ${ChartlessMap.decToSex(latTop, "NS")} (${latTop}), starting parallels at ${ChartlessMap.decToSex(firstSouthParallel, "NS")}`);
 		for (let l=firstSouthParallel; l<latTop; l+=gridStep) {
-			console.log(`Draw parallel at ${ChartlessMap.decToSex(l, "NS")}`);
+			// console.log(`Draw parallel at ${ChartlessMap.decToSex(l, "NS")}`);
 			let y = (ChartlessMap.getIncLat(l) - ChartlessMap.getIncLat(latBottom)) * latDegreesToPixel;
-			console.log(` ${ChartlessMap.decToSex(l, "NS")} => y: ${y}`);
+			// console.log(` ${ChartlessMap.decToSex(l, "NS")} => y: ${y}`);
 
 			context.beginPath();
 			context.moveTo(0, this._height - y);
@@ -345,7 +345,7 @@ class ChartlessMap extends HTMLElement {
 
 
 		// To do in a _doAfter, an example.
-		if (true) {
+		if (false) {
 			// let center = ChartlessMap.posToCanvas(this._centerLat, this._centerLng, this._projection, this._centerLat, this._centerLng, this._chartWidth, this._width, this._height);
 			let center = this.posToCanvas(this._centerLat, this._centerLng);
 			// Plot center
