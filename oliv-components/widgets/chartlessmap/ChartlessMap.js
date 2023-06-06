@@ -58,6 +58,24 @@ class ChartlessMap extends HTMLElement {
 		this.chartlessMapColorConfig = chartlessMapDefaultColorConfig;
 
 		let instance = this;
+		let mouseIsDown = false;
+		let lastDraggedPos = null;
+
+		this.canvas.addEventListener('mousedown', function(evt) {
+			// console.log("Mouse down");
+			mouseIsDown = true;
+			let rect = evt.currentTarget.getBoundingClientRect();
+			let x = evt.clientX - rect.left;
+			let y = evt.clientY - rect.top;
+			let pos = instance.canvasToPos(x, y);
+			lastDraggedPos = { x: x, y: y, pos: pos };
+		});
+
+		this.canvas.addEventListener('mouseup', function(evt) {
+			// console.log("Mouse up");
+			mouseIsDown = false;
+			lastDraggedPos = null;
+		});
 
 		// Attach a mousemovelistener to the canvas
 		this.canvas.addEventListener('mousemove', function(evt) {
@@ -67,12 +85,27 @@ class ChartlessMap extends HTMLElement {
 			let y = evt.clientY - rect.top;
 
 			let pos = instance.canvasToPos(x, y);
-				
-			if (instance._mouseMoveFeedback !== null) {
-				instance._mouseMoveFeedback({ x: Math.round(x), y: Math.round(y), pos: pos });
-			} else {
-				console.log(`Mouse Move: ${Math.round(x)} / ${Math.round(y)}: ${JSON.stringify(pos)} => ${ChartlessMap.decToSex(pos.lat, "NS")} / ${ChartlessMap.decToSex(pos.lng, "EW")}`);
-				instance.title = `${instance.decToSex(pos.lat, "NS")} / ${instance.decToSex(pos.lng, "EW")}`;
+
+			if (!mouseIsDown) { // Regular move, mouse up
+				if (instance._mouseMoveFeedback !== null) {
+					instance._mouseMoveFeedback({ x: Math.round(x), y: Math.round(y), pos: pos });
+				} else {
+					// console.log(`Mouse Move: ${Math.round(x)} / ${Math.round(y)}: ${JSON.stringify(pos)} => ${ChartlessMap.decToSex(pos.lat, "NS")} / ${ChartlessMap.decToSex(pos.lng, "EW")}`);
+					instance.title = `${instance.decToSex(pos.lat, "NS")} / ${instance.decToSex(pos.lng, "EW")}`;
+				}
+			} else { // Dragging
+				// console.log(`Chart being dragged: ${Math.round(x)} / ${Math.round(y)}: ${JSON.stringify(pos)} => ${ChartlessMap.decToSex(pos.lat, "NS")} / ${ChartlessMap.decToSex(pos.lng, "EW")}`);
+				let mousePos = instance.canvasToPos(Math.round(x), Math.round(y));
+				if (lastDraggedPos !== null) {
+					let deltaLat = lastDraggedPos.pos.lat - mousePos.lat;
+					let deltaLng = lastDraggedPos.pos.lng - mousePos.lng;
+					let newCenterLng = instance.centerLng + deltaLng;
+					let newCenterLat = instance.centerLat + deltaLat;
+					// console.log(`Bam ! deltaLat=${deltaLat}, deltaLng=${deltaLng} => center ${instance.centerLat}  ${instance.centerLng} becomes ${newCenterLat}  ${newCenterLng}`);
+					instance.centerLat = newCenterLat;
+					instance.centerLng = newCenterLng;
+					lastDraggedPos = { x: x, y: y, pos: mousePos };
+				}
 			}
 		});
 
