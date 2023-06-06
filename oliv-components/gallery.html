@@ -5967,10 +5967,13 @@ map.addEventListener('mousemove', evt => {
 						<slide-show-image src="./images/sand-dollar/08.jpg" title="Casting"></slide-show-image>
 					</slide-show>
 					<script type="text/javascript">
+                        /***
                         window.onload = () => { // Important: window.onload
+                            console.log("window.onload - 1");
                             document.getElementById("slide-show-01").slideclick = onSlideShowClick;
                             document.getElementById("slide-show-02").slideclick = onSlideShowClick;
                         }
+                        **/
                     </script>
 				</div>
 			</td>
@@ -7803,6 +7806,10 @@ function chartMouseMoveFeedback(moveData) {
 </div>  
 <script type="text/javascript">
     window.onload = () => {
+        console.log("window.onload - X");
+        document.getElementById("slide-show-01").slideclick = onSlideShowClick;
+        document.getElementById("slide-show-02").slideclick = onSlideShowClick;
+
         document.getElementById('chartless-map-01').setMouseMoveFeedback(chartMouseMoveFeedback);
     };
 </script>      

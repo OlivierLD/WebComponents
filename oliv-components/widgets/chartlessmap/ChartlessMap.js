@@ -72,7 +72,7 @@ class ChartlessMap extends HTMLElement {
 				instance._mouseMoveFeedback({ x: Math.round(x), y: Math.round(y), pos: pos });
 			} else {
 				console.log(`Mouse Move: ${Math.round(x)} / ${Math.round(y)}: ${JSON.stringify(pos)} => ${ChartlessMap.decToSex(pos.lat, "NS")} / ${ChartlessMap.decToSex(pos.lng, "EW")}`);
-				instance.title = `${chart.decToSex(pos.lat, "NS")} / ${chart.decToSex(pos.lng, "EW")}`;
+				instance.title = `${instance.decToSex(pos.lat, "NS")} / ${instance.decToSex(pos.lng, "EW")}`;
 			}
 		});
 
@@ -313,11 +313,15 @@ class ChartlessMap extends HTMLElement {
 
 		let chartHeight = incLatTop - incLatBottom; // In Increasing Latitude !!
 		// 0.5, 1, 5, 10. To be tuned...
-		let gridStep = 0.5;
+		// let gridStep = 0.5;
+		let gridStep = Math.min(0.5, Math.round((this._chartWidth / 3) * 10) / 10);
+		if (chartlessMapVerbose) {
+			console.log(`GridStep: ${gridStep}`);
+		}
 
 		let lngDegreesToPixels = this._width / this._chartWidth;
 		let firstWestMeridian = parseFloat((lngLeft - gridStep).toFixed(0));
-		for (let g=firstWestMeridian; g<lngRight; g+=gridStep) {
+		for (let g=firstWestMeridian; g<lngRight && gridStep>0; g+=gridStep) {
 			// console.log(`Between ${ChartlessMap.decToSex(lngLeft, "EW")} (${lngLeft}) and ${ChartlessMap.decToSex(lngRight, "EW")} (${lngRight}), drawing meridian at ${ChartlessMap.decToSex(g, "EW")}`);
 			let x = (g - lngLeft) * lngDegreesToPixels;
 			// console.log(` ${ChartlessMap.decToSex(g, "EW")} => x: ${x}`);
