@@ -27,7 +27,6 @@ class ChartlessMap extends HTMLElement {
 			"center-lng",      // Number. Longitude of the center of the chart
 			"chart-width",     // Number. Width of the chart in degrees
 			"projection"       // String. Default Mercator (TODO: Anaximandre, Lambert)
-			// TODO Tooltips (callback), CSS Stylesheets.
 		];
 	}
 
@@ -347,7 +346,7 @@ class ChartlessMap extends HTMLElement {
 		let chartHeight = incLatTop - incLatBottom; // In Increasing Latitude !!
 		// 0.5, 1, 5, 10. To be tuned...
 		// let gridStep = 0.5;
-		let gridStep = Math.min(0.5, Math.round((this._chartWidth / 3) * 10) / 10);
+		let gridStep = Math.min(0.5, Math.round((this._chartWidth / 4) * 10) / 10);
 		if (chartlessMapVerbose) {
 			console.log(`GridStep: ${gridStep}`);
 		}
@@ -359,24 +358,27 @@ class ChartlessMap extends HTMLElement {
 			let x = (g - lngLeft) * lngDegreesToPixels;
 			// console.log(` ${ChartlessMap.decToSex(g, "EW")} => x: ${x}`);
 
+			context.save();
 			context.beginPath();
 			context.moveTo(x, 0);
 			context.lineTo(x, this._height);
 
 			// Label
 			let label = `${ChartlessMap.decToSex(g, "EW")}`;
-			let metrics = context.measureText(label);
-			let len = metrics.width;
-			context.fillText(label, Math.round(x + 5), 12);
-
+			var len = context.measureText(label).width;
+			context.translate(Math.round(x + 5), 0); // len / 2);
+			context.rotate(Math.PI / 2);
+			context.fillText(label, 1, 1); //i * xScale, cHeight - (len));
+	  
 			context.stroke();
 			context.closePath();
+			context.restore();
 		}
 
 		let latDegreesToPixel = this._height / chartHeight;
 		let firstSouthParallel = parseFloat((latBottom - gridStep).toFixed(0));
 		// console.log(`Between ${ChartlessMap.decToSex(latBottom, "NS")} (${latBottom}) and ${ChartlessMap.decToSex(latTop, "NS")} (${latTop}), starting parallels at ${ChartlessMap.decToSex(firstSouthParallel, "NS")}`);
-		for (let l=firstSouthParallel; l<latTop; l+=gridStep) {
+		for (let l=firstSouthParallel; l<latTop && gridStep>0; l+=gridStep) {
 			// console.log(`Draw parallel at ${ChartlessMap.decToSex(l, "NS")}`);
 			let y = (ChartlessMap.getIncLat(l) - ChartlessMap.getIncLat(latBottom)) * latDegreesToPixel;
 			// console.log(` ${ChartlessMap.decToSex(l, "NS")} => y: ${y}`);
