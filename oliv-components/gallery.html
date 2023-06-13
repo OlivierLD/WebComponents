@@ -7637,6 +7637,7 @@ function callAfter(id) {
 }
 
 const trackData = 'trackData.json';
+let trackColor = 'navy';
 function animateTrack(id) {
 
     const map = document.getElementById(id);
@@ -7676,9 +7677,34 @@ function animateTrack(id) {
                 context.restore();
             }
 
+            // Markers
+            let markerAndTrackColor = 'navy';
+
+            markers = [
+                { label: "Oyster Point Port",
+                   latitude: 37.664375,
+                   longitude: -122.369182,
+                   type: "red" },
+                { label: "Oyster Point Starboard",
+                   latitude: 37.664015,
+                   longitude: -122.369162,
+                   type: "green" },
+                { label: "The dock",
+                   latitude: 37.664245,
+                   longitude: -122.380255,
+                   type: "default" }
+            ];
+            let markerRadius = 10;
+            let beaconHeight = 2 * markerRadius;
+            markers.forEach(marker => {
+                let extraMess = [];
+                elmt.plotMark(context, marker, markerRadius, beaconHeight, markerAndTrackColor, extraMess); // method defined in the ChartlessMap WebComp.
+            });
+
+
             // The points of the track
             context.beginPath();
-            context.strokeStyle = 'blue';
+            context.strokeStyle = trackColor;
             context.lineWidth = 1;
             for (let i=0; i<idx; i++) {
                 let pos = latlngsData[i];
@@ -7743,6 +7769,27 @@ function chartMouseMoveFeedback(moveData) {
     document.getElementById('cursor-POS').innerText = `${chart.decToSex(moveData.pos.lat, "NS")} / ${chart.decToSex(moveData.pos.lng, "EW")}`;
 }
 
+let setStyle = (opt) => {
+	document.getElementById('chartless-map-01').className = opt.value;
+	switch (opt.value) {
+		case 'chartless-map-03':
+            trackColor = 'cyan';
+			break;
+		case 'chartless-map-02':
+            trackColor = 'blue';
+			break;
+		case 'chartless-map-01':
+		default:
+            trackColor = 'navy';
+			break;
+	}
+
+
+
+    document.getElementById('chartless-map-01').repaint();
+};
+
+
     </script>
     <div id="chartless-map" class="smooth">
     <table>
@@ -7759,6 +7806,9 @@ function chartMouseMoveFeedback(moveData) {
                 </pre>
             </td>
             <td valign="top">
+                Can be used to plot a grid, markers, tracks... without having to have a cartography available. (or a device supporting it).<br/>
+                Only Mercator projection is supported for now.<br/>
+                Map is draggable and zoomable.<br/>
                 See how to use the <code>doAfter</code> callback.<br/>
                 See how to use the <code>_mouseMoveFeedback</code> callback.<br/>
                 Use the slider at the bottom to change the chart's scale.
@@ -7779,21 +7829,38 @@ function chartMouseMoveFeedback(moveData) {
                 </div>
             </td>
             <td valign="top">
-                Cursor: <br/>
-                X <span id="cursor-X"></span><br/>
-                Y <span id="cursor-Y"></span><br/>
-                Pos: <span id="cursor-POS"></span>
+
+				<table>
+					<tr>
+						<td>Style:</td>
+						<td>
+							<select id="chart-style" onchange="setStyle(this);" style="width: 100px; font-family: 'Courier New';">
+								<option value="chartless-map-01" selected>Light</option>
+								<option value="chartless-map-02">Dark</option>
+								<option value="chartless-map-03">Darker</option>
+							</select>
+						</td>
+					</tr>
+                    <tr>
+                        <td>
+                            Cursor: <br/>
+                            X <span id="cursor-X"></span><br/>
+                            Y <span id="cursor-Y"></span><br/>
+                            Pos: <span id="cursor-POS"></span>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
         <tr>
             <td>
                 <!-- A slider for the chart scale -->
-                <div id="div-slider">
-                    <input type="range" id="scale-slider" value="5.0" min="0.0625" max="10.0" step="0.1" style="width: 90%;" title="Chart's width in degrees"
-                           oninput="onSlider.call(this, event); sliderValue01.value = this.value;"/>
-                    <output name="padding" id="sliderValue01" style="color: cyan;"></output>
+                <div id="div-slider" style="color: white; text-shadow: 4px 4px 8px gray, 0 0 25px white, 0 0 10px orange;">
+                    Chart Width:
+                    <input type="range" id="scale-slider" value="5.0" min="0.01" max="10.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
+                            oninput="onSlider.call(this, event); sliderValue01.value = `${parseFloat(this.value).toFixed(2)}&deg;`;"/>
+                    <output name="padding" id="sliderValue01" style="">5.00&deg;</output>
                 </div>
-                
             </td>
         </tr>
         <tr> 
