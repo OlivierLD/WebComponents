@@ -15,6 +15,7 @@ Another bunch of links:
 - [Custom Elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements)
 - [Templates and Slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots)
 - [Shadow DOM](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM)
+- [The good, the Bad, and the WebComponents](https://www.youtube.com/watch?v=R4Ri4ft7bXY)
 
 -----------------------
 
