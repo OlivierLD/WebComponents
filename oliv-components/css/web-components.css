@@ -765,6 +765,13 @@ compass-display .green {
 	--display-color: purple;
 }
 
+.display-bezier-graph {
+	--display-background-gradient-from: silver;
+	--display-background-gradient-to: white;
+	--grid-color: rgba(0, 0, 0, 0.25);
+	--display-color: blue;
+}
+
 .globe-compass-01 {
 	--bg-color: transparent;
     --display-background-gradient-from: black;
