@@ -504,7 +504,8 @@ class GraphDisplay extends HTMLElement {
 								let strVal = this._hGridLabelsCallback(ordinate);
 								let metrics = context.measureText(strVal);
 								let len = metrics.width;
-								context.fillText(strVal, this.canvas.width - len - this._padding, _y);
+								context.fillText(strVal, this.canvas.width - len - this._padding, _y); // Right side of the graph
+								// context.fillText(strVal, _x, _y);
 							}
 							ordinate += step;
 						}

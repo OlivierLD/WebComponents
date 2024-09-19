@@ -768,7 +768,7 @@ compass-display .green {
 .display-prime-graph {
 	--display-background-gradient-from: silver;
 	--display-background-gradient-to: white;
-	--grid-color: rgba(0, 0, 0, 0.25);
+	--grid-color: rgba(0, 0, 0, 0.5);
 	--display-color: blue;
 }
 

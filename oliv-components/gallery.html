@@ -7068,7 +7068,7 @@ function plotGraphRC(graphId, recenter, lineColor='lime', graphLabel='Reworking 
 		withGrid: true,
 		withXLabels: false,
 		withYLabels: true,
-		thickX: 2,
+		thickX: 0,
 		thickY: 0,
 		minX: 0,
 		maxX: DATA_TO_RECENTER.length,
@@ -7089,10 +7089,10 @@ function plotGraphRC(graphId, recenter, lineColor='lime', graphLabel='Reworking 
 	elmt.value = 'null';
 
 	elmt.data.withXLabels = true;
-	elmt.data.withYLabels = false;
-	elmt.vgrid = valLabel;
+	elmt.data.withYLabels = false; // Because values are not right ;)
+	elmt.vgrid = valLabel;         // This is just bullshit.
 	elmt.label = graphLabel; // "Reworking data";
-	elmt.value = value;
+	// elmt.value = value;
 	elmt.repaint();
 }
 
@@ -7101,7 +7101,7 @@ function plotGraphPrimes(graphId) {
     let elmt = document.getElementById(graphId);
 
     let mini = 0, maxi = 360;
-    let valLabel = "0:45";
+    // let valLabel = "0:25";
 
     let value = ""; // To display, bottom right.
 
@@ -7127,9 +7127,9 @@ function plotGraphPrimes(graphId) {
 
     elmt.data = {
         withGrid: true,
-        withXLabels: false,
+        withXLabels: true,
         withYLabels: true,
-        thickX: 2,
+        thickX: 0,
         thickY: 0,
         minX: 0,
         maxX: DIFFERENCES.length,
@@ -7138,22 +7138,31 @@ function plotGraphPrimes(graphId) {
         data: [
             {
                 name: 'Primes',
-                lineColor: 'blue',
+                lineColor: 'navy',
                 fillColor: null,
-                thickness: 1,
+                thickness: 2,
                 x: values.x,
                 values: values.y
             }
         ]
     };
 
-    elmt.value = 'null';
+    elmt.value = `${values.x.length} entries`;
 
     elmt.data.withXLabels = true;
-    elmt.data.withYLabels = false;
-    elmt.vgrid = valLabel;
-    elmt.label = graphLabel; // "Reworking data";
-    elmt.value = value;
+    elmt.data.withYLabels = true;
+    // elmt.vgrid = valLabel;
+    // elmt.hgrid = "0:5";
+    elmt.label = `Primes - Differences in [${mini}..${maxi}]`; // "Reworking data";
+    // elmt.value = value;
+
+    elmt.setVGridLabelsCallback((value) => {
+			return value.toFixed(0);
+		});
+    elmt.setHGridLabelsCallback((value) => {
+			return value.toFixed(0);
+		});
+
     elmt.repaint();
 }
 				</script>
@@ -7224,8 +7233,8 @@ function plotGraphPrimes(graphId) {
                         // console.log(`MouseMove on graph: ${x}, ${y}`);
                         // Tooltip: Use theGraph.data.minX/maxX/minY/maxY if needed...
                         let height = theGraph.height;
-                        let minY = theGraph.data.minY;
-                        let maxY = theGraph.data.maxY;
+                        let minY = theGraph.data !== null ? theGraph.data.minY : 0;
+                        let maxY = theGraph.data !== null ? theGraph.data.maxY : 0;
                         let deltaY = maxY - minY;
                         let correctedY = height - y;
                         let yValue = minY + ((correctedY / height) * deltaY);
@@ -7240,14 +7249,14 @@ function plotGraphPrimes(graphId) {
                     Plot the differences between prime numbers in [0..3000]<br/>
 					<graph-display id="graph-05"
 								   tabindex="-1"
-								   class="prime"
-								   width="800"
+								   class="display-prime-graph"
+								   width="1200"
 								   height="600"
 								   padding="5"
 								   orientation="horizontal"
 								   value=" - "
-								   vgrid="0:0.5"
-								   hgrid="0:10"
+								   vgrid="0:25"
+								   hgrid="0:5"
 								   label="Primes"
 								   title="Prime numbers"/>
 				</div>
