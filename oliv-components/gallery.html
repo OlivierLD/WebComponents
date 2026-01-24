@@ -3695,7 +3695,9 @@
                  value="45"
                  label="HDG"
                  width="300"
-                 height="300">&lt;/compass-display>
+                 height="300"
+                 major-ticks="45"
+                 option="card-points">&lt;/compass-display>
                 </pre>
 	<table>
 		<tr>
@@ -3709,7 +3711,8 @@
 									 height="300"
 									 major-ticks="45"
 									 minor-ticks="5"
-									 label="HDG"></compass-display>
+									 label="HDG"
+                                     option="digits"></compass-display>
 				</div>
 				<div class="black-frame centered">
 					Value:
@@ -3732,6 +3735,38 @@
 			</td>
 			<td valign="top">
 				<div class="black-frame centered">
+					<compass-display id="compass-display-01-2"
+									 class="day"
+									 title="Heading"
+									 value="90"
+									 width="600"
+									 height="600"
+									 major-ticks="22.5" backup="11.25"
+									 minor-ticks="5"
+									 label="HDG"
+                                     option="card-points"></compass-display>
+				</div>
+				<div class="black-frame centered">
+					Value:
+					<input type="number"
+						   id="compass-display-value-01-2"
+						   placeholder="Heading"
+						   title="Heading"
+						   style="width: 40px; text-align: right;"
+						   value="22.5"/>
+					<br/>
+					<button onclick="setData('compass-display-value-01-2', 'compass-display-01-2')"
+							title="Set Heading"
+							style="margin-top: 3px;">Direct
+					</button>
+					<button onclick="doAnimate('compass-display-value-01-2', 'compass-display-01-2', 1, true)"
+							title="Set Heading"
+							style="margin-top: 3px;">Animate
+					</button>
+				</div>
+			</td>
+			<td valign="top">
+				<div class="black-frame centered">
 					<compass-display id="compass-display-02"
 									 class="green"
 									 title="Heading"
@@ -3740,7 +3775,8 @@
 									 height="250"
 									 major-ticks="45"
 									 minor-ticks="5"
-									 label="COG"></compass-display>
+									 label="COG"
+                                     option="digits"></compass-display>
 				</div>
 				<div class="black-frame centered">
 					Value:
