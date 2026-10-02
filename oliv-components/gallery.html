@@ -17,6 +17,7 @@
 	<link rel="stylesheet" href="css/web-components.css">
 
 	<script type="module" src="widgets/skeleton/Skeleton.js"></script>
+	<script type="module" src="widgets/altimeter/Altimeter.js"></script>
 	<script type="module" src="widgets/rain/Pluviometer.js"></script>
 	<script type="module" src="widgets/temperature/Thermometer.js"></script>
 	<script type="module" src="widgets/jumbo/JumboDisplay.js"></script>
@@ -1774,6 +1775,58 @@
 					<br/>
 					<button onclick="setData('skeleton-value-01', 'skeleton-01');"
 							title="Set Skeleton value above"
+							style="margin-top: 3px;">Set value
+					</button>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+<hr/>
+<!--
+    ALTIMETER
+ +-->
+<div style="cursor: pointer;" onclick="showHide('altimeter');" tabindex="0"><b><u><a id="a-altimeter" href="#a-altimeter">Altimeter</a></u></b></div>
+<div id="altimeter" class="smooth">
+                <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
+&lt;altimeter-display id="altimeter-01"
+                   width="200"
+                   height="400"
+                   value="0"
+                   from="-10"
+                   to="50"
+                   majortick="5"
+                   minortick="1"
+                   fork="10"
+                   title="Altimeter"/>
+                </pre>
+
+	<table>
+		<tr>
+			<td valign="top">
+				<div class="black-frame centered">
+					<altimeter-display id="altimeter-01"
+                                       width="200"
+                                       height="400"
+                                       value="0"
+                                       from="-10"
+                                       to="50"
+                                       majortick="5"
+                                       minortick="1"
+                                       fork="10"
+									   title="Altimeter"/>
+				</div>
+				<div class="black-frame centered">
+					Value:
+					<input type="number"
+						   id="altimeter-value-01"
+						   placeholder="Value"
+						   title="No unit"
+						   style="width: 50px; text-align: right;"
+						   value="0"/>
+					<br/>
+					<button onclick="setData('altimeter-value-01', 'altimeter-01');"
+							title="Set Altimeter value above"
 							style="margin-top: 3px;">Set value
 					</button>
 				</div>
