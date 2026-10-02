@@ -370,9 +370,12 @@
          * @param from The field containing the value to set
          * @param to The WebComponent to set the value to
          */
-        function setData(from, to) {
+        function setData(from, to, smooth) {
             let elem = document.getElementById(to);
             let value = document.getElementById(from).value; // Field to read to get the value
+            if (smooth !== undefined && smooth === true) {
+                doAnimate(from, to);
+            } else
             if (value.length !== 0) {
                 elem.value = value;                            // value corresponds to the 'set value(val) { ...', invokes the setter in the HTMLElement class
             }
@@ -1797,7 +1800,8 @@
                    to="50"
                    majortick="5"
                    minortick="1"
-                   fork="10"
+                   fork="12"
+                   label="Stuff (unit)"
                    title="Altimeter"/>
                 </pre>
 
@@ -1808,12 +1812,13 @@
 					<altimeter-display id="altimeter-01"
                                        width="200"
                                        height="400"
-                                       value="0"
+                                       value="2.34"
                                        from="-10"
                                        to="50"
                                        majortick="5"
                                        minortick="1"
-                                       fork="10"
+                                       fork="12"
+                                       label="Stuff (unit)"
 									   title="Altimeter"/>
 				</div>
 				<div class="black-frame centered">
@@ -1823,9 +1828,9 @@
 						   placeholder="Value"
 						   title="No unit"
 						   style="width: 50px; text-align: right;"
-						   value="0"/>
+						   value="2.34"/>
 					<br/>
-					<button onclick="setData('altimeter-value-01', 'altimeter-01');"
+					<button onclick="setData('altimeter-value-01', 'altimeter-01', true);"
 							title="Set Altimeter value above"
 							style="margin-top: 3px;">Set value
 					</button>

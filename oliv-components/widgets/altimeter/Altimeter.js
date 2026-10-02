@@ -15,9 +15,9 @@ const altimeterDefaultColorConfig = {
 		from: 'white', // 'black',
 		to: 'white'  // 'gray'
 	},
-	gridColor: 'rgba(255, 255, 255, 0.7)',
+	gridColor: 'darkgray',
 	displayColor: 'black',
-	valueNbDecimal: 1,
+	valueNbDecimal: 2,
 	labelFont: 'Arial',
 	valueFont: 'Courier New'
 };
@@ -277,16 +277,87 @@ class AltimeterDisplay extends HTMLElement {
 		AltimeterDisplay.roundRect(context, 0, 0, this.canvas.width, this.canvas.height, 10, true, false);
 
 		// Major and minor ticks
-		let range = this._to - this._from;
-		let visibleRange = this._fork;
-		let startValue = this._value - visibleRange / 2.0;
-		if (startValue < this._from) {
-			startValue = this._from;
+		/*
+			width="200"
+			height="400"
+			value="2.345"
+			from="-10"
+			to="50"
+			majortick="5"
+			minortick="1"
+			fork="10"
+		*/
+
+		let bigTickLength = this.width / 5;
+		let smallTickLength = this.width / 10;
+
+		// Start in the middle. For a value like 2.345, what is the closest ?
+		// Take the int part => 2.345 -> 2
+		// for 2.345, tickOrd = 400 / 2
+		// min = 2.345 - (fork / 2) -> ord = 0. Which is 2.345 - 5 = -2.655 -> ord = 0
+		// max = 2.345 + (fork / 2) -> ord = 400. Which is 2.345 + 5 = 7.345 -> ord = 400
+		// ord(value) = (value - min) * (height / fork)
+
+		let intPart = Math.trunc(this.value);
+		let minVisibleValue = this.value - (this._fork / 2.0);
+		let maxVisibleValue = this.value + (this._fork / 2.0);
+		let closestIntTickOrd = (intPart - minVisibleValue) * (this.height / this._fork);
+		// Down
+		let valueForTick = intPart;
+		while (valueForTick >= minVisibleValue) {
+			let ord = this.height - ((valueForTick - minVisibleValue) * (this.height / this._fork));
+			if (valueForTick % this._majortick === 0) {
+				// Major tick
+				context.strokeStyle = this.altimeterColorConfig.gridColor;
+				context.beginPath();
+				context.moveTo(this.width - bigTickLength, ord);
+				context.lineTo(this.width, ord);
+				context.stroke();
+				// Label
+				context.fillStyle = this.altimeterColorConfig.displayColor;
+				context.font = "bold " + Math.round(scale * 16) + "px " + this.altimeterColorConfig.labelFont;
+				let strVal = valueForTick.toFixed(this.altimeterColorConfig.valueNbDecimal);
+				let metrics = context.measureText(strVal);
+				let len = metrics.width;
+				context.fillText(strVal, this.width - bigTickLength - len - 5, ord + 5);
+			} else {
+				// Minor tick
+				context.strokeStyle = this.altimeterColorConfig.gridColor;
+				context.beginPath();
+				context.moveTo(this.width - smallTickLength, ord);
+				context.lineTo(this.width, ord);
+				context.stroke();
+			}
+			valueForTick -= this._minortick;
 		}
-		let endValue = startValue + visibleRange;
-
-
-
+		// Up
+		valueForTick = intPart + this._minortick;
+		while (valueForTick <= maxVisibleValue) {
+			let ord = this.height - ((valueForTick - minVisibleValue) * (this.height / this._fork));
+			if (valueForTick % this._majortick === 0) {
+				// Major tick
+				context.strokeStyle = this.altimeterColorConfig.gridColor;
+				context.beginPath();
+				context.moveTo(this.width - bigTickLength, ord);
+				context.lineTo(this.width, ord);
+				context.stroke();
+				// Label
+				context.fillStyle = this.altimeterColorConfig.displayColor;
+				context.font = "bold " + Math.round(scale * 16) + "px " + this.altimeterColorConfig.labelFont;
+				let strVal = valueForTick.toFixed(this.altimeterColorConfig.valueNbDecimal);
+				let metrics = context.measureText(strVal);
+				let len = metrics.width;
+				context.fillText(strVal, this.width - bigTickLength - len - 5, ord + 5);
+			} else {
+				// Minor tick
+				context.strokeStyle = this.altimeterColorConfig.gridColor;
+				context.beginPath();
+				context.moveTo(this.width - smallTickLength, ord);
+				context.lineTo(this.width, ord);
+				context.stroke();
+			}
+			valueForTick += this._minortick;
+		}
 
 		// Label and Co
 		context.fillStyle = this.altimeterColorConfig.displayColor;
@@ -294,12 +365,23 @@ class AltimeterDisplay extends HTMLElement {
 		context.font = "bold " + Math.round(scale * 16) + "px " + this.altimeterColorConfig.labelFont;
 		context.fillText(this.label, 5, 18);
 		// Value
-		context.font = "bold " + Math.round(scale * 60) + "px " + this.altimeterColorConfig.valueFont;
-		let strVal = this._value.toFixed(this.altimeterColorConfig.valueNbDecimal);
+
+		context.fillStyle = 'rgba(128, 128, 128, 0.75)'; // this.altimeterColorConfig.bgColor;
+		context.fillRect(0, (this.height / 2) - (scale * 20), this.width, scale * 40);
+
+		context.fillStyle = 'black'; // this.altimeterColorConfig.bgColor;
+
+		context.font = "bold " + Math.round(scale * 40) + "px " + this.altimeterColorConfig.valueFont;
+		let strVal = this._value.toFixed(this.altimeterColorConfig.valueNbDecimal) + " >";
 		let metrics = context.measureText(strVal);
 		let len = metrics.width;
+		let lineHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
-		context.fillText(strVal, this.canvas.width - len - 5, this.canvas.height - 5);
+		// context.fillText(strVal, this.canvas.width - len - 5, this.canvas.height - 5);
+		// console.log(`>>> Altimeter: value=${this._value}, strVal=${strVal}, len=${len}, canvas.width=${this.canvas.width}, canvas.height=${this.canvas.height}, scale=${scale}`);
+		context.fillText(strVal,
+			             this.canvas.width - len - 10,
+						 (this.canvas.height / 2) + (lineHeight/*60*/ * scale / 2));
 	}
 
 	static roundRect(ctx, x, y, width, height, radius, fill, stroke) {
