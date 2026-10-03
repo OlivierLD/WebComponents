@@ -904,6 +904,7 @@ compass-display .green {
 	--value-color: white;
 	--value-nb-decimal: 2;
 }
+
 .vertical-gauge-02 {
 	--display-background-gradient-from: rgba(0, 0, 0, 0.75);
 	--display-background-gradient-to: rgba(128, 0, 0, 0.75);

@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="css/web-components.css">
 
 	<script type="module" src="widgets/skeleton/Skeleton.js"></script>
-	<script type="module" src="widgets/altimeter/VerticalGauge.js"></script>
+	<script type="module" src="widgets/verticalgauge/VerticalGauge.js"></script>
 	<script type="module" src="widgets/rain/Pluviometer.js"></script>
 	<script type="module" src="widgets/temperature/Thermometer.js"></script>
 	<script type="module" src="widgets/jumbo/JumboDisplay.js"></script>
@@ -1787,7 +1787,7 @@
 </div>
 <hr/>
 <!--
-    ALTIMETER
+    ALTIMETER, VERTICAL GAUGE
  +-->
 <div style="cursor: pointer;" onclick="showHide('altimeter');" tabindex="0"><b><u><a id="a-altimeter" href="#a-altimeter">Vertical Gauge</a></u></b></div>
 <div id="altimeter" class="smooth">
@@ -1844,8 +1844,8 @@
                                     majortick="1"
                                     minortick="0.25"
                                     fork="6"
-                                    label="Speed (knots)"
-									title="Vertical Gauge"/>
+                                    label="Knots"
+									title="Vertical Gauge&#13;Speed in knots."/>
 				</div>
 				<div class="black-frame centered">
 					Value:
