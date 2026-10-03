@@ -901,6 +901,7 @@ compass-display .green {
 	--grid-color: black;
 	--display-color: white;
 	--value-frame-color: orange;
+	--value-color: white;
 	--value-nb-decimal: 2;
 }
 .vertical-gauge-02 {
@@ -909,5 +910,6 @@ compass-display .green {
 	--grid-color: silver;
 	--display-color: yellow;
 	--value-frame-color: cyan;
+	--value-color: limegreen;
 	--value-nb-decimal: 2;
 }

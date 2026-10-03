@@ -17,6 +17,7 @@ const verticalGaugeDefaultColorConfig = {
 	},
 	gridColor: 'darkgray',
 	displayColor: 'black',
+	valueColor: 'black',
 	valueFrameColor: 'orange',
 	valueNbDecimal: 2,
 	labelFont: 'Arial',
@@ -214,6 +215,9 @@ class VerticalGauge extends HTMLElement {
 										case '--value-frame-color':
 											colorConfig.valueFrameColor = value;
 											break;
+										case '--value-color':
+											colorConfig.valueColor = value;
+											break;
 										case '--value-nb-decimal':
 											colorConfig.valueNbDecimal = value;
 											break;
@@ -374,7 +378,7 @@ class VerticalGauge extends HTMLElement {
 		context.fillStyle = 'rgba(128, 128, 128, 0.75)'; // this.verticalGaugeColorConfig.bgColor;
 		context.fillRect(2, (this.height / 2) - (scale * 20), this.width - smallTickLength - 2, scale * 40);
 
-		context.fillStyle = 'black'; // this.verticalGaugeColorConfig.bgColor;
+		context.fillStyle = this.verticalGaugeColorConfig.valueColor;
 
 		context.font = "bold " + Math.round(scale * 40) + "px " + this.verticalGaugeColorConfig.valueFont;
 		let strVal = this._value.toFixed(this.verticalGaugeColorConfig.valueNbDecimal) + " >";
@@ -382,8 +386,9 @@ class VerticalGauge extends HTMLElement {
 		let len = metrics.width;
 		let lineHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
-		// context.fillText(strVal, this.canvas.width - len - 5, this.canvas.height - 5);
-		// console.log(`>>> VerticalGauge: value=${this._value}, strVal=${strVal}, len=${len}, canvas.width=${this.canvas.width}, canvas.height=${this.canvas.height}, scale=${scale}`);
+		if (verticalGaugeVerbose) {
+			console.log(`>>> VerticalGauge: value=${this._value}, strVal=${strVal}, len=${len}, canvas.width=${this.canvas.width}, canvas.height=${this.canvas.height}, scale=${scale}`);
+		}
 		context.fillText(strVal,
 			             this.canvas.width - len - smallTickLength - 2,
 						 (this.canvas.height / 2) + (lineHeight/*60*/ * scale / 2));
