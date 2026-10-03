@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="css/web-components.css">
 
 	<script type="module" src="widgets/skeleton/Skeleton.js"></script>
-	<script type="module" src="widgets/altimeter/Altimeter.js"></script>
+	<script type="module" src="widgets/altimeter/VerticalGauge.js"></script>
 	<script type="module" src="widgets/rain/Pluviometer.js"></script>
 	<script type="module" src="widgets/temperature/Thermometer.js"></script>
 	<script type="module" src="widgets/jumbo/JumboDisplay.js"></script>
@@ -1789,37 +1789,34 @@
 <!--
     ALTIMETER
  +-->
-<div style="cursor: pointer;" onclick="showHide('altimeter');" tabindex="0"><b><u><a id="a-altimeter" href="#a-altimeter">Altimeter</a></u></b></div>
+<div style="cursor: pointer;" onclick="showHide('altimeter');" tabindex="0"><b><u><a id="a-altimeter" href="#a-altimeter">Vertical Gauge</a></u></b></div>
 <div id="altimeter" class="smooth">
                 <pre style="font-weight: bold; text-align: left; color: white; vertical-align: top; margin-top: 6px;">
-&lt;altimeter-display id="altimeter-01"
-                   width="200"
-                   height="400"
-                   value="0"
-                   from="-10"
-                   to="50"
-                   majortick="5"
-                   minortick="1"
-                   fork="12"
-                   label="Stuff (unit)"
-                   title="Altimeter"/>
+&lt;vertical-gauge id="altimeter-01"
+                width="200"
+                height="400"
+                value="0"
+                majortick="5"
+                minortick="1"
+                fork="12"
+                label="Stuff (unit)"
+                title="Vertical Gauge"/>
                 </pre>
 
 	<table>
 		<tr>
 			<td valign="top">
 				<div class="black-frame centered">
-					<altimeter-display id="altimeter-01"
-                                       width="200"
-                                       height="400"
-                                       value="2.34"
-                                       from="-10"
-                                       to="50"
-                                       majortick="5"
-                                       minortick="1"
-                                       fork="12"
-                                       label="Stuff (unit)"
-									   title="Altimeter"/>
+					<vertical-gauge id="vertical-gauge-01"
+                                    class="vertical-gauge-01"
+                                    width="200"
+                                    height="400"
+                                    value="2.34"
+                                    majortick="5"
+                                    minortick="1"
+                                    fork="12"
+                                    label="Stuff (unit)"
+									title="Vertical Gauge"/>
 				</div>
 				<div class="black-frame centered">
 					Value:
@@ -1830,8 +1827,36 @@
 						   style="width: 50px; text-align: right;"
 						   value="2.34"/>
 					<br/>
-					<button onclick="setData('altimeter-value-01', 'altimeter-01', true);"
-							title="Set Altimeter value above"
+					<button onclick="setData('altimeter-value-01', 'vertical-gauge-01', true);"
+							title="Set Vertical Gauge value above"
+							style="margin-top: 3px;">Set value
+					</button>
+				</div>
+			</td>
+			<td valign="top">
+				<div class="black-frame centered">
+					<vertical-gauge id="vertical-gauge-02"
+                                    class="vertical-gauge-02"
+                                    width="200"
+                                    height="400"
+                                    value="7.89"
+                                    majortick="1"
+                                    minortick="0.25"
+                                    fork="6"
+                                    label="Things (ticks)"
+									title="Vertical Gauge"/>
+				</div>
+				<div class="black-frame centered">
+					Value:
+					<input type="number"
+						   id="altimeter-value-02"
+						   placeholder="Value"
+						   title="No unit"
+						   style="width: 50px; text-align: right;"
+						   value="7.89"/>
+					<br/>
+					<button onclick="setData('altimeter-value-02', 'vertical-gauge-02', true);"
+							title="Set Vertical Gauge value above"
 							style="margin-top: 3px;">Set value
 					</button>
 				</div>

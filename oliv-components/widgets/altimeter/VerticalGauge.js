@@ -6,10 +6,10 @@
  * In addition, there is a CSS colors management as well.
  */
 
-const altimeterVerbose = false;
-const ALTIMETER_TAG_NAME = 'altimeter-display';
+const verticalGaugeVerbose = false;
+const VERTICAL_GAUGE_TAG_NAME = 'vertical-gauge';
 
-const altimeterDefaultColorConfig = {
+const verticalGaugeDefaultColorConfig = {
 	bgColor: 'white',
 	displayBackgroundGradient: {
 		from: 'white', // 'black',
@@ -17,13 +17,14 @@ const altimeterDefaultColorConfig = {
 	},
 	gridColor: 'darkgray',
 	displayColor: 'black',
+	valueFrameColor: 'orange',
 	valueNbDecimal: 2,
 	labelFont: 'Arial',
 	valueFont: 'Courier New'
 };
 
 /* global HTMLElement */
-class AltimeterDisplay extends HTMLElement {
+class VerticalGauge extends HTMLElement {
 
 	static get observedAttributes() {
 		return [
@@ -31,8 +32,6 @@ class AltimeterDisplay extends HTMLElement {
 			"height",    // Integer. Canvas height
 			"value",     // Float. Numeric value to display
 			"label",     // String, like ALT (meters)
-			"from",      // Float. Lower limit of the altimeter
-			"to",        // Float. Upper limit of the altimeter
 			"majortick", // Float. Major tick interval
 			"minortick", // Float. Minor tick interval
 			"fork"       // Float. Visible range
@@ -56,24 +55,22 @@ class AltimeterDisplay extends HTMLElement {
 		this._height = 100;
 		this._label = "ALT (meters)";
 
-		this._from = -10;      // Lower limit of the altimeter
-        this._to = 50;         // Upper limit of the altimeter
         this._majortick = 5;   // Major tick interval
         this._minortick = 1;   // Minor tick interval
         this._fork = 10;       // Visible range
 
 
 		this._previousClassName = "";
-		this.altimeterColorConfig = altimeterDefaultColorConfig;
+		this.verticalGaugeColorConfig = verticalGaugeDefaultColorConfig;
 
-		if (altimeterVerbose) {
+		if (verticalGaugeVerbose) {
 			console.log("Data in Constructor:", this._value);
 		}
 	}
 
 	// Called whenever the custom element is inserted into the DOM.
 	connectedCallback() {
-		if (altimeterVerbose) {
+		if (verticalGaugeVerbose) {
 			console.log("connectedCallback invoked, 'value' is [", this.value, "]");
 		}
 		this.repaint();
@@ -81,7 +78,7 @@ class AltimeterDisplay extends HTMLElement {
 
 	// Called whenever the custom element is removed from the DOM.
 	disconnectedCallback() {
-		if (altimeterVerbose) {
+		if (verticalGaugeVerbose) {
 			console.log("disconnectedCallback invoked");
 		}
 	}
@@ -89,7 +86,7 @@ class AltimeterDisplay extends HTMLElement {
 	// Called whenever an attribute is added, removed or updated.
 	// Only attributes listed in the observedAttributes property are affected.
 	attributeChangedCallback(attrName, oldVal, newVal) {
-		if (altimeterVerbose) {
+		if (verticalGaugeVerbose) {
 			console.log("attributeChangedCallback invoked on " + attrName + " from " + oldVal + " to " + newVal);
 		}
 		switch (attrName) {
@@ -105,12 +102,12 @@ class AltimeterDisplay extends HTMLElement {
 			case "label":
 				this._label = newVal;
 				break;
-			case "from":
-				this._from = parseFloat(newVal);
-				break;
-			case "to":
-				this._to = parseFloat(newVal);
-				break;
+			// case "from":
+			// 	this._from = parseFloat(newVal);
+			// 	break;
+			// case "to":
+			// 	this._to = parseFloat(newVal);
+			// 	break;
 			case "majortick":
 				this._majortick = parseFloat(newVal);
 				break;
@@ -128,14 +125,14 @@ class AltimeterDisplay extends HTMLElement {
 
 	// Called whenever the custom element has been moved into a new document.
 	adoptedCallback() {
-		if (altimeterVerbose) {
+		if (verticalGaugeVerbose) {
 			console.log("adoptedCallback invoked");
 		}
 	}
 
 	set value(option) {
 		this.setAttribute("value", option);
-		if (altimeterVerbose) {
+		if (verticalGaugeVerbose) {
 			console.log(">> Value option:", option);
 		}
 //	this.repaint(); // Done in attributeChangedCallback
@@ -179,7 +176,7 @@ class AltimeterDisplay extends HTMLElement {
 
 	// Component methods
 	getColorConfig(classNames) {
-		let colorConfig = altimeterDefaultColorConfig;
+		let colorConfig = verticalGaugeDefaultColorConfig;
 		let classes = classNames.split(" ");
 		for (let cls = 0; cls < classes.length; cls++) {
 			let cssClassName = classes[cls];
@@ -189,7 +186,7 @@ class AltimeterDisplay extends HTMLElement {
 					for (let r = 0; document.styleSheets[s].cssRules !== null && r < document.styleSheets[s].cssRules.length; r++) {
 						let selector = document.styleSheets[s].cssRules[r].selectorText;
 						//			console.log(">>> ", selector);
-						if (selector !== undefined && (selector === '.' + cssClassName || (selector.indexOf('.' + cssClassName) > -1 && selector.indexOf(ALTIMETER_TAG_NAME) > -1))) { // Cases like "tag-name .className"
+						if (selector !== undefined && (selector === '.' + cssClassName || (selector.indexOf('.' + cssClassName) > -1 && selector.indexOf(VERTICAL_GAUGE_TAG_NAME) > -1))) { // Cases like "tag-name .className"
 							//				console.log("  >>> Found it! [%s]", selector);
 							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
 							let cssTextElems = cssText.split(";");
@@ -213,6 +210,9 @@ class AltimeterDisplay extends HTMLElement {
 											break;
 										case '--display-color':
 											colorConfig.displayColor = value;
+											break;
+										case '--value-frame-color':
+											colorConfig.valueFrameColor = value;
 											break;
 										case '--value-nb-decimal':
 											colorConfig.valueNbDecimal = value;
@@ -239,17 +239,17 @@ class AltimeterDisplay extends HTMLElement {
 	}
 
 	repaint() {
-		this.drawAltimeter();
+		this.drawVerticalGauge();
 	}
 
-	drawAltimeter() {
+	drawVerticalGauge() {
 
 		let currentStyle = this.className;
 		if (this._previousClassName !== currentStyle || true) {
 			// Reload
 			//	console.log("Reloading CSS");
 			try {
-				this.altimeterColorConfig = this.getColorConfig(currentStyle);
+				this.verticalGaugeColorConfig = this.getColorConfig(currentStyle);
 			} catch (err) {
 				// Absorb?
 				console.log(err);
@@ -269,12 +269,12 @@ class AltimeterDisplay extends HTMLElement {
 		this.canvas.height = this.height;
 
 		let grd = context.createLinearGradient(0, 5, 0, this.height);
-		grd.addColorStop(0, this.altimeterColorConfig.displayBackgroundGradient.from); // 0  Beginning
-		grd.addColorStop(1, this.altimeterColorConfig.displayBackgroundGradient.to); // 1  End
+		grd.addColorStop(0, this.verticalGaugeColorConfig.displayBackgroundGradient.from); // 0  Beginning
+		grd.addColorStop(1, this.verticalGaugeColorConfig.displayBackgroundGradient.to); // 1  End
 		context.fillStyle = grd;
 
 		// Background
-		AltimeterDisplay.roundRect(context, 0, 0, this.canvas.width, this.canvas.height, 10, true, false);
+		VerticalGauge.roundRect(context, 0, 0, this.canvas.width, this.canvas.height, 10, true, false);
 
 		// Major and minor ticks
 		/*
@@ -308,21 +308,21 @@ class AltimeterDisplay extends HTMLElement {
 			let ord = this.height - ((valueForTick - minVisibleValue) * (this.height / this._fork));
 			if (valueForTick % this._majortick === 0) {
 				// Major tick
-				context.strokeStyle = this.altimeterColorConfig.gridColor;
+				context.strokeStyle = this.verticalGaugeColorConfig.gridColor;
 				context.beginPath();
 				context.moveTo(this.width - bigTickLength, ord);
 				context.lineTo(this.width, ord);
 				context.stroke();
-				// Label
-				context.fillStyle = this.altimeterColorConfig.displayColor;
-				context.font = "bold " + Math.round(scale * 16) + "px " + this.altimeterColorConfig.labelFont;
-				let strVal = valueForTick.toFixed(this.altimeterColorConfig.valueNbDecimal);
+				// Label of the tick
+				context.fillStyle = this.verticalGaugeColorConfig.displayColor;
+				context.font = "bold " + Math.round(scale * 16) + "px " + this.verticalGaugeColorConfig.labelFont;
+				let strVal = valueForTick.toFixed(0); // this.verticalGaugeColorConfig.valueNbDecimal);
 				let metrics = context.measureText(strVal);
 				let len = metrics.width;
 				context.fillText(strVal, this.width - bigTickLength - len - 5, ord + 5);
 			} else {
 				// Minor tick
-				context.strokeStyle = this.altimeterColorConfig.gridColor;
+				context.strokeStyle = this.verticalGaugeColorConfig.gridColor;
 				context.beginPath();
 				context.moveTo(this.width - smallTickLength, ord);
 				context.lineTo(this.width, ord);
@@ -336,21 +336,21 @@ class AltimeterDisplay extends HTMLElement {
 			let ord = this.height - ((valueForTick - minVisibleValue) * (this.height / this._fork));
 			if (valueForTick % this._majortick === 0) {
 				// Major tick
-				context.strokeStyle = this.altimeterColorConfig.gridColor;
+				context.strokeStyle = this.verticalGaugeColorConfig.gridColor;
 				context.beginPath();
 				context.moveTo(this.width - bigTickLength, ord);
 				context.lineTo(this.width, ord);
 				context.stroke();
-				// Label
-				context.fillStyle = this.altimeterColorConfig.displayColor;
-				context.font = "bold " + Math.round(scale * 16) + "px " + this.altimeterColorConfig.labelFont;
-				let strVal = valueForTick.toFixed(this.altimeterColorConfig.valueNbDecimal);
+				// Label of the tick
+				context.fillStyle = this.verticalGaugeColorConfig.displayColor;
+				context.font = "bold " + Math.round(scale * 16) + "px " + this.verticalGaugeColorConfig.labelFont;
+				let strVal = valueForTick.toFixed(0); // this.verticalGaugeColorConfig.valueNbDecimal);
 				let metrics = context.measureText(strVal);
 				let len = metrics.width;
 				context.fillText(strVal, this.width - bigTickLength - len - 5, ord + 5);
 			} else {
 				// Minor tick
-				context.strokeStyle = this.altimeterColorConfig.gridColor;
+				context.strokeStyle = this.verticalGaugeColorConfig.gridColor;
 				context.beginPath();
 				context.moveTo(this.width - smallTickLength, ord);
 				context.lineTo(this.width, ord);
@@ -360,27 +360,32 @@ class AltimeterDisplay extends HTMLElement {
 		}
 
 		// Label and Co
-		context.fillStyle = this.altimeterColorConfig.displayColor;
+		context.fillStyle = this.verticalGaugeColorConfig.displayColor;
 		// Label
-		context.font = "bold " + Math.round(scale * 16) + "px " + this.altimeterColorConfig.labelFont;
+		context.font = "bold " + Math.round(scale * 16) + "px " + this.verticalGaugeColorConfig.labelFont;
 		context.fillText(this.label, 5, 18);
 		// Value
+		context.strokeStyle = this.verticalGaugeColorConfig.valueFrameColor;
+		context.lineWidth = 2;
+		context.beginPath();
+		context.rect(0, (this.height / 2) - (scale * 20), this.width - smallTickLength, scale * 40);
+		context.stroke();
 
-		context.fillStyle = 'rgba(128, 128, 128, 0.75)'; // this.altimeterColorConfig.bgColor;
-		context.fillRect(0, (this.height / 2) - (scale * 20), this.width, scale * 40);
+		context.fillStyle = 'rgba(128, 128, 128, 0.75)'; // this.verticalGaugeColorConfig.bgColor;
+		context.fillRect(2, (this.height / 2) - (scale * 20), this.width - smallTickLength - 2, scale * 40);
 
-		context.fillStyle = 'black'; // this.altimeterColorConfig.bgColor;
+		context.fillStyle = 'black'; // this.verticalGaugeColorConfig.bgColor;
 
-		context.font = "bold " + Math.round(scale * 40) + "px " + this.altimeterColorConfig.valueFont;
-		let strVal = this._value.toFixed(this.altimeterColorConfig.valueNbDecimal) + " >";
+		context.font = "bold " + Math.round(scale * 40) + "px " + this.verticalGaugeColorConfig.valueFont;
+		let strVal = this._value.toFixed(this.verticalGaugeColorConfig.valueNbDecimal) + " >";
 		let metrics = context.measureText(strVal);
 		let len = metrics.width;
 		let lineHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
 		// context.fillText(strVal, this.canvas.width - len - 5, this.canvas.height - 5);
-		// console.log(`>>> Altimeter: value=${this._value}, strVal=${strVal}, len=${len}, canvas.width=${this.canvas.width}, canvas.height=${this.canvas.height}, scale=${scale}`);
+		// console.log(`>>> VerticalGauge: value=${this._value}, strVal=${strVal}, len=${len}, canvas.width=${this.canvas.width}, canvas.height=${this.canvas.height}, scale=${scale}`);
 		context.fillText(strVal,
-			             this.canvas.width - len - 10,
+			             this.canvas.width - len - smallTickLength - 2,
 						 (this.canvas.height / 2) + (lineHeight/*60*/ * scale / 2));
 	}
 
@@ -415,4 +420,4 @@ class AltimeterDisplay extends HTMLElement {
 }
 
 // Associate the tag and the class
-window.customElements.define(ALTIMETER_TAG_NAME, AltimeterDisplay);
+window.customElements.define(VERTICAL_GAUGE_TAG_NAME, VerticalGauge);
